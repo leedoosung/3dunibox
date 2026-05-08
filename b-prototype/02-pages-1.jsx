@@ -96,9 +96,9 @@ const ProductCard = ({ m, onClick, onAdd }) => {
       <span className="ub-mono" style={{ fontSize: 10, color: "var(--gray-400)" }}>{m.code}</span>
     </div>
     <div style={{ aspectRatio: "1 / 1", background: "rgba(255,255,255,0.02)", borderRadius: 8, display: "grid", placeItems: "center", marginBottom: isMobile ? 10 : 14, border: "1px solid var(--line)", overflow: "hidden" }}>
-      {m.image_url
-        ? <img src={m.image_url} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 8 }} />
-        : <Bracket size={isMobile ? 78 : 110} />}
+      {m.image_url && (
+        <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "contain", padding: 8 }} />
+      )}
     </div>
     <div style={{ fontSize: isMobile ? 13 : 15, fontWeight: 700, color: "var(--white)", marginBottom: 2 }}>{m.name}</div>
     {!isMobile && <div style={{ fontSize: 12, color: "var(--gray-300)", marginBottom: 14, minHeight: 16 }}>{m.desc}</div>}

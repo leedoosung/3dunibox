@@ -25,9 +25,9 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
         <div>
           <div style={{ aspectRatio: "1", background: "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", display: "grid", placeItems: "center", border: "1px solid var(--line)" }}>
             <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.4 }} />
-            {m.image_url
-              ? <img src={m.image_url} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 12 }} />
-              : <Bracket size={360} />}
+            {m.image_url && (
+              <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "contain", padding: 12 }} />
+            )}
             <div style={{ position: "absolute", top: 16, left: 16 }}>
               <Badge kind={m.status === "live" ? "live" : "soon"}>{m.status === "live" ? "판매중" : "출시예정"}</Badge>
             </div>
