@@ -373,6 +373,20 @@ const openPostcode = (callback) => {
 const _modelListeners = new Set();
 const _notifyModels = () => _modelListeners.forEach(fn => { try { fn(); } catch (e) {} });
 
+// 첫 페인트 즉시 사진 표시를 위해 직전 fetch 결과를 localStorage에 캐싱.
+// 재방문 시 캐시로 동기 hydrate → 사진 바로 보임 → 백그라운드 fetch로 최신화.
+const PRODUCTS_CACHE_KEY = "ub:products:v1";
+try {
+  const raw = localStorage.getItem(PRODUCTS_CACHE_KEY);
+  if (raw) {
+    const cached = JSON.parse(raw);
+    if (Array.isArray(cached) && cached.length > 0) {
+      MODELS.length = 0;
+      MODELS.push(...cached);
+    }
+  }
+} catch (e) {}
+
 const loadProducts = async () => {
   const sb = window.SUPABASE;
   if (!sb) return false;
@@ -397,6 +411,7 @@ const loadProducts = async () => {
       }));
       MODELS.length = 0;
       MODELS.push(...next);
+      try { localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify(next)); } catch (e) {}
       _notifyModels();
       return true;
     }
