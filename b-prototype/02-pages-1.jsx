@@ -23,7 +23,8 @@ const HomePage = ({ onNav }) => {
             <span style={{ color: "var(--cyan-400)" }}>그래서 만들었습니다</span>
           </h1>
           <p style={{ color: "var(--gray-300)", fontSize: 13, lineHeight: 1.5, margin: "10px 0 0" }}>
-            3D 프린팅으로 현장의 불편함을 해결합니다.
+            정밀하게 설계했습니다.<br/>
+            PETG 소재로 더 가볍게.
           </p>
         </section>
       ) : (
@@ -37,7 +38,8 @@ const HomePage = ({ onNav }) => {
                 <span style={{ color: "var(--cyan-400)" }}>그래서 만들었습니다</span>
               </h1>
               <p style={{ color: "var(--gray-200)", fontSize: 18, lineHeight: 1.6, marginBottom: 32, maxWidth: 540 }}>
-                3D 프린팅으로 <strong style={{ color: "var(--white)" }}>현장의 불편함</strong>을 해결합니다.
+                <strong style={{ color: "var(--white)" }}>정밀하게 설계했습니다.</strong><br/>
+                PETG 소재로 더 가볍게.
               </p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, auto)", gap: 36 }}>
                 {[["1개+", "최소 주문"], ["1일", "출고 기준"], ["0.1mm", "정밀도"]].map(([n, l]) => (
