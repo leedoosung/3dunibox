@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>3D UniBox — 가설 프로토타입</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="슈프리마 출입통제 단말기 전용 3D 프린팅 유니버설 브라켓 — 3D UniBox" />
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#00C8F0" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0A1628" media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="dark light" />
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/icon-192.svg" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="3D UniBox" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="stylesheet" href="styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  html, body, #root { height: 100%; }
+  body { background: #000000; }
+  html { -webkit-tap-highlight-color: transparent; }
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+</style>
+<script>
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch((e) => {
+      console.warn("[PWA] SW 등록 실패:", e);
+    });
+  });
+}
+</script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="shared.jsx"></script>
+<script type="text/babel" src="flow-a-1.jsx"></script>
+<script type="text/babel" src="flow-a-2.jsx"></script>
+<script type="text/babel" src="flow-b-1.jsx"></script>
+<script type="text/babel" src="flow-b-2.jsx"></script>
+<script type="text/babel" src="flow-c-1.jsx"></script>
+<script type="text/babel" src="flow-c-2.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+const HypothesisHeader = ({ tag, title, sub, hypothesis, prediction }) => (
+  <div style={{
+    padding: "20px 24px",
+    background: "linear-gradient(180deg, rgba(0,200,240,0.06), rgba(0,200,240,0))",
+    border: "1px solid rgba(0,200,240,0.2)",
+    borderRadius: 12,
+    marginBottom: 4,
+    width: "100%",
+    boxSizing: "border-box",
+  }}>
+    <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 8 }}>
+      <div style={{
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: 11, fontWeight: 600,
+        color: "#00C8F0",
+        background: "rgba(0,200,240,0.1)",
+        padding: "4px 10px",
+        borderRadius: 100,
+        letterSpacing: "0.06em",
+      }}>{tag}</div>
+      <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: "#fff", letterSpacing: "0.02em" }}>{title}</div>
+    </div>
+    <div style={{ fontSize: 13, color: "#C8D2E0", marginBottom: 10, fontFamily: "'Noto Sans KR', sans-serif" }}>{sub}</div>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, fontSize: 12, fontFamily: "'Noto Sans KR', sans-serif" }}>
+      <div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#00C8F0", letterSpacing: "0.1em", marginBottom: 4 }}>HYPOTHESIS</div>
+        <div style={{ color: "#E8EEF5", lineHeight: 1.5 }}>{hypothesis}</div>
+      </div>
+      <div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#00C8F0", letterSpacing: "0.1em", marginBottom: 4 }}>EXPECTED OUTCOME</div>
+        <div style={{ color: "#E8EEF5", lineHeight: 1.5 }}>{prediction}</div>
+      </div>
+    </div>
+  </div>
+);
+
+const App = () => (
+  <DesignCanvas
+    title="3D UniBox — 3가지 가설 × 5화면 플로우"
+    subtitle="에스디컨버전스 / B2B 다크 프리미엄 / 슈프리마 단말기 유니버설 브라켓"
+  >
+    <DCSection
+      id="hyp-a"
+      title="가설 A · Wall-first Discovery"
+      description="설치자는 단말기보다 '벽'을 먼저 안다. 벽→모델→견적 순서로 묻자."
+    >
+      <DCArtboard id="a0" label="가설 정의" width={1200} height={220}>
+        <HypothesisHeader
+          tag="HYPOTHESIS A"
+          title="WALL-FIRST DISCOVERY"
+          sub="설치환경 우선 탐색 플로우"
+          hypothesis="시공기사·시설관리자는 '어떤 단말기를 쓸지'보다 '어떤 벽에 다는지'를 먼저 안다. 따라서 벽 종류(유리/콘크리트)를 먼저 묻고 호환 모델을 보여주는 흐름이 자연스럽다."
+          prediction="첫 화면 이탈률 감소 + 견적폼 도달률 상승. 잘못된 모델 선택으로 인한 반품·문의가 줄어들 것."
+        />
+      </DCArtboard>
+      <DCArtboard id="a1" label="A-1 · Hero / 벽종류 선택" width={1440} height={900}><A1_Hero /></DCArtboard>
+      <DCArtboard id="a2" label="A-2 · 호환 모델 그리드" width={1440} height={900}><A2_Compatible /></DCArtboard>
+      <DCArtboard id="a3" label="A-3 · 제품 상세" width={1440} height={900}><A3_Detail /></DCArtboard>
+      <DCArtboard id="a4" label="A-4 · 견적 문의" width={1440} height={900}><A4_Quote /></DCArtboard>
+      <DCArtboard id="a5" label="A-5 · 접수 완료" width={1440} height={900}><A5_Done /></DCArtboard>
+    </DCSection>
+
+    <DCSection
+      id="hyp-b"
+      title="가설 B · Model-first Catalog"
+      description="기업 보안담당자는 모델명을 안다. 카테고리 탭 카탈로그가 익숙하고 신뢰감 있다."
+    >
+      <DCArtboard id="b0" label="가설 정의" width={1200} height={220}>
+        <HypothesisHeader
+          tag="HYPOTHESIS B"
+          title="MODEL-FIRST CATALOG"
+          sub="모델 카탈로그 우선 탐색 플로우"
+          hypothesis="이미 단말기 모델을 보유했거나 사양을 알고 있는 사용자는 카테고리 탭 + 그리드 + 상세 페이지의 클래식한 커머스 패턴이 가장 빠르고 익숙하다. 스마트스토어 구매 동선과도 자연스럽게 이어진다."
+          prediction="구매 전환율 상승 + 검색→상세 도달 시간 단축. 스마트스토어 외부 트래픽 유입 시 친숙한 UX로 이탈을 줄임."
+        />
+      </DCArtboard>
+      <DCArtboard id="b1" label="B-1 · Hero / 카탈로그 입구" width={1440} height={900}><B1_Hero /></DCArtboard>
+      <DCArtboard id="b2" label="B-2 · 카테고리 탭 그리드" width={1440} height={900}><B2_Catalog /></DCArtboard>
+      <DCArtboard id="b3" label="B-3 · 모델 상세 (스펙·구매)" width={1440} height={900}><B3_ModelDetail /></DCArtboard>
+      <DCArtboard id="b4" label="B-4 · 설치 가이드" width={1440} height={900}><B4_InstallGuide /></DCArtboard>
+      <DCArtboard id="b5" label="B-5 · FAQ + Footer" width={1440} height={900}><B5_FAQ /></DCArtboard>
+    </DCSection>
+
+    <DCSection
+      id="hyp-c"
+      title="가설 C · 3D Visualizer / AR Confidence"
+      description="'내 벽에 진짜 맞을까?' 라는 의심을 3D·AR로 해소하면 문의 전환이 늘어난다."
+    >
+      <DCArtboard id="c0" label="가설 정의" width={1200} height={220}>
+        <HypothesisHeader
+          tag="HYPOTHESIS C"
+          title="3D · AR CONFIDENCE"
+          sub="시각화 우선 시뮬레이션 플로우"
+          hypothesis="3D 프린팅 맞춤 제작은 '내 환경에 진짜 맞을까'가 가장 큰 구매 장벽. 인터랙티브 3D 뷰어 + AR 미리보기 + 단계별 시뮬레이션으로 신뢰를 쌓으면 견적 문의 전환이 올라간다."
+          prediction="문의 1건당 정보 품질 상승(모델·벽·치수 자동 입력) + 출장 견적 횟수 감소. 가격 민감도 낮은 B2B 고가 견적 유치에 유리."
+        />
+      </DCArtboard>
+      <DCArtboard id="c1" label="C-1 · Hero / 3D 뷰어" width={1440} height={900}><C1_Hero /></DCArtboard>
+      <DCArtboard id="c2" label="C-2 · 모델·벽 컨피규레이터" width={1440} height={900}><C2_Configurator /></DCArtboard>
+      <DCArtboard id="c3" label="C-3 · AR 미리보기 (모바일)" width={390} height={844}><C3_ARPreview /></DCArtboard>
+      <DCArtboard id="c4" label="C-4 · 단계별 시뮬레이션" width={1440} height={900}><C4_Simulation /></DCArtboard>
+      <DCArtboard id="c5" label="C-5 · 빠른 견적" width={1440} height={900}><C5_QuickQuote /></DCArtboard>
+    </DCSection>
+  </DesignCanvas>
+);
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

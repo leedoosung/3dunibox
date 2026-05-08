@@ -1,0 +1,609 @@
+/* 3D UniBox — Dark Premium B2B */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Brand — Pure Black baseline (모든 표면 검정 + 보더로 구분) */
+  --navy-950: #000000;          /* body 배경 */
+  --navy-900: #000000;          /* 사이드바/푸터 / TopNav 보조 표면 */
+  --navy-800: #000000;          /* 카드 베이스 */
+  --navy-700: #0F0F0F;          /* hover / 활성 표면 (살짝 변화) */
+  --navy-600: #161616;
+  --navy-500: #1F1F1F;
+  --cyan-400: #00C8F0;
+  --cyan-500: #00A8D0;
+  --cyan-300: #5BDDF5;
+  --cyan-glow: rgba(0, 200, 240, 0.30);
+  /* Logo accent — 당근 시그니처 오렌지 (실제 픽셀 추출 #FF7E36) */
+  --orange-500: #FF7E36;
+  --orange-400: #FF9357;
+  --orange-glow: rgba(255, 126, 54, 0.35);
+  --white: #FFFFFF;
+  --gray-100: #EDEDED;
+  --gray-200: #C9C9C9;
+  --gray-300: #A0A0A0;
+  --gray-400: #707070;
+  --gray-500: #4A4A4A;
+  --gray-600: #2A2A2A;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --success: #4ADE80;
+  --warning: #FBBF24;
+
+  /* Type */
+  --font-kr: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-display: 'Bebas Neue', 'Pretendard Variable', Pretendard, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Motion — Supanova premium ease */
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-kr);
+  background: #08111E;
+  color: var(--gray-100);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+/* 한국어 — 어절 단위 줄바꿈 (단어 중간 잘림 방지) */
+h1, h2, h3, h4, h5, h6, p, li, label, button, a, span, div {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.ub-mono, .ub-mono * {
+  word-break: normal;       /* 영문/숫자는 기본 동작 */
+  overflow-wrap: anywhere;
+}
+
+/* === ARTBOARD BASE === */
+.ub-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--navy-950);
+  color: var(--gray-100);
+  position: relative;
+  overflow: hidden;
+  font-family: var(--font-kr);
+  display: flex;
+  flex-direction: column;
+}
+
+.ub-screen.desktop { font-size: 14px; }
+.ub-screen.mobile { font-size: 14px; }
+
+/* === TOP BAR (desktop) === */
+.ub-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 40px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+.ub-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  color: var(--white);
+}
+.ub-logo-mark {
+  width: 28px; height: 28px;
+  background: #FF7E36;
+  border-radius: 6px;
+  position: relative;
+  display: grid; place-items: center;
+  color: #FFFFFF;
+  font-weight: 900;
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+.ub-logo-mark::after {
+  content: ""; position: absolute; inset: 0;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.10) inset;
+}
+.ub-nav {
+  display: flex; gap: 28px;
+  font-size: 13px;
+  color: var(--gray-200);
+}
+.ub-nav span { cursor: pointer; }
+.ub-nav .active { color: var(--cyan-400); }
+.ub-cta-mini {
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--cyan-400);
+  color: var(--navy-950);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* === BUTTONS === */
+.ub-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-kr);
+  transition: all 0.4s var(--ease-soft);
+}
+.ub-btn-primary {
+  background: var(--cyan-400);
+  color: var(--navy-950);
+  box-shadow: 0 6px 24px -4px var(--cyan-glow);
+}
+.ub-btn-primary:hover { background: var(--cyan-300); transform: translateY(-1px); box-shadow: 0 10px 32px -6px var(--cyan-glow); }
+.ub-btn-primary:active { transform: translateY(0) scale(0.98); }
+.ub-btn-ghost {
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--line-strong);
+}
+.ub-btn-ghost:hover { background: rgba(255,255,255,0.04); }
+.ub-btn-lg { padding: 16px 28px; font-size: 15px; }
+
+/* === CARDS (당근 스타일 미니멀) === */
+.ub-card {
+  background: var(--navy-800);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px;
+}
+/* Double-bezel — outer ring + inner core 효과 (단일 요소로 시뮬레이션) */
+.ub-card-product {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 18px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.5s var(--ease-soft);
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 10px 28px -16px rgba(0, 0, 0, 0.6);
+}
+/* 안쪽 코어 (inset 베젤 라인) — pseudo-element 로 ring 한 겹 더 */
+.ub-card-product::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+  z-index: -1;
+  transition: border-color 0.5s var(--ease-soft);
+}
+.ub-card-product:hover {
+  border-color: rgba(0, 200, 240, 0.28);
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    0 18px 40px -16px rgba(0, 200, 240, 0.18);
+}
+.ub-card-product:hover::before {
+  border-color: rgba(0, 200, 240, 0.10);
+}
+.ub-card-product:active {
+  transform: translateY(-1px) scale(0.995);
+}
+
+/* === BADGES === */
+.ub-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.ub-badge-live {
+  background: rgba(74, 222, 128, 0.12);
+  color: var(--success);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+}
+.ub-badge-soon {
+  background: rgba(251, 191, 36, 0.1);
+  color: var(--warning);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+.ub-badge-cyan {
+  background: rgba(0, 200, 240, 0.12);
+  color: var(--cyan-400);
+  border: 1px solid rgba(0, 200, 240, 0.3);
+}
+.ub-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* === SECTION HEADERS === */
+.ub-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--cyan-400);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.ub-h1 {
+  font-family: var(--font-kr);
+  font-weight: 900;
+  font-size: 56px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin: 0;
+}
+.ub-h2 {
+  font-family: var(--font-kr);
+  font-weight: 800;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--white);
+  margin: 0;
+}
+.ub-h3 {
+  font-family: var(--font-kr);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.3;
+  color: var(--white);
+  margin: 0;
+}
+.ub-display {
+  font-family: var(--font-display);
+  font-size: 96px;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  color: var(--white);
+}
+.ub-mono { font-family: var(--font-mono); }
+.ub-spec-key {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ub-spec-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--white);
+}
+
+/* === GRID BG === */
+.ub-grid-bg {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.ub-radial-cyan {
+  background: radial-gradient(ellipse 600px 400px at 80% 20%, rgba(0, 200, 240, 0.15), transparent 60%);
+}
+
+/* === DEVICE / BRACKET ILLUSTRATION === */
+.ub-device {
+  background: linear-gradient(160deg, #1a2940, #0d1828);
+  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  position: relative;
+  overflow: hidden;
+}
+.ub-device::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(0,200,240,0.12), transparent 50%);
+}
+.ub-device-screen {
+  position: absolute;
+  background: linear-gradient(180deg, #0a1220, #050a14);
+  border: 1px solid rgba(0,200,240,0.2);
+  border-radius: 4px;
+}
+
+/* === TABS === */
+.ub-tabs {
+  display: flex; gap: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.ub-tab {
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-300);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  white-space: nowrap;
+}
+.ub-tab.active {
+  color: var(--cyan-400);
+  border-bottom-color: var(--cyan-400);
+}
+.ub-tab:hover:not(.active) { color: var(--gray-100); }
+
+/* === FORMS === */
+.ub-input, .ub-select, .ub-textarea {
+  width: 100%;
+  background: var(--navy-900);
+  border: 1px solid var(--line);
+  color: var(--white);
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--font-kr);
+  outline: none;
+}
+.ub-input:focus, .ub-select:focus, .ub-textarea:focus {
+  border-color: var(--cyan-400);
+  box-shadow: 0 0 0 3px rgba(0,200,240,0.1);
+}
+.ub-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-200);
+  margin-bottom: 8px;
+}
+.ub-label-req::after {
+  content: "*";
+  color: var(--cyan-400);
+  margin-left: 4px;
+}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-500); }
+
+/* === DEVICE FRAME (mobile) === */
+.ub-mobile-statusbar {
+  height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 22px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--white);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.ub-mobile-tabbar {
+  height: 64px;
+  border-top: 1px solid var(--line);
+  background: rgba(10, 22, 40, 0.95);
+  display: flex; align-items: center; justify-content: space-around;
+  flex-shrink: 0;
+}
+.ub-tabbar-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: 10px;
+  color: var(--gray-400);
+}
+.ub-tabbar-item.active { color: var(--cyan-400); }
+
+/* === STEP DOTS === */
+.ub-stepper {
+  display: flex; align-items: center; gap: 8px;
+}
+.ub-step-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--line-strong);
+  color: var(--gray-300);
+}
+.ub-step-dot.done { background: var(--cyan-400); color: var(--navy-950); border-color: var(--cyan-400); }
+.ub-step-dot.active { border-color: var(--cyan-400); color: var(--cyan-400); box-shadow: 0 0 0 4px rgba(0,200,240,0.1); }
+.ub-step-line { flex: 1; height: 1px; background: var(--line-strong); }
+.ub-step-line.done { background: var(--cyan-400); }
+
+/* === Wall texture illustrations === */
+.wall-glass {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 8px, transparent 8px 16px),
+    linear-gradient(160deg, rgba(0,200,240,0.08), rgba(0,200,240,0.02));
+  border: 1px solid rgba(0,200,240,0.25);
+}
+.wall-concrete {
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.04) 0 8px, transparent 9px),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.03) 0 6px, transparent 7px),
+    radial-gradient(circle at 50% 80%, rgba(255,255,255,0.04) 0 10px, transparent 11px),
+    linear-gradient(160deg, #2a3441, #1a2230);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.wall-mixed {
+  background:
+    linear-gradient(90deg, rgba(0,200,240,0.06) 0 50%, rgba(255,255,255,0.03) 50%);
+  border: 1px solid var(--line-strong);
+}
+
+/* utility */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 16px; }
+.gap-6 { gap: 24px; }
+.grow { flex: 1; }
+.text-cyan { color: var(--cyan-400); }
+.text-gray { color: var(--gray-300); }
+.text-mono { font-family: var(--font-mono); }
+
+/* cart drawer */
+.ub-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 320ms var(--ease-soft);
+  z-index: 100;
+}
+.ub-drawer-overlay.is-open { opacity: 1; }
+
+.ub-drawer-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 420px;
+  max-width: 100vw;
+  background: var(--navy-950);
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 380ms var(--ease-soft);
+  z-index: 101;
+  outline: none;
+}
+.ub-drawer-panel.is-open { transform: translateX(0); }
+
+.ub-drawer-iconbtn {
+  background: transparent;
+  border: 0;
+  padding: 4px;
+  color: var(--gray-300);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.3s var(--ease-soft), background 0.3s var(--ease-soft);
+}
+.ub-drawer-iconbtn:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+.ub-drawer-iconbtn:focus-visible { outline: 2px solid var(--cyan-400); outline-offset: 2px; }
+
+.ub-qty-group {
+  display: flex;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.ub-qty-btn {
+  background: transparent;
+  border: 0;
+  padding: 4px 10px;
+  color: var(--gray-200);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: background 0.3s var(--ease-soft), color 0.3s var(--ease-soft);
+}
+.ub-qty-btn:hover { background: rgba(255,255,255,0.05); color: var(--white); }
+.ub-qty-btn:focus-visible { outline: 2px solid var(--cyan-400); outline-offset: -2px; }
+.ub-qty-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+.ub-qty-divider { border-left: 1px solid var(--line-strong); }
+
+.ub-drawer-footer { padding: 24px; border-top: 1px solid var(--line); }
+.ub-drawer-body { flex: 1; overflow: auto; padding: 24px; }
+
+@media (max-width: 480px) {
+  .ub-drawer-panel { width: 100vw; border-left: none; }
+  .ub-drawer-footer { padding: 16px; }
+  .ub-drawer-body { padding: 16px; }
+}
+
+/* mobile baseline */
+@media (max-width: 1024px) {
+  .ub-topbar { padding: 12px 16px !important; }
+  .ub-h2 { font-size: clamp(22px, 6vw, 28px) !important; line-height: 1.2 !important; word-break: keep-all; }
+  .ub-card { padding: 16px !important; border-radius: 12px !important; }
+  .ub-card-product { padding: 12px !important; border-radius: 10px !important; }
+  .ub-card-product .ub-mono { font-size: 9px !important; }
+  table { font-size: 11px !important; }
+  table th, table td { padding: 10px 8px !important; }
+  /* 하단 탭바 가림 방지 — body 하단 패딩 확보 */
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important; }
+  footer { margin-bottom: 0 !important; }
+}
+
+/* 하단 모바일 탭바 (당근 마켓 스타일) */
+.ub-bottom-tabs {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 90;
+}
+.ub-bottom-tab {
+  background: transparent;
+  border: 0;
+  padding: 10px 6px 8px;
+  color: var(--gray-300);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  transition: color 0.3s var(--ease-soft);
+}
+.ub-bottom-tab.active { color: var(--cyan-400); font-weight: 700; }
+.ub-bottom-tab .dot {
+  position: absolute; top: 4px; right: calc(50% - 18px);
+  min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 100px; background: var(--cyan-400); color: var(--navy-950);
+  font-size: 9px; font-weight: 700; font-family: var(--font-mono);
+  display: grid; place-items: center;
+}
+
+/* === ORBIT — Hero 3D 회전 디스크 ring (wannathis 스타일) === */
+/* ⚠ 부모에 filter / opacity<1 / mix-blend-mode 절대 금지 — preserve-3d 평면화됨 */
+/* 회전은 JS(requestAnimationFrame)가 인라인 transform 으로 제어. CSS 애니메이션 X. */
+.ub-orbit {
+  position: relative;
+  display: inline-block;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+.ub-orbit-rotor {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.ub-orbit-disc {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  backface-visibility: visible;
+  background:
+    radial-gradient(ellipse at 32% 28%,
+      rgba(216, 200, 255, 0.95) 0%,
+      rgba(149, 120, 245, 0.92) 25%,
+      rgba(91, 60, 200, 0.88) 55%,
+      rgba(40, 28, 90, 1) 100%);
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(139, 92, 246, 0.30);
+}

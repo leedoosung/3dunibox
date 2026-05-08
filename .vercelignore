@@ -1,0 +1,17 @@
+# 개발 자료 — 배포에서 제외
+__screens__/
+당근마켓 UI/
+nocache_server.py
+flow-a-1.jsx
+flow-a-2.jsx
+flow-b-1.jsx
+flow-b-2.jsx
+flow-c-1.jsx
+flow-c-2.jsx
+design-canvas.jsx
+shared.jsx
+*.py
+*.md
+.git/
+.DS_Store
+Thumbs.db

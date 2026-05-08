@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192" role="img" aria-label="3D UniBox">
+  <rect width="192" height="192" rx="34" fill="#000000"/>
+  <rect x="40" y="40" width="112" height="112" rx="22" fill="#FF7E36"/>
+  <text x="96" y="118" font-family="'Bebas Neue','Inter',Arial,sans-serif"
+        font-weight="700" font-size="64" letter-spacing="-2"
+        text-anchor="middle" fill="#FFFFFF">3D</text>
+</svg>

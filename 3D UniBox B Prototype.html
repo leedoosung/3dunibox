@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>3D UniBox — 없으면 만들고, 있으면 더 낫게</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="없으면 만들고, 있으면 더 낫게 — 3D 프린팅으로 현장의 불편함을 해결합니다." />
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#00C8F0" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0A1628" media="(prefers-color-scheme: dark)" />
+<meta name="color-scheme" content="dark light" />
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/icon-192.svg" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="3D UniBox" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+
+<link rel="stylesheet" href="styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+html, body, #root { margin: 0; min-height: 100vh; background: var(--navy-950, #000000); }
+html { -webkit-tap-highlight-color: transparent; }
+body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+</style>
+<script>
+// === 강제 캐시 박살 — 매 진입마다 옛 SW/caches 모두 제거. 무한 reload 방지. ===
+(function () {
+  var hasSW = 'serviceWorker' in navigator;
+  var hasCaches = 'caches' in window;
+  if (!hasSW && !hasCaches) return;
+
+  var FLAG = 'ub:cleared:once';
+  var alreadyCleared = false;
+  try { alreadyCleared = sessionStorage.getItem(FLAG) === '1'; } catch (e) {}
+
+  var pending = 0;
+  var didSomething = false;
+  function doneStep() {
+    pending--;
+    if (pending <= 0) {
+      try { sessionStorage.setItem(FLAG, '1'); } catch (e) {}
+      if (didSomething && !alreadyCleared) location.reload();
+    }
+  }
+
+  if (hasSW) {
+    pending++;
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+      if (regs.length > 0) didSomething = true;
+      return Promise.all(regs.map(function (r) { return r.unregister(); }));
+    }).catch(function () {}).finally(doneStep);
+  }
+  if (hasCaches) {
+    pending++;
+    caches.keys().then(function (keys) {
+      if (keys.length > 0) didSomething = true;
+      return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+    }).catch(function () {}).finally(doneStep);
+  }
+})();
+</script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- Supabase JS SDK + 클라이언트 초기화 -->
+<script src="https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+  window.SUPABASE_URL = "https://cdpigjktddwyajyjhqtw.supabase.co";
+  window.SUPABASE_KEY = "sb_publishable_p9cs6d7mr5iGXFmE8oeRWQ_N1YebGWy";
+  if (window.supabase && window.supabase.createClient) {
+    window.SUPABASE = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+    });
+  }
+</script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="b-prototype/01-core.jsx"></script>
+<script type="text/babel" src="b-prototype/00-auth.jsx"></script>
+<script type="text/babel" src="b-prototype/02-pages-1.jsx"></script>
+<script type="text/babel" src="b-prototype/03-pages-2.jsx"></script>
+<script type="text/babel" src="b-prototype/04-pages-3.jsx"></script>
+<script type="text/babel" src="b-prototype/05-admin.jsx"></script>
+<script type="text/babel" src="b-prototype/06-mypage.jsx"></script>
+<script type="text/babel" src="b-prototype/07-policy.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect } = React;
+const { TopNav, BottomTabs, HomePage, CatalogPage, DetailPage, GuidePage, FAQPage, OrderPage, CartDrawer, DoneModal, AboutPage, AdminPage, MyPage, Footer, MODELS, LoginPage, useAuth, TermsPage, PrivacyPage } = window.UB;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#00C8F0",
+  "density": "regular",
+  "showBadges": true
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = useState({ name: "home" });
+  const [cart, setCart] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState(null);
+  const [doneData, setDoneData] = useState(null);
+  const { user, ready: authReady } = useAuth();
+
+  useEffect(() => { document.documentElement.style.setProperty("--cyan-400", t.accent); }, [t.accent]);
+  useEffect(() => { window.scrollTo(0, 0); }, [route]);
+
+  // 라우터 — 해시(#admin) + 짧은 path(/admin) 둘 다 인식
+  useEffect(() => {
+    const VALID = ["home", "catalog", "guide", "faq", "about", "order", "admin", "me", "login", "terms", "privacy"];
+    const apply = () => {
+      // 우선순위 1: hash
+      const h = (location.hash || "").replace(/^#/, "").trim();
+      if (VALID.includes(h)) { setRoute({ name: h }); return; }
+      // 우선순위 2: 첫 path 세그먼트 (예: /admin, /me, /catalog)
+      const seg = (location.pathname || "/").split("/").filter(Boolean)[0] || "";
+      if (VALID.includes(seg)) { setRoute({ name: seg }); return; }
+      // 그 외는 home 유지
+    };
+    apply();
+    window.addEventListener("hashchange", apply);
+    window.addEventListener("popstate", apply);
+    return () => {
+      window.removeEventListener("hashchange", apply);
+      window.removeEventListener("popstate", apply);
+    };
+  }, []);
+
+  const showToast = (msg) => { setToastMsg(msg); setTimeout(() => setToastMsg(null), 2400); };
+  const addToCart = (m, qty = 1) => {
+    setCart(c => {
+      const i = c.findIndex(x => x.id === m.id);
+      if (i >= 0) { const next = [...c]; next[i] = { ...next[i], qty: next[i].qty + qty }; return next; }
+      return [...c, { id: m.id, qty }];
+    });
+    showToast(`${m.name} ${qty}개 장바구니에 담김`);
+  };
+  const updateCart = (i, qty) => setCart(c => c.map((x, j) => j === i ? { ...x, qty } : x));
+  const removeCart = (i) => setCart(c => c.filter((_, j) => j !== i));
+
+  const navTo = (r) => {
+    setRoute(r);
+    setCartOpen(false);
+  };
+
+  const isAdmin = route.name === "admin";
+
+  return (
+    <div>
+      {!isAdmin && <TopNav route={route} onNav={navTo} cartCount={cart.length} onOpenCart={() => setCartOpen(true)} />}
+      {route.name === "home" && <HomePage onNav={navTo} />}
+      {route.name === "catalog" && <CatalogPage onNav={navTo} onAdd={addToCart} />}
+      {route.name === "detail" && <DetailPage id={route.id} onNav={navTo} onAdd={addToCart} toast={showToast} />}
+      {route.name === "guide" && <GuidePage />}
+      {route.name === "faq" && <FAQPage />}
+      {route.name === "about" && <AboutPage />}
+      {route.name === "admin" && <AdminPage />}
+      {route.name === "me" && (user ? <MyPage /> : <LoginPage onAfter={() => navTo({ name: "me" })} />)}
+      {route.name === "login" && <LoginPage onAfter={() => navTo({ name: "me" })} />}
+      {route.name === "terms" && <TermsPage />}
+      {route.name === "privacy" && <PrivacyPage />}
+      {route.name === "order" && (
+        user ? (
+          <OrderPage
+            onNav={navTo}
+            presetId={route.presetId}
+            cart={cart}
+            onClear={() => setCart([])}
+            onDone={(data) => setDoneData(data)}
+          />
+        ) : (
+          <LoginPage onAfter={() => navTo({ name: "order" })} />
+        )
+      )}
+      {!isAdmin && <Footer onNav={navTo} />}
+      {!isAdmin && <BottomTabs route={route} onNav={navTo} cartCount={cart.length} onOpenCart={() => setCartOpen(true)} />}
+
+      <CartDrawer
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        cart={cart}
+        onUpdate={updateCart}
+        onRemove={removeCart}
+        onCheckout={() => { setCartOpen(false); navTo({ name: "order" }); }}
+        onBrowse={() => { setCartOpen(false); navTo({ name: "catalog" }); }}
+      />
+
+      {doneData && <DoneModal data={doneData} onClose={() => { setDoneData(null); navTo({ name: "guide" }); }} onHome={() => { setDoneData(null); navTo({ name: "home" }); }} />}
+
+      {toastMsg && (
+        <div style={{
+          position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", zIndex: 300,
+          padding: "12px 20px", borderRadius: 100, background: "rgba(10,22,40,0.95)",
+          border: "1px solid var(--cyan-400)", color: "var(--white)", fontSize: 13, fontWeight: 500,
+          backdropFilter: "blur(8px)", boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
+          display: "flex", alignItems: "center", gap: 8,
+        }}>
+          <span style={{ color: "var(--cyan-400)" }}>✓</span>
+          {toastMsg}
+        </div>
+      )}
+
+      <TweaksPanel>
+        <TweakSection label="테마" />
+        <TweakColor label="액센트 컬러" value={t.accent} onChange={(v) => setTweak("accent", v)} />
+        <TweakSection label="제품" />
+        <TweakToggle label="상태 배지 표시" value={t.showBadges} onChange={(v) => setTweak("showBadges", v)} />
+        <TweakRadio label="밀도" value={t.density} options={["compact", "regular", "comfy"]} onChange={(v) => setTweak("density", v)} />
+        <TweakSection label="빠른 이동" />
+        <TweakButton onClick={() => navTo({ name: "home" })}>홈</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "catalog" })}>카탈로그</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "detail", id: "fsf2" })}>제품 상세 (FSF2)</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "guide" })}>시공사례</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "faq" })}>FAQ</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "order" })}>결제 폼</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "admin" })}>관리자 (윤곽)</TweakButton>
+        <TweakButton onClick={() => navTo({ name: "me" })}>마이페이지</TweakButton>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

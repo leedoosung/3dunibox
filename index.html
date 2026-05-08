@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>3D UniBox — 없으면 만들고, 있으면 더 낫게</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="없으면 만들고, 있으면 더 낫게 — 3D 프린팅으로 현장의 불편함을 해결합니다." />
+<link rel="canonical" href="https://3dunibox.co.kr/" />
+
+<!-- PWA 메타 -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#000000" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/icons/icon-192.svg" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="3D UniBox" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- OpenGraph (카톡/페이스북 미리보기) -->
+<meta property="og:title" content="3D UniBox — 없으면 만들고, 있으면 더 낫게" />
+<meta property="og:description" content="3D 프린팅으로 현장의 불편함을 해결합니다." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://3dunibox.co.kr/" />
+<meta property="og:image" content="https://3dunibox.co.kr/icons/icon-512.svg" />
+<meta property="og:locale" content="ko_KR" />
+
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff;
+    font-family: 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent; }
+  body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  .splash { display:grid; place-items:center; height:100%; gap:14px; text-align:center; padding:20px; }
+  .mark { width:64px; height:64px; border-radius:14px; background:#FF7E36;
+    display:grid; place-items:center; color:#fff; font-weight:900;
+    font-family:'Bebas Neue',sans-serif; font-size:30px; letter-spacing:1px; }
+  .name { font-size:22px; font-weight:700; letter-spacing:0.5px; }
+  .sub { font-size:13px; color:#A0A0A0; }
+  a.go { color:#FF7E36; text-decoration:none; font-weight:600; padding:10px 16px;
+    border:1px solid rgba(255,255,255,0.2); border-radius:8px; }
+</style>
+</head>
+<body>
+<div class="splash">
+  <div class="mark">3D</div>
+  <div class="name">3D UniBox</div>
+  <div class="sub">로딩 중…</div>
+  <noscript>
+    <a href="/3D%20UniBox%20B%20Prototype.html" class="go">진입하기 →</a>
+  </noscript>
+</div>
+
+<script>
+  // 옛 SW 자동 정리 (있을 경우)
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    navigator.serviceWorker.getRegistrations().then(function (regs) {
+      if (regs.length > 0) navigator.serviceWorker.register("/service-worker.js").catch(function () {});
+    }).catch(function () {});
+  }
+  // 메인 페이지로 부드럽게 이동
+  setTimeout(function () {
+    location.replace("/3D%20UniBox%20B%20Prototype.html" + (location.hash || ""));
+  }, 50);
+</script>
+</body>
+</html>

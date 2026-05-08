@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="3D UniBox">
+  <rect width="512" height="512" rx="92" fill="#000000"/>
+  <rect x="106" y="106" width="300" height="300" rx="58" fill="#FF7E36"/>
+  <text x="256" y="316" font-family="'Bebas Neue','Inter',Arial,sans-serif"
+        font-weight="700" font-size="172" letter-spacing="-6"
+        text-anchor="middle" fill="#FFFFFF">3D</text>
+  <text x="256" y="372" font-family="'JetBrains Mono','Menlo',monospace"
+        font-weight="600" font-size="22" letter-spacing="6"
+        text-anchor="middle" fill="rgba(255,255,255,0.65)">UNIBOX</text>
+</svg>

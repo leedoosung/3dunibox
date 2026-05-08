@@ -1,0 +1,16 @@
+# Vercel
+.vercel
+
+# Node (혹시 추후 도입 시)
+node_modules/
+npm-debug.log*
+
+# OS 잡파일
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 에디터
+.vscode/
+.idea/
+*.swp

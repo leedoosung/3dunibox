@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /__screens__/
+Disallow: /b-prototype/
+Disallow: /flow-a-1.jsx
+Disallow: /flow-a-2.jsx
+Disallow: /flow-b-1.jsx
+Disallow: /flow-b-2.jsx
+Disallow: /flow-c-1.jsx
+Disallow: /flow-c-2.jsx
+Disallow: /design-canvas.jsx
+Disallow: /tweaks-panel.jsx
+Disallow: /shared.jsx
+
+Sitemap: https://3dunibox.co.kr/sitemap.xml

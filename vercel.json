@@ -1,0 +1,74 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/app", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/admin", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/me", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/catalog", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/guide", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/faq", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/about", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/order", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/login", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/terms", "destination": "/3D UniBox B Prototype.html" },
+    { "source": "/privacy", "destination": "/3D UniBox B Prototype.html" }
+  ],
+  "headers": [
+    {
+      "source": "/service-worker.js",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "Service-Worker-Allowed", "value": "/" }
+      ]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        { "key": "Content-Type", "value": "application/manifest+json" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/b-prototype/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "text/babel; charset=utf-8" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*\\.jsx)",
+      "headers": [
+        { "key": "Content-Type", "value": "text/babel; charset=utf-8" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*\\.css)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*\\.html)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    }
+  ]
+}

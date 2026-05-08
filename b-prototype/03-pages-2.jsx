@@ -1,0 +1,230 @@
+// B안 — 페이지 2: Detail / Guide / FAQ / Quote / Cart
+
+const { useState: uS3, useMemo: uM3, useEffect: uE3, Fragment: F3 } = React;
+const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, useIsMobile: useIsMobile3, useProducts: useProducts3 } = window.UB;
+
+// ─── DETAIL ────────────────────────────────────────────────────────────────
+const DetailPage = ({ id, onNav, onAdd, toast }) => {
+  useProducts3();
+  const isMobile = useIsMobile3(1024);
+  const [qty, setQty] = uS3(1);
+  const [tab, setTab] = uS3("desc");
+  const m = MODELS.find(x => x.id === id) || MODELS[0];
+  if (!m) {
+    return <div style={{ padding: 60, textAlign: "center", color: "var(--gray-400)" }}>제품을 불러오는 중…</div>;
+  }
+
+  return (
+    <div>
+      <div style={{ padding: isMobile ? "12px 16px" : "16px 80px", borderBottom: "1px solid var(--line)", fontSize: 12, color: "var(--gray-400)" }}>
+        <span style={{ cursor: "pointer" }} onClick={() => onNav({ name: "home" })}>홈</span> /
+        <span style={{ cursor: "pointer", margin: "0 6px" }} onClick={() => onNav({ name: "catalog" })}>제품</span> /
+        <span style={{ color: "var(--white)", marginLeft: 6 }}>{m.name} ({m.code})</span>
+      </div>
+      <div style={{ padding: isMobile ? "20px 16px 40px" : "32px 80px 60px", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", gap: isMobile ? 24 : 48 }}>
+        <div>
+          <div style={{ aspectRatio: "1", background: "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", display: "grid", placeItems: "center", border: "1px solid var(--line)" }}>
+            <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.4 }} />
+            {m.image_url
+              ? <img src={m.image_url} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 12 }} />
+              : <Bracket size={360} />}
+            <div style={{ position: "absolute", top: 16, left: 16 }}>
+              <Badge kind={m.status === "live" ? "live" : "soon"}>{m.status === "live" ? "판매중" : "출시예정"}</Badge>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="ub-mono" style={{ fontSize: 12, color: "var(--cyan-400)", marginBottom: 8 }}>{m.code} · {m.cat === "face" ? "안면인식" : m.cat === "fp" ? "지문+카드" : m.cat === "card" ? "카드전용" : "멀티"}</div>
+          <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 8 }}>{m.name} 전용 브라켓</h1>
+          <div style={{ color: "var(--gray-300)", fontSize: 14, marginBottom: 20 }}>{m.desc}. 슈프리마 정확한 핏. 유리·콘크리트 모두 OK. 케이블 내장 수납.</div>
+
+          <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid var(--line)" }}>
+            <div style={{ color: "var(--cyan-400)", letterSpacing: 2 }}>★★★★★</div>
+            <div style={{ fontSize: 12, color: "var(--gray-300)" }}>4.9 / 27건 리뷰</div>
+          </div>
+
+          <div className="ub-card" style={{ marginBottom: 20, background: "rgba(0,200,240,0.03)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
+              <div>
+                <div className="ub-spec-key">SD샵 · 스마트스토어</div>
+                <div className="ub-mono" style={{ fontSize: 28, color: "var(--white)", fontWeight: 700, marginTop: 4 }}>₩{(m.price * qty).toLocaleString()}</div>
+              </div>
+              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>무료배송</div>
+            </div>
+            <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 14 }}>
+              <span className="ub-spec-key">수량</span>
+              <div style={{ display: "flex", border: "1px solid var(--line-strong)", borderRadius: 8, overflow: "hidden" }}>
+                <div onClick={() => setQty(Math.max(1, qty - 1))} style={{ padding: "8px 14px", borderRight: "1px solid var(--line-strong)", cursor: "pointer", userSelect: "none" }}>−</div>
+                <div className="ub-mono" style={{ padding: "8px 18px", color: "var(--white)", minWidth: 50, textAlign: "center" }}>{qty}</div>
+                <div onClick={() => setQty(qty + 1)} style={{ padding: "8px 14px", borderLeft: "1px solid var(--line-strong)", cursor: "pointer", userSelect: "none" }}>+</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              {m.status === "live" ? (
+                <>
+                  <Btn variant="primary" size="lg" full onClick={() => { window.open("https://smartstore.naver.com", "_blank"); }}>
+                    스마트스토어로 구매 {Ic.external}
+                  </Btn>
+                  <Btn variant="ghost" size="lg" onClick={() => { onAdd(m, qty); toast(`${m.name} ${qty}개 장바구니에 담김`); }}>장바구니</Btn>
+                </>
+              ) : (
+                <Btn variant="primary" size="lg" full onClick={() => alert("출시 알림은 1588-0000 또는 info@sdconv.kr로 신청해 주세요.")}>출시 알림 신청</Btn>
+              )}
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 20 }}>
+            <div className="ub-spec-key" style={{ marginBottom: 10 }}>설치 환경 호환</div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {["유리", "콘크리트", "석고", "벽돌"].map(c => (
+                <span key={c} style={{ fontSize: 12, fontFamily: "var(--font-mono)", padding: "6px 10px", borderRadius: 6, background: "rgba(74,222,128,0.1)", color: "var(--success)", border: "1px solid rgba(74,222,128,0.25)" }}>{c} ✓</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="ub-tabs">
+            {[["desc", "제품 설명"], ["spec", "스펙"], ["review", "리뷰 (27)"], ["return", "교환·반품"]].map(([k, l]) => (
+              <div key={k} className={`ub-tab ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>{l}</div>
+            ))}
+          </div>
+          <div style={{ padding: "20px 0", color: "var(--gray-200)", fontSize: 13, lineHeight: 1.7, minHeight: 120 }}>
+            {tab === "desc" && <>{m.name} 단말기 후면에 정확히 맞도록 3D 스캔 데이터 기반으로 설계되었습니다. 케이블이 외부로 노출되지 않아 깔끔한 마감이 가능하며, <strong style={{ color: "var(--white)" }}>동봉된 볼트·너트 세트(M3 × 4ea, 와셔 포함)</strong>로 유리·콘크리트·석고 어떤 벽에도 견고하게 고정됩니다.</>}
+            {tab === "spec" && (
+              <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
+                <tbody>
+                  {[["모델", m.code], ["대응 단말기", `Suprema ${m.name}`], ["재질", "PETG · 무광 블랙"], ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`], ["중량", `${m.weight} g`], ["케이블 채널", "⌀8mm"], ["고정", "M3 볼트 4ea + 너트·와셔 동봉"], ["보증", "1년"]].map(([k, v]) => (
+                    <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
+                      <td style={{ padding: "10px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
+                      <td style={{ padding: "10px 0", color: "var(--white)" }}>{v}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            {tab === "review" && <>실제 설치자 27명의 리뷰가 등록되어 있습니다. 평균 평점 4.9 / 5.0. 가장 많이 언급된 키워드: "마감", "케이블", "단단함".</>}
+            {tab === "return" && <>맞춤 제작 특성상 단순 변심 반품은 제한됩니다. 제품 하자 시 7일 이내 100% 무상 교환 가능. 상세는 FAQ 참조.</>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── GUIDE — 현장별 설치 사례 (Supabase install_cases fetch) ───────────────
+const GuidePage = () => {
+  const isMobile = useIsMobile3(1024);
+  const [cases, setCases] = uS3([]);
+  const [loading, setLoading] = uS3(true);
+
+  uE3(() => {
+    const sb = window.SUPABASE;
+    if (!sb) { setLoading(false); return; }
+    sb.from("install_cases").select("*").order("sort_order")
+      .then(({ data, error }) => {
+        if (!error && Array.isArray(data)) setCases(data);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const allHavePhoto = cases.length > 0 && cases.every(c => c.image_url);
+
+  return (
+    <div style={{ padding: isMobile ? "28px 16px 40px" : "48px 80px 60px" }}>
+      <div className="ub-eyebrow" style={{ marginBottom: 10 }}>INSTALLATION CASES</div>
+      <h2 className="ub-h2" style={{ marginBottom: 8 }}>현장별 설치 사례</h2>
+      <div style={{ color: "var(--gray-300)", fontSize: 14, marginBottom: isMobile ? 20 : 32 }}>실제 적용 현장 모음</div>
+
+      {loading ? (
+        <div style={{ padding: 60, textAlign: "center", color: "var(--gray-400)" }}>불러오는 중…</div>
+      ) : cases.length === 0 ? (
+        <div style={{ padding: 60, textAlign: "center", border: "1px dashed var(--line-strong)", borderRadius: 12, color: "var(--gray-400)" }}>등록된 사례가 없습니다</div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", gap: isMobile ? 18 : 24 }}>
+          {cases.map((c, i) => (
+            <div key={c.id || i}>
+              <div style={{ aspectRatio: "1 / 1", background: "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 12, border: "1px solid var(--line)", display: "grid", placeItems: "center", position: "relative", overflow: "hidden" }}>
+                {c.image_url ? (
+                  <img src={c.image_url} alt={c.caption} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 8 }} />
+                ) : (
+                  <>
+                    <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.3 }} />
+                    <div style={{ position: "relative", textAlign: "center", color: "var(--gray-500, #6B7280)", fontSize: 11, fontFamily: "var(--font-mono)", letterSpacing: 1.2 }}>
+                      IMAGE {String(i + 1).padStart(2, "0")}
+                    </div>
+                  </>
+                )}
+              </div>
+              <div style={{ marginTop: 12, fontSize: 14, color: "var(--white)", fontWeight: 700, lineHeight: 1.4 }}>{c.caption}</div>
+              {c.description && (
+                <div style={{ marginTop: 6, fontSize: 13, color: "var(--gray-300)", lineHeight: 1.6, whiteSpace: "pre-wrap", wordBreak: "keep-all" }}>{c.description}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!loading && cases.length > 0 && !allHavePhoto && (
+        <div style={{ marginTop: 24, fontSize: 11, color: "var(--gray-500, #6B7280)", textAlign: "center" }}>
+          실제 현장 사진으로 교체 예정 — 임시 플레이스홀더 사용 중
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+const FAQPage = () => {
+  const isMobile = useIsMobile3(1024);
+  const [open, setOpen] = uS3(0);
+  const [cat, setCat] = uS3("전체");
+  const [q, setQ] = uS3("");
+  const cats = ["전체", ...new Set(FAQS.map(f => f.c))];
+  const filtered = FAQS.filter(f => (cat === "전체" || f.c === cat) && (!q.trim() || f.q.includes(q) || f.a.includes(q)));
+  return (
+    <div style={{ padding: isMobile ? "28px 16px 40px" : "48px 80px 60px" }}>
+      <div className="ub-eyebrow" style={{ marginBottom: 10 }}>FAQ · 자주 묻는 질문</div>
+      <h2 className="ub-h2" style={{ marginBottom: 24 }}>궁금한 점이 있으세요?</h2>
+      <div style={{ position: "relative", maxWidth: 480, marginBottom: 24 }}>
+        <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--gray-400)" }}>{Ic.search}</span>
+        <input className="ub-input" placeholder="키워드로 검색 (예: 유리, 케이블, 반품)" value={q} onChange={e => setQ(e.target.value)} style={{ paddingLeft: 40 }} />
+      </div>
+      {isMobile ? (
+        <div style={{ display: "flex", gap: 6, marginBottom: 16, overflowX: "auto", paddingBottom: 4 }}>
+          {cats.map(c => (
+            <div key={c} onClick={() => setCat(c)} style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 100, background: cat === c ? "rgba(0,200,240,0.12)" : "transparent", color: cat === c ? "var(--cyan-400)" : "var(--gray-200)", border: `1px solid ${cat === c ? "var(--cyan-400)" : "var(--line)"}`, fontSize: 12, fontWeight: cat === c ? 600 : 400, cursor: "pointer" }}>{c}</div>
+          ))}
+        </div>
+      ) : null}
+      <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "200px 1fr", gap: isMobile ? 0 : 32 }}>
+        {!isMobile && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            {cats.map(c => (
+              <div key={c} onClick={() => setCat(c)} style={{ padding: "10px 14px", borderRadius: 8, background: cat === c ? "rgba(0,200,240,0.1)" : "transparent", color: cat === c ? "var(--cyan-400)" : "var(--gray-200)", fontSize: 13, fontWeight: cat === c ? 600 : 400, cursor: "pointer", borderLeft: cat === c ? "2px solid var(--cyan-400)" : "2px solid transparent" }}>{c}</div>
+            ))}
+          </div>
+        )}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {filtered.length === 0 ? <div style={{ padding: 40, textAlign: "center", color: "var(--gray-400)", border: "1px dashed var(--line-strong)", borderRadius: 12 }}>검색 결과 없음</div> :
+          filtered.map((f, i) => (
+            <div key={i} className="ub-card" style={{ padding: "16px 22px", cursor: "pointer" }} onClick={() => setOpen(open === i ? -1 : i)}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", gap: 14, alignItems: "center" }}>
+                  <span className="ub-mono" style={{ color: "var(--cyan-400)", fontSize: 13 }}>Q.</span>
+                  <span style={{ fontSize: 14, color: "var(--white)", fontWeight: 600 }}>{f.q}</span>
+                  <Badge kind="cyan">{f.c}</Badge>
+                </div>
+                <span style={{ color: "var(--gray-400)", transform: open === i ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>{Ic.chevron}</span>
+              </div>
+              {open === i && <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--line)", color: "var(--gray-200)", fontSize: 13, lineHeight: 1.7, paddingLeft: 28 }}>{f.a}</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+window.UB.DetailPage = DetailPage;
+window.UB.GuidePage = GuidePage;
+window.UB.FAQPage = FAQPage;
