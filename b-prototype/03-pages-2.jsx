@@ -71,7 +71,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           <div style={{ marginBottom: 20 }}>
             <div className="ub-spec-key" style={{ marginBottom: 10 }}>설치 환경 호환</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {["유리", "콘크리트", "석고", "벽돌"].map(c => (
+              {["유리", "콘크리트", "석고"].map(c => (
                 <span key={c} style={{ fontSize: 12, fontFamily: "var(--font-mono)", padding: "6px 10px", borderRadius: 6, background: "rgba(74,222,128,0.1)", color: "var(--success)", border: "1px solid rgba(74,222,128,0.25)" }}>{c} ✓</span>
               ))}
             </div>
