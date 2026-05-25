@@ -87,7 +87,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
             {tab === "spec" && (
               <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
                 <tbody>
-                  {[["모델", m.code], ["대응 단말기", `Suprema ${m.name}`], ["재질", "PETG · 무광 블랙"], ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`], ["중량", `${m.weight} g`], ["케이블 채널", "⌀8mm"], ["고정", "M3 볼트 4ea + 너트·와셔 동봉"], ["보증", "1년"]].map(([k, v]) => (
+                  {[["모델", m.code], ["대응 단말기", `Suprema ${m.name}`], ["재질", "PETG · 무광 블랙"], ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`], ["중량", `${m.weight} g`], ["고정", "M3 볼트 4ea + 너트·와셔 동봉"]].map(([k, v]) => (
                     <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
                       <td style={{ padding: "10px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
                       <td style={{ padding: "10px 0", color: "var(--white)" }}>{v}</td>
