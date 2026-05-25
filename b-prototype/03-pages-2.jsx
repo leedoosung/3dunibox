@@ -83,11 +83,11 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
             ))}
           </div>
           <div style={{ padding: "20px 0", color: "var(--gray-200)", fontSize: 13, lineHeight: 1.7, minHeight: 120 }}>
-            {tab === "desc" && <>{m.name} 단말기 후면에 정확히 맞도록 3D 스캔 데이터 기반으로 설계되었습니다. 케이블이 외부로 노출되지 않아 깔끔한 마감이 가능하며, <strong style={{ color: "var(--white)" }}>동봉된 볼트·너트 세트(M3 × 4ea, 와셔 포함)</strong>로 유리·콘크리트·석고 어떤 벽에도 견고하게 고정됩니다.</>}
+            {tab === "desc" && <>{m.name} 단말기 후면에 정확히 맞도록 3D 스캔 데이터 기반으로 설계되었습니다. <strong style={{ color: "var(--white)" }}>동봉된 M3 볼트·너트</strong>로 유리·콘크리트·석고 어떤 벽에도 견고하게 고정됩니다.</>}
             {tab === "spec" && (
               <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
                 <tbody>
-                  {[["모델", m.code], ["대응 단말기", `Suprema ${m.name}`], ["재질", "PETG · 무광 블랙"], ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`], ["중량", `${m.weight} g`], ["고정", "M3 볼트 4ea + 너트·와셔 동봉"]].map(([k, v]) => (
+                  {[["모델", m.code], ["대응 단말기", `Suprema ${m.name}`], ["재질", "PETG · 무광 블랙"], ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`], ["중량", `${m.weight} g`], ["고정", "M3 볼트·너트 동봉"]].map(([k, v]) => (
                     <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
                       <td style={{ padding: "10px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
                       <td style={{ padding: "10px 0", color: "var(--white)" }}>{v}</td>
