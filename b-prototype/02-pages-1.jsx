@@ -140,7 +140,7 @@ const CatalogPage = ({ onNav, onAdd }) => {
     return c;
   })();
 
-  const askCustom = () => alert("맞춤 제작은 1588-0000 또는 info@sdconv.kr로 문의 부탁드립니다.");
+  const askCustom = () => alert("맞춤 제작은 010-9090-9029 또는 leedoo80@gmail.com로 문의 부탁드립니다.");
 
   return (
     <div style={{ padding: isMobile ? "20px 16px 40px" : "32px 80px 60px" }}>

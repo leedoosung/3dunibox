@@ -65,7 +65,7 @@ const FAQS = [
   { c: "설치", q: "어떻게 고정하나요? 별도 부속이 필요한가요?", a: "동봉된 M3 볼트 4개·너트·와셔 세트만으로 유리·콘크리트·석고 어디에든 1인 설치가 가능합니다. 별도 공구는 일반 드라이버만 필요합니다." },
   { c: "제품·호환성", q: "케이블은 어떻게 숨겨지나요?", a: "브라켓 내부에 ⌀8mm 채널이 있어 단말기 후면에서 벽 출선구로 외부 노출 없이 정리됩니다." },
   { c: "배송·결제", q: "출시예정 모델은 언제 판매되나요?", a: "출시 알림 신청 시 우선 안내해드리며, 통상 2~3주 이내에 판매가 시작됩니다." },
-  { c: "제품·호환성", q: "맞춤 제작도 가능한가요?", a: "슈프리마 외 단말기, 특수 환경(곡면 유리, 옥외 IP등급 등)은 1588-0000 또는 info@sdconv.kr로 별도 문의 부탁드립니다." },
+  { c: "제품·호환성", q: "맞춤 제작도 가능한가요?", a: "슈프리마 외 단말기, 특수 환경(곡면 유리, 옥외 IP등급 등)은 010-9090-9029 또는 leedoo80@gmail.com로 별도 문의 부탁드립니다." },
   { c: "설치", q: "1인 설치가 정말 가능한가요?", a: "네, 모든 브라켓은 1인 작업 기준으로 설계되었습니다. 동봉된 볼트·너트 세트와 일반 드라이버만으로 평균 8~10분 내 설치가 완료됩니다." },
   { c: "교환·반품", q: "단순 변심 반품이 가능한가요?", a: "맞춤 제작 특성상 출고 후 단순 변심 반품은 어려우며, 제품 하자 시 100% 무상 교환됩니다." },
 ];
@@ -201,7 +201,7 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 6 : 14 }}>
           {!isMobile && (
-            <span className="ub-mono" style={{ fontSize: 12, color: "var(--gray-300)" }}>1588-0000</span>
+            <span className="ub-mono" style={{ fontSize: 12, color: "var(--gray-300)" }}>010-9090-9029</span>
           )}
           <button onClick={() => onNav({ name: user ? "me" : "login" })}
             aria-label={user ? "마이페이지" : "로그인"} style={{
@@ -283,7 +283,7 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
             </nav>
             <div style={{ padding: 16, borderTop: "1px solid var(--line)" }}>
               <div style={{ fontSize: 11, color: "var(--gray-400)", marginBottom: 4 }}>고객센터</div>
-              <div className="ub-mono" style={{ fontSize: 16, color: "var(--white)", fontWeight: 600 }}>1588-0000</div>
+              <div className="ub-mono" style={{ fontSize: 16, color: "var(--white)", fontWeight: 600 }}>010-9090-9029</div>
               <div style={{ fontSize: 11, color: "var(--gray-400)", marginTop: 4 }}>평일 09–18시</div>
             </div>
           </div>

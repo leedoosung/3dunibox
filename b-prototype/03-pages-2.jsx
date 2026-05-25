@@ -38,11 +38,6 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 8 }}>{m.name} 전용 브라켓</h1>
           <div style={{ color: "var(--gray-300)", fontSize: 14, marginBottom: 20 }}>{m.desc}. 슈프리마 정확한 핏. 유리·콘크리트 모두 OK. 케이블 내장 수납.</div>
 
-          <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid var(--line)" }}>
-            <div style={{ color: "var(--cyan-400)", letterSpacing: 2 }}>★★★★★</div>
-            <div style={{ fontSize: 12, color: "var(--gray-300)" }}>4.9 / 27건 리뷰</div>
-          </div>
-
           <div className="ub-card" style={{ marginBottom: 20, background: "rgba(0,200,240,0.03)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
               <div>
@@ -68,7 +63,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                   <Btn variant="ghost" size="lg" onClick={() => { onAdd(m, qty); toast(`${m.name} ${qty}개 장바구니에 담김`); }}>장바구니</Btn>
                 </>
               ) : (
-                <Btn variant="primary" size="lg" full onClick={() => alert("출시 알림은 1588-0000 또는 info@sdconv.kr로 신청해 주세요.")}>출시 알림 신청</Btn>
+                <Btn variant="primary" size="lg" full onClick={() => alert("출시 알림은 010-9090-9029 또는 leedoo80@gmail.com로 신청해 주세요.")}>출시 알림 신청</Btn>
               )}
             </div>
           </div>
@@ -83,7 +78,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           </div>
 
           <div className="ub-tabs">
-            {[["desc", "제품 설명"], ["spec", "스펙"], ["review", "리뷰 (27)"], ["return", "교환·반품"]].map(([k, l]) => (
+            {[["desc", "제품 설명"], ["spec", "스펙"], ["return", "교환·반품"]].map(([k, l]) => (
               <div key={k} className={`ub-tab ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>{l}</div>
             ))}
           </div>
@@ -101,7 +96,6 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                 </tbody>
               </table>
             )}
-            {tab === "review" && <>실제 설치자 27명의 리뷰가 등록되어 있습니다. 평균 평점 4.9 / 5.0. 가장 많이 언급된 키워드: "마감", "케이블", "단단함".</>}
             {tab === "return" && <>맞춤 제작 특성상 단순 변심 반품은 제한됩니다. 제품 하자 시 7일 이내 100% 무상 교환 가능. 상세는 FAQ 참조.</>}
           </div>
         </div>

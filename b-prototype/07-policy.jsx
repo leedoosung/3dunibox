@@ -96,7 +96,7 @@ const TermsPage = () => {
         <strong style={{ color: "var(--white)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
         대표 허희경 · 사업자등록번호 449-56-00430<br/>
         통신판매업신고: [번호 발급 후 기재]<br/>
-        문의: 1588-0000 / info@sdconv.kr
+        문의: 010-9090-9029 / leedoo80@gmail.com
       </div>
     </div>
   );
@@ -208,8 +208,8 @@ const PrivacyPage = () => {
       <Section n="09" title="개인정보 보호책임자">
         <div style={{ padding: 14, background: "rgba(0,200,240,0.04)", border: "1px solid rgba(0,200,240,0.2)", borderRadius: 8, fontSize: 13 }}>
           <div><strong style={{ color: "var(--white)" }}>개인정보 보호책임자</strong>: 허희경 (대표)</div>
-          <div>연락처: 1588-0000</div>
-          <div>이메일: info@sdconv.kr</div>
+          <div>연락처: 010-9090-9029</div>
+          <div>이메일: leedoo80@gmail.com</div>
         </div>
       </Section>
 
