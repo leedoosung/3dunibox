@@ -535,7 +535,7 @@ const AboutPage = () => (
       <div className="ub-spec-key" style={{ marginBottom: 14 }}>회사 정보</div>
       <table style={{ width: "100%", fontSize: 13 }}>
         <tbody>
-          {[["대표", "허희경"], ["사업자등록번호", "449-56-00430"], ["통신판매업", "[번호 발급 후 기재]"], ["연락처", "010-9090-9029 / leedoo80@gmail.com"]].map(([k, v]) => (
+          {[["대표", "허희경"], ["사업자등록번호", "449-56-00430"], ["통신판매업", "[번호 발급 후 기재]"], ["사업장 주소", "경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호"], ["연락처", "010-9090-9029 / leedoo80@gmail.com"]].map(([k, v]) => (
             <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
               <td style={{ padding: "12px 0", color: "var(--gray-400)", width: 160, fontFamily: "var(--font-mono)", fontSize: 11 }}>{k.toUpperCase()}</td>
               <td style={{ padding: "12px 0", color: "var(--white)" }}>{v}</td>
@@ -556,7 +556,7 @@ const Footer = ({ onNav }) => {
       <div style={{ gridColumn: isMobile ? "span 2" : "auto" }}>
         <div className="ub-logo"><div className="ub-logo-mark">3D</div><span>UNIBOX</span></div>
         <div style={{ marginTop: 14, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.7 }}>
-          에스디컨버전스 (SD Convergence)<br/>대표 허희경 · 사업자등록번호 449-56-00430<br/>통신판매업신고 [번호 발급 후 기재]
+          에스디컨버전스 (SD Convergence)<br/>대표 허희경 · 사업자등록번호 449-56-00430<br/>통신판매업신고 [번호 발급 후 기재]<br/>경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호
         </div>
       </div>
       {[

@@ -96,6 +96,7 @@ const TermsPage = () => {
         <strong style={{ color: "var(--white)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
         대표 허희경 · 사업자등록번호 449-56-00430<br/>
         통신판매업신고: [번호 발급 후 기재]<br/>
+        사업장 주소: 경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
         문의: 010-9090-9029 / leedoo80@gmail.com
       </div>
     </div>
@@ -220,7 +221,8 @@ const PrivacyPage = () => {
       <div style={{ marginTop: 40, padding: 18, border: "1px dashed var(--line-strong)", borderRadius: 10, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.8 }}>
         <strong style={{ color: "var(--white)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
         대표 허희경 · 사업자등록번호 449-56-00430<br/>
-        통신판매업신고: [번호 발급 후 기재]
+        통신판매업신고: [번호 발급 후 기재]<br/>
+        사업장 주소: 경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호
       </div>
     </div>
   );
