@@ -703,7 +703,7 @@ const MembersTab = ({ orders, members = [], loading = false, error = null, onRel
 // 제품 CRUD — Supabase products 테이블, 관리자 RPC 경유
 const PROD_BLANK = {
   id: "", code: "", name: "", cat: "face",
-  price: 0, status: "live", description: "",
+  price: 0, status: "live", description: "", long_description: "",
   w: null, h: null, d: null, weight: null,
   image_url: "", sort_order: 100,
 };
@@ -745,6 +745,7 @@ const ProductsTab = () => {
   const startEdit = (r) => { setUploadErr(null); setEditing({
     id: r.id, code: r.code, name: r.name, cat: r.cat,
     price: r.price, status: r.status, description: r.description || "",
+    long_description: r.long_description || "",
     w: r.w, h: r.h, d: r.d, weight: r.weight,
     image_url: r.image_url || "", sort_order: r.sort_order,
   }); };
@@ -774,6 +775,13 @@ const ProductsTab = () => {
         p_sort_order:  Number(editing.sort_order) || 100,
       });
       if (error) throw error;
+      // long_description 은 별도 RPC (기존 upsert 시그니처 변경 없이 추가하기 위함)
+      const { error: ldErr } = await sb.rpc("admin_update_long_description", {
+        p_secret:           ADMIN_PW,
+        p_id:               editing.id,
+        p_long_description: editing.long_description || null,
+      });
+      if (ldErr) throw ldErr;
       setEditing(null);
       await reload();
       // 고객 카탈로그도 같이 갱신
@@ -962,6 +970,17 @@ const ProductsTab = () => {
               <div style={{ gridColumn: "span 2" }}>
                 <label className="ub-label">한 줄 설명</label>
                 <input className="ub-input" value={editing.description} onChange={e => upd("description", e.target.value)} placeholder="안면인식 + 카드 + 지문" />
+              </div>
+              <div style={{ gridColumn: "span 2" }}>
+                <label className="ub-label">제품 설명 본문 <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(상세 페이지 "제품 설명" 탭에 표시 · 줄바꿈 그대로 노출)</span></label>
+                <textarea
+                  className="ub-input"
+                  rows={8}
+                  value={editing.long_description}
+                  onChange={e => upd("long_description", e.target.value)}
+                  placeholder={"전용으로 설계된 브라켓으로\n후면 형상과 정확히 맞아 유격 없이 장착됩니다.\n동봉된 M3 볼트·너트로\n유리·콘크리트·석고벽 등\n다양한 환경에 설치할 수 있습니다."}
+                  style={{ width: "100%", fontFamily: "var(--font-sans)", lineHeight: 1.6, resize: "vertical" }}
+                />
               </div>
               <div style={{ gridColumn: "span 2" }}>
                 <label className="ub-label">제품 사진 (없으면 SVG 일러스트로 표시)</label>

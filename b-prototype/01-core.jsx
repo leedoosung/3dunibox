@@ -404,6 +404,7 @@ const loadProducts = async () => {
         price: r.price,
         status: r.status,
         desc: r.description || "",
+        long_description: r.long_description || "",
         w: r.w, h: r.h, d: r.d, weight: r.weight,
         image_url: r.image_url || null,
       }));

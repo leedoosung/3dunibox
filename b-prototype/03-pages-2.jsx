@@ -84,13 +84,17 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           </div>
           <div style={{ padding: "20px 0", color: "var(--gray-200)", fontSize: 13, lineHeight: 1.7, minHeight: 120 }}>
             {tab === "desc" && (
-              <>
-                <strong style={{ color: "var(--white)" }}>전용으로 설계된 브라켓</strong>으로<br/>
-                후면 형상과 정확히 맞아 유격 없이 장착됩니다.<br/>
-                동봉된 <strong style={{ color: "var(--white)" }}>M3 볼트·너트</strong>로<br/>
-                유리·콘크리트·석고벽 등<br/>
-                다양한 환경에 설치할 수 있습니다.
-              </>
+              m.long_description ? (
+                <div style={{ whiteSpace: "pre-line" }}>{m.long_description}</div>
+              ) : (
+                <>
+                  <strong style={{ color: "var(--white)" }}>전용으로 설계된 브라켓</strong>으로<br/>
+                  후면 형상과 정확히 맞아 유격 없이 장착됩니다.<br/>
+                  동봉된 <strong style={{ color: "var(--white)" }}>M3 볼트·너트</strong>로<br/>
+                  유리·콘크리트·석고벽 등<br/>
+                  다양한 환경에 설치할 수 있습니다.
+                </>
+              )
             )}
             {tab === "spec" && (
               <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
