@@ -1060,8 +1060,11 @@ const ProductsTab = () => {
                   </div>
                 )}
                 {editing.image_url && (
-                  <div style={{ marginTop: 10, padding: 8, border: "1px solid var(--line)", borderRadius: 8, display: "flex", justifyContent: "center", position: "relative" }}>
-                    <img src={editing.image_url} alt="preview" style={{ maxWidth: "100%", maxHeight: 200, objectFit: "contain" }} />
+                  <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 8, position: "relative", overflow: "hidden" }}>
+                    <div style={{ padding: "4px 10px", fontSize: 10, color: "var(--gray-400)", borderBottom: "1px solid var(--line)", fontFamily: "var(--font-mono)" }}>고객 화면 미리보기</div>
+                    <div style={{ background: "#fff", display: "flex", justifyContent: "center", alignItems: "center", aspectRatio: "1 / 1", maxHeight: 280, overflow: "hidden" }}>
+                      <img src={editing.image_url} alt="preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                    </div>
                     <button type="button" onClick={() => upd("image_url", "")}
                       style={{ position: "absolute", top: 6, right: 6, padding: "3px 8px", fontSize: 10, background: "rgba(10,22,40,0.85)", color: "var(--gray-200)", border: "1px solid var(--line-strong)", borderRadius: 4, cursor: "pointer" }}>
                       삭제
@@ -1313,8 +1316,11 @@ const CasesTab = () => {
                   </div>
                 )}
                 {editing.image_url && (
-                  <div style={{ marginTop: 10, padding: 8, border: "1px solid var(--line)", borderRadius: 8, display: "flex", justifyContent: "center", position: "relative" }}>
-                    <img src={editing.image_url} alt="preview" style={{ maxWidth: "100%", maxHeight: 200, objectFit: "contain" }} />
+                  <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 8, position: "relative", overflow: "hidden" }}>
+                    <div style={{ padding: "4px 10px", fontSize: 10, color: "var(--gray-400)", borderBottom: "1px solid var(--line)", fontFamily: "var(--font-mono)" }}>고객 화면 미리보기</div>
+                    <div style={{ background: "#fff", display: "flex", justifyContent: "center", alignItems: "center", aspectRatio: "1 / 1", maxHeight: 280, overflow: "hidden" }}>
+                      <img src={editing.image_url} alt="preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                    </div>
                     <button type="button" onClick={() => upd("image_url", "")}
                       style={{ position: "absolute", top: 6, right: 6, padding: "3px 8px", fontSize: 10, background: "rgba(10,22,40,0.85)", color: "var(--gray-200)", border: "1px solid var(--line-strong)", borderRadius: 4, cursor: "pointer" }}>
                       삭제
