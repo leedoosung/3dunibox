@@ -555,8 +555,10 @@ const Footer = ({ onNav }) => {
     <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1.4fr 1fr 1fr 1fr", gap: isMobile ? 20 : 48, marginBottom: 24 }}>
       <div style={{ gridColumn: isMobile ? "span 2" : "auto" }}>
         <div className="ub-logo"><div className="ub-logo-mark">3D</div><span>UNIBOX</span></div>
-        <div style={{ marginTop: 14, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.7 }}>
-          에스디컨버전스 (SD Convergence)<br/>대표 허희경 · 사업자등록번호 449-56-00430<br/>통신판매업신고 [번호 발급 후 기재]<br/>경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호
+        <img src="/sd_white.png" alt="에스디컨버전스 (SD Convergence)"
+             style={{ height: 26, width: "auto", display: "block", marginTop: 14 }} />
+        <div style={{ marginTop: 10, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.7 }}>
+          대표 허희경 · 사업자등록번호 449-56-00430<br/>통신판매업신고 [번호 발급 후 기재]<br/>경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호
         </div>
       </div>
       {[
