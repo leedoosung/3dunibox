@@ -34,7 +34,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           </div>
         </div>
         <div>
-          <div className="ub-mono" style={{ fontSize: 12, color: "var(--cyan-400)", marginBottom: 8 }}>{m.code} · {m.cat === "face" ? "안면인식" : m.cat === "fp" ? "지문+카드" : m.cat === "card" ? "카드전용" : "멀티"}</div>
+          <div className="ub-mono" style={{ fontSize: 12, color: "var(--cyan-400)", marginBottom: 8 }}>{m.code}</div>
           <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 20 }}>{m.name} 전용 브라켓</h1>
 
           <div className="ub-card" style={{ marginBottom: 20, background: "rgba(0,200,240,0.03)" }}>
@@ -67,14 +67,23 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
             </div>
           </div>
 
-          <div style={{ marginBottom: 20 }}>
-            <div className="ub-spec-key" style={{ marginBottom: 10 }}>설치 환경 호환</div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {["유리", "콘크리트", "석고"].map(c => (
-                <span key={c} style={{ fontSize: 12, fontFamily: "var(--font-mono)", padding: "6px 10px", borderRadius: 6, background: "rgba(74,222,128,0.1)", color: "var(--success)", border: "1px solid rgba(74,222,128,0.25)" }}>{c} ✓</span>
-              ))}
-            </div>
-          </div>
+          {(() => {
+            const tags = (m.compat_tags || "유리,콘크리트,석고")
+              .split(",")
+              .map(s => s.trim())
+              .filter(Boolean);
+            if (tags.length === 0) return null;
+            return (
+              <div style={{ marginBottom: 20 }}>
+                <div className="ub-spec-key" style={{ marginBottom: 10 }}>설치 환경 호환</div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {tags.map(c => (
+                    <span key={c} style={{ fontSize: 12, fontFamily: "var(--font-mono)", padding: "6px 10px", borderRadius: 6, background: "rgba(74,222,128,0.1)", color: "var(--success)", border: "1px solid rgba(74,222,128,0.25)" }}>{c} ✓</span>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="ub-tabs">
             {[["desc", "제품 설명"], ["spec", "스펙"], ["return", "교환·반품"]].map(([k, l]) => (
@@ -95,18 +104,26 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                 </>
               )
             )}
-            {tab === "spec" && (
-              <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
-                <tbody>
-                  {[["모델", m.code], ["대응 단말기", `Suprema ${m.name}`], ["재질", "PETG · 무광 블랙"], ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`], ["중량", `${m.weight} g`], ["고정", "M3 볼트·너트 동봉"]].map(([k, v]) => (
-                    <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
-                      <td style={{ padding: "10px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
-                      <td style={{ padding: "10px 0", color: "var(--white)" }}>{v}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+            {tab === "spec" && (() => {
+              const hasDim = m.w != null && m.h != null && m.d != null;
+              const rows = [
+                ["모델", m.code],
+                ["재질", m.material || "PETG · 무광 블랙"],
+                hasDim ? ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`] : null,
+              ].filter(Boolean);
+              return (
+                <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
+                  <tbody>
+                    {rows.map(([k, v]) => (
+                      <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
+                        <td style={{ padding: "10px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
+                        <td style={{ padding: "10px 0", color: "var(--white)" }}>{v}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              );
+            })()}
             {tab === "return" && <>맞춤 제작 특성상 단순 변심 반품은 제한됩니다. 제품 하자 시 7일 이내 100% 무상 교환 가능. 상세는 FAQ 참조.</>}
           </div>
         </div>

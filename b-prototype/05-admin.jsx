@@ -702,8 +702,9 @@ const MembersTab = ({ orders, members = [], loading = false, error = null, onRel
 // ─── PRODUCTS TAB ─────────────────────────────────────────────────────────────
 // 제품 CRUD — Supabase products 테이블, 관리자 RPC 경유
 const PROD_BLANK = {
-  id: "", code: "", name: "", cat: "face",
+  id: "", code: "", name: "", cat: "multi",
   price: 0, status: "live", description: "", long_description: "",
+  material: "PETG · 무광 블랙", compat_tags: "유리, 콘크리트, 석고",
   w: null, h: null, d: null, weight: null,
   image_url: "", sort_order: 100,
 };
@@ -743,9 +744,11 @@ const ProductsTab = () => {
 
   const startNew = () => { setUploadErr(null); setEditing({ ...PROD_BLANK }); };
   const startEdit = (r) => { setUploadErr(null); setEditing({
-    id: r.id, code: r.code, name: r.name, cat: r.cat,
+    id: r.id, code: r.code, name: r.name, cat: r.cat || "multi",
     price: r.price, status: r.status, description: r.description || "",
     long_description: r.long_description || "",
+    material: r.material || "",
+    compat_tags: r.compat_tags || "",
     w: r.w, h: r.h, d: r.d, weight: r.weight,
     image_url: r.image_url || "", sort_order: r.sort_order,
   }); };
@@ -775,13 +778,15 @@ const ProductsTab = () => {
         p_sort_order:  Number(editing.sort_order) || 100,
       });
       if (error) throw error;
-      // long_description 은 별도 RPC (기존 upsert 시그니처 변경 없이 추가하기 위함)
-      const { error: ldErr } = await sb.rpc("admin_update_long_description", {
+      // 본문/재질/호환태그는 통합 extras RPC 로 — 기존 upsert 시그니처 변경 없이 추가
+      const { error: exErr } = await sb.rpc("admin_update_product_extras", {
         p_secret:           ADMIN_PW,
         p_id:               editing.id,
+        p_material:         editing.material || null,
+        p_compat_tags:      editing.compat_tags || null,
         p_long_description: editing.long_description || null,
       });
-      if (ldErr) throw ldErr;
+      if (exErr) throw exErr;
       setEditing(null);
       await reload();
       // 고객 카탈로그도 같이 갱신
@@ -848,7 +853,7 @@ const ProductsTab = () => {
       <div className="ub-card" style={{ padding: 14, display: "flex", gap: 10, alignItems: "center", marginBottom: 14 }}>
         <input
           type="text" value={q} onChange={(e) => setQ(e.target.value)}
-          placeholder="ID / 코드 / 이름 / 카테고리 검색"
+          placeholder="ID / 코드 / 이름 검색"
           style={{ flex: 1, background: "rgba(255,255,255,0.03)", border: "1px solid var(--line-strong)", borderRadius: 8, padding: "8px 12px", color: "var(--white)", fontSize: 13, outline: "none" }}
         />
         <Btn5 variant="ghost" onClick={reload}>새로고침</Btn5>
@@ -868,7 +873,7 @@ const ProductsTab = () => {
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, minWidth: 920 }}>
             <thead>
               <tr style={{ background: "rgba(255,255,255,0.02)", color: "var(--gray-400)", fontFamily: "var(--font-mono)" }}>
-                {["순서", "ID", "코드", "이름", "카테고리", "가격", "상태", "사진", "액션"].map(h => (
+                {["순서", "ID", "코드", "이름", "가격", "상태", "사진", "액션"].map(h => (
                   <th key={h} style={{ padding: "12px 14px", textAlign: "left", fontWeight: 500, fontSize: 10, letterSpacing: 1.2, borderBottom: "1px solid var(--line)" }}>{h.toUpperCase()}</th>
                 ))}
               </tr>
@@ -877,14 +882,13 @@ const ProductsTab = () => {
               {loading ? (
                 <tr><td colSpan={9} style={{ padding: 40, textAlign: "center", color: "var(--gray-400)" }}>불러오는 중…</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={9} style={{ padding: 40, textAlign: "center", color: "var(--gray-400)" }}>{rows.length === 0 ? "등록된 제품이 없습니다" : "일치하는 제품이 없습니다"}</td></tr>
+                <tr><td colSpan={8} style={{ padding: 40, textAlign: "center", color: "var(--gray-400)" }}>{rows.length === 0 ? "등록된 제품이 없습니다" : "일치하는 제품이 없습니다"}</td></tr>
               ) : filtered.map(r => (
                 <tr key={r.id} style={{ borderTop: "1px solid var(--line)" }}>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-300)" }}>{r.sort_order}</td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--cyan-400)" }}>{r.id}</td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-200)" }}>{r.code}</td>
                   <td style={{ padding: "12px 14px", color: "var(--white)", fontWeight: 600 }}>{r.name}</td>
-                  <td style={{ padding: "12px 14px", color: "var(--gray-300)" }}>{r.cat}</td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--white)", fontWeight: 600 }}>₩{Number(r.price || 0).toLocaleString()}</td>
                   <td style={{ padding: "12px 14px" }}>
                     <span style={{
@@ -943,15 +947,6 @@ const ProductsTab = () => {
                 <input className="ub-input" value={editing.name} onChange={e => upd("name", e.target.value)} placeholder="FaceStation F2" />
               </div>
               <div>
-                <label className="ub-label ub-label-req">카테고리</label>
-                <select className="ub-input" value={editing.cat} onChange={e => upd("cat", e.target.value)}>
-                  <option value="face">안면인식</option>
-                  <option value="fp">지문+카드</option>
-                  <option value="card">카드전용</option>
-                  <option value="multi">멀티·기타</option>
-                </select>
-              </div>
-              <div>
                 <label className="ub-label ub-label-req">상태</label>
                 <select className="ub-input" value={editing.status} onChange={e => upd("status", e.target.value)}>
                   <option value="live">판매중</option>
@@ -966,6 +961,14 @@ const ProductsTab = () => {
               <div>
                 <label className="ub-label">정렬 순서</label>
                 <input className="ub-input ub-mono" type="number" value={editing.sort_order} onChange={e => upd("sort_order", e.target.value)} placeholder="100" />
+              </div>
+              <div>
+                <label className="ub-label">재질 <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(스펙 표)</span></label>
+                <input className="ub-input" value={editing.material} onChange={e => upd("material", e.target.value)} placeholder="PETG · 무광 블랙" />
+              </div>
+              <div style={{ gridColumn: "span 2" }}>
+                <label className="ub-label">설치 환경 호환 <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(쉼표로 구분 · 상세 페이지 ✓ 태그로 노출)</span></label>
+                <input className="ub-input" value={editing.compat_tags} onChange={e => upd("compat_tags", e.target.value)} placeholder="유리, 콘크리트, 석고" />
               </div>
               <div style={{ gridColumn: "span 2" }}>
                 <label className="ub-label">한 줄 설명</label>

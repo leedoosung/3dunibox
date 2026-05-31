@@ -397,6 +397,8 @@ const loadProducts = async () => {
         status: r.status,
         desc: r.description || "",
         long_description: r.long_description || "",
+        material: r.material || "",
+        compat_tags: r.compat_tags || "",
         w: r.w, h: r.h, d: r.d, weight: r.weight,
         image_url: r.image_url || null,
       }));
