@@ -4,46 +4,6 @@
 const { useState: uS2, useMemo: uM2, useEffect: uE2, useRef: uR2, Fragment: F2 } = React;
 const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsMobile2, useProducts: useProducts2 } = window.UB;
 
-// ─── HERO 제품 360 슬라이드쇼 ─────────────────────────────────────────────
-// 영상 파일은 /videos/<ID>_360.{webm,mp4} 에 위치. WebM(VP9 알파) 우선, MP4 폴백.
-// 영상 끝(onEnded)에 다음으로 전환. 영상이 없는 ID 는 onError 로 즉시 건너뜀.
-const HERO_VIDEO_IDS = ["UB-BEP2","UB-BEW2","UB-BLN2","UB-BS2A","UB-BS3","UB-XP2_G","UB-XP2_M","UB-XS2"];
-
-const HeroProductSlideshow = ({ size = 320 }) => {
-  const [idx, setIdx] = uS2(0);
-  const ref = uR2(null);
-  uE2(() => {
-    const v = ref.current;
-    if (!v) return;
-    try { v.load(); v.play().catch(() => {}); } catch (e) {}
-  }, [idx]);
-  const next = () => setIdx(p => (p + 1) % HERO_VIDEO_IDS.length);
-  const id = HERO_VIDEO_IDS[idx];
-  return (
-    <div style={{ width: size, height: size, position: "relative" }}>
-      <video
-        ref={ref}
-        autoPlay muted playsInline
-        onEnded={next}
-        onError={next}
-        style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-      >
-        <source src={`/videos/${id}_360.webm`} type="video/webm" />
-        <source src={`/videos/${id}_360.mp4`} type="video/mp4" />
-      </video>
-      <div style={{ position: "absolute", bottom: -18, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 5 }}>
-        {HERO_VIDEO_IDS.map((_, i) => (
-          <span key={i} style={{
-            width: 5, height: 5, borderRadius: "50%",
-            background: i === idx ? "var(--cyan-400)" : "rgba(255,255,255,0.18)",
-            transition: "background 0.2s",
-          }} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 const HomePage = ({ onNav }) => {
   useProducts2();   // products fetch 완료 시 재렌더 구독
@@ -87,7 +47,7 @@ const HomePage = ({ onNav }) => {
               </div>
             </div>
             <div style={{ display: "grid", placeItems: "center", height: 360 }}>
-              <HeroProductSlideshow size={320} />
+              <Orbit size={320} />
             </div>
           </div>
         </section>
