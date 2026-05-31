@@ -23,10 +23,10 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
       </div>
       <div style={{ padding: isMobile ? "20px 16px 40px" : "32px 80px 60px", display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr", gap: isMobile ? 24 : 48 }}>
         <div>
-          <div style={{ aspectRatio: "1", background: "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", display: "grid", placeItems: "center", border: "1px solid var(--line)" }}>
-            <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.4 }} />
+          <div style={{ aspectRatio: "1", background: m.image_url ? "#fff" : "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", display: "grid", placeItems: "center", border: "1px solid var(--line)" }}>
+            {!m.image_url && <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.4 }} />}
             {m.image_url && (
-              <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "contain", padding: 12 }} />
+              <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             )}
             <div style={{ position: "absolute", top: 16, left: 16 }}>
               <Badge kind={m.status === "live" ? "live" : "soon"}>{m.status === "live" ? "판매중" : "출시예정"}</Badge>
