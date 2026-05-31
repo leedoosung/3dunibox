@@ -55,8 +55,8 @@ const HomePage = ({ onNav }) => {
 
       <section style={{ padding: SECTION_PAD }}>
         <div style={{ marginBottom: isMobile ? 18 : 28 }}>
-          <div className="ub-eyebrow" style={{ marginBottom: 8 }}>NOW AVAILABLE</div>
-          <h2 className="ub-h2">지금 바로 구매 가능한 브라켓</h2>
+          <div className="ub-eyebrow" style={{ marginBottom: 8 }}>PRODUCT LINEUP</div>
+          <h2 className="ub-h2">3D UniBox 제품 라인업</h2>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? 10 : 16 }}>
           {live.map(m => (
