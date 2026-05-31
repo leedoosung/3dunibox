@@ -960,7 +960,7 @@ const ProductsTab = () => {
       {/* 편집 드로어 */}
       {editing && (
         <>
-          <div onClick={cancel} className="ub-drawer-overlay is-open" />
+          <div className="ub-drawer-overlay is-open" />
           <div className="ub-drawer-panel is-open" role="dialog" aria-modal="true">
             <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
@@ -1250,7 +1250,7 @@ const CasesTab = () => {
       {/* 편집 드로어 */}
       {editing && (
         <>
-          <div onClick={cancel} className="ub-drawer-overlay is-open" />
+          <div className="ub-drawer-overlay is-open" />
           <div className="ub-drawer-panel is-open" role="dialog" aria-modal="true">
             <div style={{ padding: "20px 24px", borderBottom: "1px solid var(--line)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
