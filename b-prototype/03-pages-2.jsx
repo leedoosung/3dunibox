@@ -238,7 +238,7 @@ const FAQPage = () => {
                 </div>
                 <span style={{ color: "var(--gray-400)", transform: open === i ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>{Ic.chevron}</span>
               </div>
-              {open === i && <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--line)", color: "var(--gray-200)", fontSize: 13, lineHeight: 1.7, paddingLeft: 28 }}>{f.a}</div>}
+              {open === i && <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--line)", color: "var(--gray-200)", fontSize: 14, lineHeight: 1.75, paddingLeft: 28, whiteSpace: "pre-line" }}>{f.a}</div>}
             </div>
           ))}
         </div>
