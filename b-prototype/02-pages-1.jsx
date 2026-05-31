@@ -2,7 +2,7 @@
 // HomePage, CatalogPage, DetailPage, GuidePage, FAQPage, QuotePage, CartDrawer, ToastHost
 
 const { useState: uS2, useMemo: uM2, useEffect: uE2, useRef: uR2, Fragment: F2 } = React;
-const { MODELS, CATS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsMobile2, useProducts: useProducts2 } = window.UB;
+const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsMobile2, useProducts: useProducts2 } = window.UB;
 
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 const HomePage = ({ onNav }) => {
@@ -118,12 +118,11 @@ const ProductCard = ({ m, onClick, onAdd }) => {
 const CatalogPage = ({ onNav, onAdd }) => {
   useProducts2();
   const isMobile = useIsMobile2(1024);
-  const [cat, setCat] = uS2("all");
   const [q, setQ] = uS2("");
   const [sort, setSort] = uS2("status");
 
   const filtered = uM2(() => {
-    let r = MODELS.filter(m => m.status === "live").filter(m => cat === "all" || m.cat === cat);
+    let r = MODELS.filter(m => m.status === "live");
     if (q.trim()) {
       const k = q.toLowerCase();
       r = r.filter(m => m.name.toLowerCase().includes(k) || m.code.toLowerCase().includes(k) || m.desc.toLowerCase().includes(k));
@@ -131,14 +130,7 @@ const CatalogPage = ({ onNav, onAdd }) => {
     if (sort === "price-asc") r = [...r].sort((a, b) => a.price - b.price);
     else if (sort === "price-desc") r = [...r].sort((a, b) => b.price - a.price);
     return r;
-  }, [cat, q, sort]);
-
-  const liveModels = MODELS.filter(m => m.status === "live");
-  const counts = (() => {
-    const c = { all: liveModels.length };
-    CATS.forEach(({ id }) => { if (id !== "all") c[id] = liveModels.filter(m => m.cat === id).length; });
-    return c;
-  })();
+  }, [q, sort]);
 
   const askCustom = () => alert("맞춤 제작은 010-9090-9029 또는 leedoo80@gmail.com로 문의 부탁드립니다.");
 
@@ -163,15 +155,6 @@ const CatalogPage = ({ onNav, onAdd }) => {
             </select>
           </div>
         </div>
-      </div>
-
-      <div className="ub-tabs" style={{ marginBottom: 20, overflowX: "auto", flexWrap: "nowrap", whiteSpace: "nowrap" }}>
-        {CATS.map(c => (
-          <div key={c.id} className={`ub-tab ${cat === c.id ? "active" : ""}`} onClick={() => setCat(c.id)} style={{ flexShrink: 0 }}>
-            {c.label}
-            <span className="ub-mono" style={{ fontSize: 10, opacity: 0.6, marginLeft: 6 }}>({counts[c.id]})</span>
-          </div>
-        ))}
       </div>
 
       {filtered.length === 0 ? (

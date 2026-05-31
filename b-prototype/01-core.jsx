@@ -52,14 +52,6 @@ const upsertAddress = (me, addr) => {
 // 관리자 회원 탭은 빈 상태에서 시작 — Supabase Dashboard 또는 추후 API 연동으로 조회.
 const MEMBERS = [];
 
-const CATS = [
-  { id: "all", label: "전체보기" },
-  { id: "face", label: "안면인식" },
-  { id: "fp", label: "지문+카드" },
-  { id: "card", label: "카드전용" },
-  { id: "multi", label: "멀티·기타" },
-];
-
 const FAQS = [
   { c: "제품·호환성", q: "유리문이 두꺼워도 설치되나요?", a: "강화유리 8~12mm 까지 표준 대응이며, 그 이상은 사전 문의 시 맞춤 제작 가능합니다." },
   { c: "설치", q: "어떻게 고정하나요? 별도 부속이 필요한가요?", a: "동봉된 M3 볼트·너트만으로 유리·콘크리트·석고 어디에든 1인 설치가 가능합니다. 별도 공구는 일반 드라이버만 필요합니다." },
@@ -473,7 +465,7 @@ const Orbit = ({ size = 320, count = 8, speed = 22 }) => {
 
 window.UB = {
   useState, useMemo, useEffect, useRef, Fragment,
-  MODELS, CATS, FAQS, STEPS,
+  MODELS, FAQS, STEPS,
   SHIP, calcShip,
   MEMBERS, calcGrade, GRADE_COLORS,
   loadMe, saveMe, upsertAddress,
