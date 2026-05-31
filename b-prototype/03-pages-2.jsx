@@ -35,8 +35,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
         </div>
         <div>
           <div className="ub-mono" style={{ fontSize: 12, color: "var(--cyan-400)", marginBottom: 8 }}>{m.code} · {m.cat === "face" ? "안면인식" : m.cat === "fp" ? "지문+카드" : m.cat === "card" ? "카드전용" : "멀티"}</div>
-          <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 8 }}>{m.name} 전용 브라켓</h1>
-          <div style={{ color: "var(--gray-300)", fontSize: 14, marginBottom: 20 }}>{m.desc}. 슈프리마 정확한 핏. 유리·콘크리트 모두 OK. 케이블 내장 수납.</div>
+          <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 20 }}>{m.name} 전용 브라켓</h1>
 
           <div className="ub-card" style={{ marginBottom: 20, background: "rgba(0,200,240,0.03)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
