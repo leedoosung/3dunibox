@@ -59,7 +59,7 @@ const HomePage = ({ onNav }) => {
           <h2 className="ub-h2">지금 바로 구매 가능한 브라켓</h2>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? 10 : 16 }}>
-          {live.slice(0, 4).map(m => (
+          {live.map(m => (
             <ProductCard key={m.id} m={m} onClick={() => onNav({ name: "detail", id: m.id })} />
           ))}
         </div>
