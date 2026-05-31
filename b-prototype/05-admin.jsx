@@ -33,6 +33,21 @@ const formatItems = (items) => items.map(it => {
   return m ? `${m.name} ×${it.qty}` : `? ×${it.qty}`;
 }).join(", ");
 
+// CSV 다운로드 — Excel 한글 호환을 위해 UTF-8 BOM, 줄바꿈 \r\n
+const downloadCSV = (filename, headers, rows) => {
+  const esc = (v) => {
+    const s = v == null ? "" : String(v);
+    return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const lines = [headers.map(esc).join(","), ...rows.map(r => r.map(esc).join(","))];
+  const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
 // ─── 작은 컴포넌트 ────────────────────────────────────────────────────────────
 const KpiCard = ({ label, value, sub, accent }) => (
   <div className="ub-card" style={{ padding: 20, position: "relative", overflow: "hidden" }}>
@@ -326,7 +341,17 @@ const AdminPageInner = () => {
                 {Object.keys(STATUS_COLORS).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
               <Btn5 variant="ghost" onClick={() => { setQ(""); setStatusFilter("all"); }}>초기화</Btn5>
-              <Btn5 variant="primary" onClick={() => alert("CSV 내보내기 — 추후 연동")}>CSV 내보내기 {Ic5.arrow}</Btn5>
+              <Btn5 variant="primary" onClick={() => {
+                const headers = ["주문번호", "일시", "고객", "전화", "모델·수량", "소계", "배송비", "합계", "상태", "송장"];
+                const rows = orders.map(o => [
+                  o.no, o.date, o.customer, o.phone,
+                  formatItems(o.items),
+                  orderSubtotal(o), orderShip(o), orderTotal(o),
+                  o.status, o.waybill || "",
+                ]);
+                const today = new Date().toISOString().slice(0, 10);
+                downloadCSV(`주문_전체_${today}.csv`, headers, rows);
+              }}>CSV 내보내기 {Ic5.arrow}</Btn5>
             </div>
 
             {/* 테이블 */}
@@ -555,7 +580,22 @@ const MembersTab = ({ orders, members = [], loading = false, error = null, onRel
         </select>
         <Btn5 variant="ghost" onClick={() => { setQ(""); setGradeFilter("all"); }}>초기화</Btn5>
         <Btn5 variant="ghost" onClick={() => onReload && onReload()}>새로고침</Btn5>
-        <Btn5 variant="primary" onClick={() => alert("CSV 내보내기 — 추후 연동")}>CSV {Ic5.arrow}</Btn5>
+        <Btn5 variant="primary" onClick={() => {
+          const headers = ["이름", "연락처", "이메일", "우편번호", "기본 배송지", "상세 주소", "가입일", "주문 수", "누적 구매", "등급"];
+          const rows = members.map(m => {
+            const def = (m.addresses || []).find(a => a.isDefault) || (m.addresses || [])[0] || {};
+            return [
+              m.name, m.phone, m.email,
+              def.zip || "", def.addr1 || "", def.addr2 || "",
+              m.joinedAt,
+              `${m.totalOrders}건`,
+              m.totalSpent,
+              calcGrade5(m.totalSpent, m.totalOrders, m.joinedAt),
+            ];
+          });
+          const today = new Date().toISOString().slice(0, 10);
+          downloadCSV(`회원_전체_${today}.csv`, headers, rows);
+        }}>CSV {Ic5.arrow}</Btn5>
       </div>
 
       {error && (
