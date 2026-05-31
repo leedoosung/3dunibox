@@ -90,7 +90,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
               <div key={k} className={`ub-tab ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>{l}</div>
             ))}
           </div>
-          <div style={{ padding: "20px 0", color: "var(--gray-200)", fontSize: 13, lineHeight: 1.7, minHeight: 120 }}>
+          <div style={{ padding: "20px 0", color: "var(--gray-200)", fontSize: 15, lineHeight: 1.75, minHeight: 120 }}>
             {tab === "desc" && (
               m.long_description ? (
                 <div style={{ whiteSpace: "pre-line" }}>{m.long_description}</div>
@@ -112,12 +112,12 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                 hasDim ? ["치수", `W ${m.w} × H ${m.h} × D ${m.d} mm`] : null,
               ].filter(Boolean);
               return (
-                <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 12 }}>
+                <table style={{ width: "100%", fontFamily: "var(--font-mono)", fontSize: 14 }}>
                   <tbody>
                     {rows.map(([k, v]) => (
                       <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
-                        <td style={{ padding: "10px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
-                        <td style={{ padding: "10px 0", color: "var(--white)" }}>{v}</td>
+                        <td style={{ padding: "12px 0", color: "var(--gray-400)", width: 140 }}>{k.toUpperCase()}</td>
+                        <td style={{ padding: "12px 0", color: "var(--white)" }}>{v}</td>
                       </tr>
                     ))}
                   </tbody>
