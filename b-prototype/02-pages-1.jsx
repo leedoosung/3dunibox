@@ -7,6 +7,8 @@ const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsM
 // ─── HERO 제품 360 슬라이드쇼 ─────────────────────────────────────────────
 // 영상 파일은 /videos/<ID>_360.{webm,mp4} 에 위치. WebM(VP9 알파) 우선, MP4 폴백.
 // 영상 끝(onEnded)에 다음으로 전환. 영상이 없는 ID 는 onError 로 즉시 건너뜀.
+// 새 영상 적용 시 캐시 무효화 (?v=숫자 증가)
+const HERO_VIDEO_VER = 2;
 const HERO_VIDEO_IDS = ["UB-BEP2","UB-BEW2","UB-BLN2","UB-BS2A","UB-BS3","UB-XP2_G","UB-XP2_M","UB-XS2"];
 
 const HeroProductSlideshow = ({ size = 320 }) => {
@@ -28,8 +30,8 @@ const HeroProductSlideshow = ({ size = 320 }) => {
         onError={next}
         style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
       >
-        <source src={`/videos/${id}_360.webm`} type="video/webm" />
-        <source src={`/videos/${id}_360.mp4`} type="video/mp4" />
+        <source src={`/videos/${id}_360.webm?v=${HERO_VIDEO_VER}`} type="video/webm" />
+        <source src={`/videos/${id}_360.mp4?v=${HERO_VIDEO_VER}`} type="video/mp4" />
       </video>
       <div style={{ position: "absolute", bottom: -18, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 5 }}>
         {HERO_VIDEO_IDS.map((_, i) => (
