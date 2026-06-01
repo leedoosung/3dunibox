@@ -118,17 +118,25 @@ function App() {
   useEffect(() => { document.documentElement.style.setProperty("--cyan-400", t.accent); }, [t.accent]);
   useEffect(() => { window.scrollTo(0, 0); }, [route]);
 
-  // 라우터 — 해시(#admin) + 짧은 path(/admin) 둘 다 인식
+  // 라우터 — 해시(#admin, #detail/<id>) + 짧은 path(/admin) 둘 다 인식
+  const VALID_ROUTES = ["home", "catalog", "guide", "faq", "about", "order", "admin", "me", "login", "terms", "privacy"];
+  const routeToHash = (r) => {
+    if (!r || !r.name || r.name === "home") return "";
+    if (r.name === "detail" && r.id) return `#detail/${r.id}`;
+    return `#${r.name}`;
+  };
+
   useEffect(() => {
-    const VALID = ["home", "catalog", "guide", "faq", "about", "order", "admin", "me", "login", "terms", "privacy"];
     const apply = () => {
-      // 우선순위 1: hash
       const h = (location.hash || "").replace(/^#/, "").trim();
-      if (VALID.includes(h)) { setRoute({ name: h }); return; }
-      // 우선순위 2: 첫 path 세그먼트 (예: /admin, /me, /catalog)
+      if (h.startsWith("detail/")) {
+        const id = h.slice(7);
+        if (id) { setRoute({ name: "detail", id }); return; }
+      }
+      if (VALID_ROUTES.includes(h)) { setRoute({ name: h }); return; }
       const seg = (location.pathname || "/").split("/").filter(Boolean)[0] || "";
-      if (VALID.includes(seg)) { setRoute({ name: seg }); return; }
-      // 그 외는 home 유지
+      if (VALID_ROUTES.includes(seg)) { setRoute({ name: seg }); return; }
+      setRoute({ name: "home" });
     };
     apply();
     window.addEventListener("hashchange", apply);
@@ -151,7 +159,13 @@ function App() {
   const updateCart = (i, qty) => setCart(c => c.map((x, j) => j === i ? { ...x, qty } : x));
   const removeCart = (i) => setCart(c => c.filter((_, j) => j !== i));
 
+  // navTo — 브라우저 history 에 push 해서 뒤로가기 시 이전 라우트로 복귀 (사이트 내 이동 보존)
   const navTo = (r) => {
+    const newHash = routeToHash(r);
+    if ((location.hash || "") !== newHash) {
+      const targetUrl = newHash || (location.pathname + location.search);
+      try { history.pushState(null, "", targetUrl); } catch (e) {}
+    }
     setRoute(r);
     setCartOpen(false);
   };
