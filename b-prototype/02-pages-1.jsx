@@ -8,7 +8,7 @@ const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsM
 // 영상 파일은 /videos/<ID>_360.{webm,mp4} 에 위치. WebM(VP9 알파) 우선, MP4 폴백.
 // 영상 끝(onEnded)에 다음으로 전환. 영상이 없는 ID 는 onError 로 즉시 건너뜀.
 // 새 영상 적용 시 캐시 무효화 (?v=숫자 증가)
-const HERO_VIDEO_VER = 2;
+const HERO_VIDEO_VER = 3;
 const HERO_VIDEO_IDS = ["UB-BEP2","UB-BEW2","UB-BLN2","UB-BS2A","UB-BS3","UB-XP2_G","UB-XP2_M","UB-XS2"];
 
 const HeroProductSlideshow = ({ size = 320 }) => {
@@ -56,16 +56,19 @@ const HomePage = ({ onNav }) => {
   return (
     <div>
       {isMobile ? (
-        // 모바일: 컴팩트 Hero
-        <section style={{ padding: "20px 16px 18px" }}>
+        // 모바일: 컴팩트 Hero + 슬라이드쇼
+        <section style={{ padding: "20px 16px 28px" }}>
           <div className="ub-eyebrow" style={{ marginBottom: 6, fontSize: 10 }}>SD CONVERGENCE · 3D PRINTING STUDIO</div>
           <h1 style={{ fontSize: "clamp(22px, 6.5vw, 30px)", lineHeight: 1.25, color: "var(--white)", margin: 0, fontWeight: 800, wordBreak: "keep-all" }}>
             정밀하게 설계했습니다<br/>
             <span style={{ color: "var(--cyan-400)" }}>PETG 소재로 더 가볍게</span>
           </h1>
-          <p style={{ color: "var(--gray-300)", fontSize: 13, lineHeight: 1.5, margin: "10px 0 0" }}>
+          <p style={{ color: "var(--gray-300)", fontSize: 13, lineHeight: 1.5, margin: "10px 0 18px" }}>
             3D 프린팅으로 현장의 불편함을 해결합니다.
           </p>
+          <div style={{ display: "grid", placeItems: "center", marginTop: 8 }}>
+            <HeroProductSlideshow size={240} />
+          </div>
         </section>
       ) : (
         <section style={{ padding: PAD }}>
