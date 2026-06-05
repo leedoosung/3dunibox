@@ -1063,7 +1063,7 @@ const ProductsTab = () => {
                   <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 8, position: "relative", overflow: "hidden" }}>
                     <div style={{ padding: "4px 10px", fontSize: 10, color: "var(--gray-400)", borderBottom: "1px solid var(--line)", fontFamily: "var(--font-mono)" }}>고객 화면 미리보기</div>
                     <div style={{ background: "rgba(255,255,255,0.02)", display: "flex", justifyContent: "center", alignItems: "center", aspectRatio: "3 / 4", maxHeight: 320, overflow: "hidden" }}>
-                      <img src={editing.image_url} alt="preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                      <img src={editing.image_url} alt="preview" style={{ width: "100%", height: "100%", objectFit: "contain", padding: 12, boxSizing: "border-box" }} />
                     </div>
                     <button type="button" onClick={() => upd("image_url", "")}
                       style={{ position: "absolute", top: 6, right: 6, padding: "3px 8px", fontSize: 10, background: "rgba(10,22,40,0.85)", color: "var(--gray-200)", border: "1px solid var(--line-strong)", borderRadius: 4, cursor: "pointer" }}>
@@ -1319,7 +1319,7 @@ const CasesTab = () => {
                   <div style={{ marginTop: 10, border: "1px solid var(--line)", borderRadius: 8, position: "relative", overflow: "hidden" }}>
                     <div style={{ padding: "4px 10px", fontSize: 10, color: "var(--gray-400)", borderBottom: "1px solid var(--line)", fontFamily: "var(--font-mono)" }}>고객 화면 미리보기</div>
                     <div style={{ background: "rgba(255,255,255,0.02)", display: "flex", justifyContent: "center", alignItems: "center", aspectRatio: "3 / 4", maxHeight: 320, overflow: "hidden" }}>
-                      <img src={editing.image_url} alt="preview" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                      <img src={editing.image_url} alt="preview" style={{ width: "100%", height: "100%", objectFit: "contain", padding: 12, boxSizing: "border-box" }} />
                     </div>
                     <button type="button" onClick={() => upd("image_url", "")}
                       style={{ position: "absolute", top: 6, right: 6, padding: "3px 8px", fontSize: 10, background: "rgba(10,22,40,0.85)", color: "var(--gray-200)", border: "1px solid var(--line-strong)", borderRadius: 4, cursor: "pointer" }}>

@@ -142,7 +142,8 @@ const ProductCard = ({ m, onClick, onAdd }) => {
     </div>
     <div style={{ aspectRatio: "3 / 4", background: "rgba(255,255,255,0.02)", borderRadius: 8, display: "grid", placeItems: "center", marginBottom: isMobile ? 10 : 14, border: "1px solid var(--line)", overflow: "hidden" }}>
       {m.image_url && (
-        <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+        <img src={m.image_url} alt={m.name} loading="eager"
+             style={{ width: "100%", height: "100%", objectFit: "contain", padding: 10, boxSizing: "border-box" }} />
       )}
     </div>
     <div style={{ fontSize: isMobile ? 13 : 15, fontWeight: 700, color: "var(--white)", marginBottom: 2 }}>{m.name}</div>
