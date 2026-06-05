@@ -26,10 +26,10 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           <div style={{ marginBottom: 12 }}>
             <Badge kind={m.status === "live" ? "live" : "soon"}>{m.status === "live" ? "판매중" : "출시예정"}</Badge>
           </div>
-          <div style={{ aspectRatio: "3 / 4", maxHeight: "75vh", background: m.image_url ? "#fff" : "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", display: "grid", placeItems: "center", border: "1px solid var(--line)" }}>
-            {!m.image_url && <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.4 }} />}
+          <div style={{ aspectRatio: "3 / 4", maxHeight: "75vh", background: "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", display: "grid", placeItems: "center", border: "1px solid var(--line)" }}>
+            <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: m.image_url ? 0.15 : 0.4 }} />
             {m.image_url && (
-              <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <img src={m.image_url} alt={m.name} loading="eager" style={{ width: "100%", height: "100%", objectFit: "contain", position: "relative", zIndex: 1 }} />
             )}
           </div>
         </div>
