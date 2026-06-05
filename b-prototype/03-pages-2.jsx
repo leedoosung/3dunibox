@@ -29,8 +29,10 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           <div style={{ aspectRatio: "3 / 4", maxHeight: "75vh", background: "linear-gradient(160deg, var(--navy-900), var(--navy-800))", borderRadius: 16, position: "relative", overflow: "hidden", border: "1px solid var(--line)" }}>
             <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: m.image_url ? 0.15 : 0.4 }} />
             {m.image_url && (
-              <img src={m.image_url} alt={m.name} loading="eager"
-                   style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", padding: 24, boxSizing: "border-box", zIndex: 1 }} />
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, boxSizing: "border-box", zIndex: 1 }}>
+                <img src={m.image_url} alt={m.name} loading="eager"
+                     style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block" }} />
+              </div>
             )}
           </div>
         </div>
