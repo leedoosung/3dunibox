@@ -146,7 +146,19 @@ const ProductCard = ({ m, onClick, onAdd }) => {
       )}
     </div>
     <div style={{ fontSize: isMobile ? 13 : 15, fontWeight: 700, color: "var(--white)", marginBottom: 2 }}>{m.name}</div>
-    {!isMobile && <div style={{ fontSize: 12, color: "var(--gray-300)", marginBottom: 14, minHeight: 16 }}>{m.desc}</div>}
+    {m.desc && (
+      <div style={{
+        fontSize: isMobile ? 11 : 12,
+        color: "var(--gray-300)",
+        marginBottom: isMobile ? 8 : 14,
+        lineHeight: 1.4,
+        display: "-webkit-box",
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: "vertical",
+        overflow: "hidden",
+        wordBreak: "keep-all",
+      }}>{m.desc}</div>
+    )}
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: isMobile ? 8 : 0 }}>
       <span className="ub-mono" style={{ fontSize: isMobile ? 13 : 14, color: "var(--white)", fontWeight: 700 }}>₩{m.price.toLocaleString()}</span>
       {onAdd && m.status === "live" ? (

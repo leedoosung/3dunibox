@@ -35,7 +35,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
         </div>
         <div>
           <div className="ub-mono" style={{ fontSize: 12, color: "var(--cyan-400)", marginBottom: 8 }}>{m.code}</div>
-          <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 20 }}>{m.name} 전용 브라켓</h1>
+          <h1 className="ub-h2" style={{ fontSize: 30, marginBottom: 20 }}>{m.name}</h1>
 
           <div className="ub-card" style={{ marginBottom: 20, background: "rgba(0,200,240,0.03)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
