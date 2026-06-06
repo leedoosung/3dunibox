@@ -185,6 +185,14 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                 <li>제품 수령 후 7일 이내 <strong style={{ color: "var(--white)" }}>명백한 제품 하자</strong>(파손·출력 불량·모델 불일치)가 확인된 경우 100% 무상 교환·환불해 드립니다.</li>
                 <li>「전자상거래법 제17조 제2항 제5호」에 따라 사용자 주문에 따라 개별 생산되는 제품으로 청약철회가 제한될 수 있습니다.</li>
               </ul>
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: "1px dashed rgba(251,191,36,0.25)" }}>
+                <div style={{ fontSize: 12, color: "var(--warning, #FBBF24)", fontWeight: 600, marginBottom: 8 }}>제품 특성 안내</div>
+                <ul style={{ margin: 0, paddingLeft: 20, color: "var(--gray-200)", fontSize: 12.5, lineHeight: 1.8 }}>
+                  <li><strong style={{ color: "var(--white)" }}>표면 질감</strong> — FDM 방식 특성상 레이어 적층 패턴이 육안으로 보일 수 있습니다. 사출 성형 제품과 동일한 매끄러운 표면을 기대하시면 안 됩니다.</li>
+                  <li><strong style={{ color: "var(--white)" }}>색상 및 마감</strong> — 무광 블랙 PETG 소재 특성상 촬영 환경에 따라 실제 제품과 색상이 다소 다르게 보일 수 있습니다.</li>
+                  <li><strong style={{ color: "var(--white)" }}>온도·환경 변형</strong> — 장시간 직사광선이나 고온 환경(60℃ 이상)에 노출 시 미세한 변형이 발생할 수 있습니다.</li>
+                </ul>
+              </div>
               <div style={{ marginTop: 10, fontSize: 12, color: "var(--gray-400)" }}>※ 결제 진행은 위 유의사항에 동의함을 의미합니다.</div>
             </div>
           </div>
