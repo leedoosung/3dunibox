@@ -79,17 +79,9 @@ const HomePage = ({ onNav }) => {
                 정밀하게 설계했습니다<br/>
                 <span style={{ color: "var(--cyan-400)" }}>PETG 소재로 더 가볍게</span>
               </h1>
-              <p style={{ color: "var(--gray-200)", fontSize: 18, lineHeight: 1.6, marginBottom: 32, maxWidth: 540 }}>
+              <p style={{ color: "var(--gray-200)", fontSize: 18, lineHeight: 1.6, marginBottom: 0, maxWidth: 540 }}>
                 3D 프린팅으로 <strong style={{ color: "var(--white)" }}>현장의 불편함</strong>을 해결합니다.
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, auto)", gap: 36 }}>
-                {[["1개+", "최소 주문"], ["1일", "출고 기준"], ["0.1mm", "정밀도"]].map(([n, l]) => (
-                  <div key={l}>
-                    <div style={{ fontFamily: "var(--font-display)", fontSize: 40, color: "var(--cyan-400)", lineHeight: 1 }}>{n}</div>
-                    <div className="ub-spec-key" style={{ marginTop: 4 }}>{l}</div>
-                  </div>
-                ))}
-              </div>
             </div>
             <div style={{ display: "grid", placeItems: "center", height: 360 }}>
               <HeroProductSlideshow size={320} />
