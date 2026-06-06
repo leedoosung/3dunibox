@@ -59,8 +59,13 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
             <div style={{ display: "flex", gap: 10 }}>
               {m.status === "live" ? (
                 <>
-                  <Btn variant="primary" size="lg" full onClick={() => { window.open("https://smartstore.naver.com", "_blank"); }}>
-                    스마트스토어로 구매 {Ic.external}
+                  <Btn variant="primary" size="lg" full onClick={() => {
+                    window.UB.payWithToss({
+                      amount: m.price * qty,
+                      orderName: `${m.name} ${qty}개`,
+                    });
+                  }}>
+                    토스페이먼츠로 결제 {Ic.arrow}
                   </Btn>
                   <Btn variant="ghost" size="lg" onClick={() => { onAdd(m, qty); toast(`${m.name} ${qty}개 장바구니에 담김`); }}>장바구니</Btn>
                 </>

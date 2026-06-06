@@ -463,6 +463,45 @@ const Orbit = ({ size = 320, count = 8, speed = 22 }) => {
   );
 };
 
+// ─── 토스페이먼츠 v2 결제 스캐폴드 ─────────────────────────────────────────
+// 현재: 토스 공식 "도큐먼트 테스트 키" — 결제창은 뜨지만 실제 결제 불가.
+// 라이브 전환 TODO (CLAUDE.md "토스페이먼츠 통합" 절 참조):
+//   1. https://www.tosspayments.com 가맹점 가입
+//   2. TOSS_CLIENT_KEY → 라이브 키 (live_ck_...)
+//   3. successUrl / failUrl 페이지 백엔드 처리 (paymentKey 받아 /v1/payments/confirm 호출 → 결제 승인)
+//   4. orders 테이블 신설 + 결제 정보·상태 저장
+const TOSS_CLIENT_KEY = "test_ck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+
+const payWithToss = async ({ amount, orderName, customerEmail = "", customerName = "" }) => {
+  if (!window.TossPayments) {
+    alert("토스페이먼츠 SDK 로드 실패 — 잠시 후 다시 시도해 주세요.");
+    return false;
+  }
+  try {
+    const tossPayments = window.TossPayments(TOSS_CLIENT_KEY);
+    const sbUser = window.__ub_auth && window.__ub_auth.user;
+    const customerKey = (sbUser && sbUser.id) || ("anon_" + Math.random().toString(36).slice(2, 14));
+    const payment = tossPayments.payment({ customerKey });
+    const orderId = "ub_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+    await payment.requestPayment({
+      method: "CARD",
+      amount: { currency: "KRW", value: Number(amount) },
+      orderId,
+      orderName: String(orderName).slice(0, 100),
+      successUrl: `${location.origin}/?toss=success`,
+      failUrl:    `${location.origin}/?toss=fail`,
+      customerEmail: customerEmail || undefined,
+      customerName:  customerName  || undefined,
+    });
+    return true;
+  } catch (e) {
+    if (e && (e.code === "USER_CANCEL" || e.code === "PAY_PROCESS_CANCELED")) return false;
+    console.error("[toss] payment error:", e);
+    alert("결제 진행 중 오류: " + (e?.message || e));
+    return false;
+  }
+};
+
 window.UB = {
   useState, useMemo, useEffect, useRef, Fragment,
   MODELS, FAQS, STEPS,
@@ -472,5 +511,6 @@ window.UB = {
   useIsMobile,
   openPostcode,
   loadProducts, useProducts,
+  payWithToss,
   Ic, Btn, Badge, Logo, Bracket, Orbit, TopNav, BottomTabs,
 };

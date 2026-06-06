@@ -157,30 +157,13 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
 
           {/* 결제 수단 */}
           <div className="ub-card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
               <div className="ub-spec-key">결제 수단</div>
-              <span style={{ fontSize: 11, color: "var(--warning, #FBBF24)" }}>카드 선결제 · PG 연동 추후</span>
+              <span style={{ fontSize: 11, color: "var(--cyan-400)" }}>토스페이먼츠</span>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1.2fr 1fr", gap: 12 }}>
-              <div>
-                <label className="ub-label ub-label-req">카드사</label>
-                <select className="ub-select" value={data.cardCo} onChange={e => upd("cardCo", e.target.value)}>
-                  <option value="">선택하세요</option>
-                  {["신한", "국민", "삼성", "현대", "롯데", "BC", "하나", "NH"].map(c => <option key={c} value={c}>{c}카드</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="ub-label">할부</label>
-                <select className="ub-select" value={data.installments} onChange={e => upd("installments", e.target.value)}>
-                  <option value="0">일시불</option>
-                  {[2,3,6,12].map(n => <option key={n} value={String(n)}>{n}개월</option>)}
-                </select>
-              </div>
-              <div style={{ gridColumn: "span 2" }}>
-                <label className="ub-label ub-label-req">카드번호</label>
-                <input className="ub-input ub-mono" placeholder="0000 0000 0000 0000" value={data.cardNo} onChange={e => upd("cardNo", e.target.value)} />
-                <div style={{ fontSize: 11, color: "var(--gray-400)", marginTop: 6 }}>실제 결제는 PG사(토스페이먼츠 / 포트원) 결제창에서 처리됩니다 — 본 화면은 입력 자리표시.</div>
-              </div>
+            <div style={{ fontSize: 13, color: "var(--gray-200)", lineHeight: 1.7 }}>
+              결제하기 버튼을 누르면 <strong style={{ color: "var(--white)" }}>토스페이먼츠 결제창</strong>이 열립니다.<br/>
+              카드 · 계좌이체 · 간편결제 모두 지원합니다.
             </div>
           </div>
 
@@ -232,12 +215,20 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                 } catch (e) { console.warn("[order] 주소 자동 저장 실패:", e); }
               }
             }
-            onDone({
-              email: data.email, name: data.name, phone: data.phone,
-              addr: `${data.addr1} ${data.addr2}`,
-              total,
+            // 토스페이먼츠 결제창 호출 (성공시 successUrl 로 리다이렉트, 실패/취소시 false)
+            const cart0 = cart[0] || {};
+            const m0 = window.UB.MODELS.find(x => x.id === cart0.id);
+            const orderName = (m0 && cart.length > 1)
+              ? `${m0.name} 외 ${cart.length - 1}건`
+              : (m0 ? `${m0.name} ${cart0.qty}개` : "3D UniBox 주문");
+            await window.UB.payWithToss({
+              amount: total,
+              orderName,
+              customerEmail: data.email,
+              customerName:  data.name,
             });
-            onClear();
+            // 결제창이 뜨면 사용자는 토스 페이지로 리다이렉트됨.
+            // 실제 결제 완료/실패 처리는 successUrl/failUrl 페이지에서 (백엔드 confirm 필요 — TODO).
           }}>
             ₩{total.toLocaleString()} 결제하기 {Ic.arrow}
           </Btn>
