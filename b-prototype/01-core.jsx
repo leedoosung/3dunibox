@@ -10,9 +10,9 @@ const MODELS = [
 ];
 
 // ─── 배송비 정책 ─────────────────────────────────────────────────────────────
-// 100,000원 이상 무료, 미만 3,500원. 도서산간 등 추가 정책은 PG/배송 연동 시 확장.
-const SHIP = { FREE_OVER: 100000, FEE: 3500 };
-const calcShip = (subtotal) => (subtotal === 0 ? 0 : (subtotal >= SHIP.FREE_OVER ? 0 : SHIP.FEE));
+// 고정 배송비 3,500원 (도서산간 등 추가 정책은 PG/배송 연동 시 확장).
+const SHIP = { FEE: 3500 };
+const calcShip = (subtotal) => (subtotal === 0 ? 0 : SHIP.FEE);
 
 // ─── 회원 등급 정책 ──────────────────────────────────────────────────────────
 // VIP: 누적 구매 100만원 이상 또는 4건 이상

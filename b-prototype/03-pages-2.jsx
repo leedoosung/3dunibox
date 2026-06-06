@@ -1,7 +1,7 @@
 // B안 — 페이지 2: Detail / Guide / FAQ / Quote / Cart
 
 const { useState: uS3, useMemo: uM3, useEffect: uE3, Fragment: F3 } = React;
-const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, useIsMobile: useIsMobile3, useProducts: useProducts3 } = window.UB;
+const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, SHIP, calcShip, useIsMobile: useIsMobile3, useProducts: useProducts3 } = window.UB;
 
 // ─── DETAIL ────────────────────────────────────────────────────────────────
 const DetailPage = ({ id, onNav, onAdd, toast }) => {
@@ -46,7 +46,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                 <div className="ub-spec-key">SD샵 · 스마트스토어</div>
                 <div className="ub-mono" style={{ fontSize: 28, color: "var(--white)", fontWeight: 700, marginTop: 4 }}>₩{(m.price * qty).toLocaleString()}</div>
               </div>
-              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>무료배송</div>
+              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>배송비 ₩{SHIP.FEE.toLocaleString()} 별도</div>
             </div>
             <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 14 }}>
               <span className="ub-spec-key">수량</span>
@@ -60,12 +60,13 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
               {m.status === "live" ? (
                 <>
                   <Btn variant="primary" size="lg" full onClick={() => {
+                    const sub = m.price * qty;
                     window.UB.payWithToss({
-                      amount: m.price * qty,
+                      amount: sub + calcShip(sub),
                       orderName: `${m.name} ${qty}개`,
                     });
                   }}>
-                    토스페이먼츠로 결제 {Ic.arrow}
+                    토스페이먼츠로 결제 (₩{((m.price * qty) + calcShip(m.price * qty)).toLocaleString()}) {Ic.arrow}
                   </Btn>
                   <Btn variant="ghost" size="lg" onClick={() => { onAdd(m, qty); toast(`${m.name} ${qty}개 장바구니에 담김`); }}>장바구니</Btn>
                 </>

@@ -249,15 +249,8 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, fontSize: 12, color: "var(--gray-300)" }}>
               <span>배송비</span>
-              <span className="ub-mono" style={{ color: ship === 0 ? "var(--success, #4ADE80)" : "var(--white)" }}>
-                {ship === 0 ? "무료" : `₩${ship.toLocaleString()}`}
-              </span>
+              <span className="ub-mono" style={{ color: "var(--white)" }}>₩{SHIP.FEE.toLocaleString()}</span>
             </div>
-            {remainForFree > 0 && (
-              <div style={{ fontSize: 11, color: "var(--cyan-400)", marginBottom: 12, textAlign: "right" }}>
-                ₩{remainForFree.toLocaleString()} 더 담으면 무료배송
-              </div>
-            )}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingTop: 12, borderTop: "1px solid var(--line)" }}>
               <div className="ub-spec-key">총 결제 금액</div>
               <div className="ub-mono" style={{ fontSize: 24, fontWeight: 700, color: "var(--cyan-400)" }}>₩{total.toLocaleString()}</div>
