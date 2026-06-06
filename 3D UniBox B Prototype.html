@@ -112,7 +112,18 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [route, setRoute] = useState({ name: "home" });
-  const [cart, setCart] = useState([]);
+  // cart — 새로고침해도 유지되도록 localStorage 영속화
+  const CART_KEY = "ub:cart:v1";
+  const [cart, setCart] = useState(() => {
+    try {
+      const raw = localStorage.getItem(CART_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed.filter(x => x && x.id && x.qty > 0) : [];
+    } catch (e) { return []; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
+  }, [cart]);
   const [cartOpen, setCartOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState(null);
   const [doneData, setDoneData] = useState(null);
@@ -195,7 +206,7 @@ function App() {
             onNav={navTo}
             presetId={route.presetId}
             cart={cart}
-            onClear={() => setCart([])}
+            onClear={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
             onDone={(data) => setDoneData(data)}
           />
         ) : (

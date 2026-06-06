@@ -9,8 +9,16 @@ const Row = ({ k, v }) => <div style={{ display: "flex", justifyContent: "space-
 const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
   useProducts4();
   const isMobile = useIsMobile4(1024);
+  // cart 비었으면 카탈로그로 자동 이동 (엉뚱한 더미 제품 표시 방지)
+  uE4(() => {
+    if ((!cart || cart.length === 0) && !presetId) {
+      onNav({ name: "catalog" });
+    }
+  }, []);
   const [data, setData] = uS4({
-    items: cart && cart.length ? [...cart] : [{ id: presetId || (MODELS[0] && MODELS[0].id) || "", qty: 1 }],
+    items: cart && cart.length
+      ? [...cart]
+      : (presetId ? [{ id: presetId, qty: 1 }] : []),
     name: "", phone: "", email: "",
     zip: "", addr1: "", addr2: "",
     memo: "",
@@ -64,7 +72,6 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
   }, 0);
   const ship = calcShip(subtotal);
   const total = subtotal + ship;
-  const remainForFree = Math.max(0, SHIP.FREE_OVER - subtotal);
 
   const valid =
     data.items.length > 0 && data.items.every(i => i.qty > 0) &&
@@ -376,7 +383,6 @@ const CartDrawer = ({ open, onClose, cart, onUpdate, onRemove, onCheckout, onBro
   const subtotal = cart.reduce((s, it) => { const m = MODELS.find(x => x.id === it.id); return s + (m ? m.price * it.qty : 0); }, 0);
   const ship = calcShip(subtotal);
   const total = subtotal + ship;
-  const remainForFree = Math.max(0, SHIP.FREE_OVER - subtotal);
   const openClass = shown ? " is-open" : "";
 
   return (
@@ -466,15 +472,8 @@ const CartDrawer = ({ open, onClose, cart, onUpdate, onRemove, onCheckout, onBro
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10, fontSize: 12, color: "var(--gray-300)" }}>
               <span>배송비</span>
-              <span className="ub-mono" style={{ color: ship === 0 ? "var(--success, #4ADE80)" : "var(--white)" }}>
-                {ship === 0 ? "무료" : `₩${ship.toLocaleString()}`}
-              </span>
+              <span className="ub-mono" style={{ color: "var(--white)" }}>₩{SHIP.FEE.toLocaleString()}</span>
             </div>
-            {remainForFree > 0 && (
-              <div style={{ fontSize: 11, color: "var(--cyan-400)", marginBottom: 12, textAlign: "right" }}>
-                ₩{remainForFree.toLocaleString()} 더 담으면 무료배송
-              </div>
-            )}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14, paddingTop: 12, borderTop: "1px solid var(--line)" }}>
               <div className="ub-spec-key">합계</div>
               <div className="ub-mono" style={{ fontSize: 24, fontWeight: 700, color: "var(--white)" }}>₩{total.toLocaleString()}</div>
