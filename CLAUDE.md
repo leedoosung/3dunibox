@@ -76,6 +76,18 @@
 - Supabase SMTP 설정 완료 — 비밀번호 재설정 등에 사용
 - 가입 인증 메일은 OFF라 발송 안 함
 
+### 결제 (토스페이먼츠 v2) — 🟡 스캐폴드만 (실결제 불가)
+- **SDK**: `https://js.tosspayments.com/v2/standard` HTML head 로드
+- **헬퍼**: `window.UB.payWithToss({amount, orderName, customerEmail, customerName})` — [01-core.jsx](b-prototype/01-core.jsx) 하단
+- **연결 위치**: DetailPage 즉시 구매 버튼 + OrderPage 결제 버튼
+- **현재 키**: `test_ck_docs_Ovk5rk1EwkEbP0W43n07xlzm` (토스 공식 테스트 키 — 결제창은 뜨지만 실 결제 불가)
+- **라이브 전환 절차 (TODO)**:
+  1. https://www.tosspayments.com 가맹점 가입 (사업자등록증 필요)
+  2. 콘솔에서 라이브 클라이언트 키 발급 → `TOSS_CLIENT_KEY` 교체
+  3. **백엔드 결제 승인 엔드포인트 구축** — `successUrl` (`/?toss=success`) 에 도달한 paymentKey/orderId/amount 를 받아서 `/v1/payments/confirm` 호출 (Supabase Edge Function 또는 Vercel Serverless)
+  4. `orders` 테이블 신설 + 결제 정보·상태 저장 (orderId / paymentKey / 금액 / 상태)
+  5. 운영자 알림 메일 (Resend) — 결제 성공시
+
 ### 캐시 정책 — 절대 변경하지 마라
 - `service-worker.js`: 자살 모드 (옛 SW 제거 후 재등록 안 함)
 - `vercel.json`: 모든 정적 자원 (HTML/CSS/JSX/manifest) `Cache-Control: no-cache, no-store, must-revalidate`
