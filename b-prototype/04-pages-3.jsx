@@ -534,7 +534,7 @@ const AboutPage = () => (
       <div className="ub-spec-key" style={{ marginBottom: 14 }}>회사 정보</div>
       <table style={{ width: "100%", fontSize: 13 }}>
         <tbody>
-          {[["대표", "허희경"], ["사업자등록번호", "449-56-00430"], ["통신판매업", "[번호 발급 후 기재]"], ["사업장 주소", "경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호"], ["연락처", "010-9090-9029 / leedoo80@gmail.com"]].map(([k, v]) => (
+          {[["대표", "허희경"], ["사업자등록번호", "449-56-00430"], ["통신판매업", "[번호 발급 후 기재]"], ["사업장 주소", "경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호"], ["연락처", "010-9109-8277 / leedoo80@gmail.com"]].map(([k, v]) => (
             <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
               <td style={{ padding: "12px 0", color: "var(--gray-400)", width: 160, fontFamily: "var(--font-mono)", fontSize: 11 }}>{k.toUpperCase()}</td>
               <td style={{ padding: "12px 0", color: "var(--white)" }}>{v}</td>
@@ -563,7 +563,7 @@ const Footer = ({ onNav }) => {
       {[
         { t: "제품", items: [["전체보기", () => onNav({ name: "catalog" })], ["장바구니", () => onNav({ name: "catalog" })]] },
         { t: "고객지원", items: [["시공사례", () => onNav({ name: "guide" })], ["FAQ", () => onNav({ name: "faq" })]] },
-        { t: "문의", items: [["010-9090-9029", null], ["leedoo80@gmail.com", null], ["평일 09–18시", null]] },
+        { t: "문의", items: [["010-9109-8277", null], ["leedoo80@gmail.com", null], ["평일 09–18시", null]] },
       ].map(c => (
         <div key={c.t}>
           <div className="ub-spec-key" style={{ marginBottom: 12 }}>{c.t}</div>

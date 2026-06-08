@@ -71,7 +71,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                   <Btn variant="ghost" size="lg" onClick={() => { onAdd(m, qty); toast(`${m.name} ${qty}개 장바구니에 담김`); }}>장바구니</Btn>
                 </>
               ) : (
-                <Btn variant="primary" size="lg" full onClick={() => alert("출시 알림은 010-9090-9029 또는 leedoo80@gmail.com로 신청해 주세요.")}>출시 알림 신청</Btn>
+                <Btn variant="primary" size="lg" full onClick={() => alert("출시 알림은 010-9109-8277 또는 leedoo80@gmail.com로 신청해 주세요.")}>출시 알림 신청</Btn>
               )}
             </div>
           </div>

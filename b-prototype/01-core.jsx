@@ -189,7 +189,7 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 6 : 14 }}>
           {!isMobile && (
-            <span className="ub-mono" style={{ fontSize: 12, color: "var(--gray-300)" }}>010-9090-9029</span>
+            <span className="ub-mono" style={{ fontSize: 12, color: "var(--gray-300)" }}>010-9109-8277</span>
           )}
           <button onClick={() => onNav({ name: user ? "me" : "login" })}
             aria-label={user ? "마이페이지" : "로그인"} style={{
@@ -271,7 +271,7 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
             </nav>
             <div style={{ padding: 16, borderTop: "1px solid var(--line)" }}>
               <div style={{ fontSize: 11, color: "var(--gray-400)", marginBottom: 4 }}>고객센터</div>
-              <div className="ub-mono" style={{ fontSize: 16, color: "var(--white)", fontWeight: 600 }}>010-9090-9029</div>
+              <div className="ub-mono" style={{ fontSize: 16, color: "var(--white)", fontWeight: 600 }}>010-9109-8277</div>
               <div style={{ fontSize: 11, color: "var(--gray-400)", marginTop: 4 }}>평일 09–18시</div>
             </div>
           </div>

@@ -97,7 +97,7 @@ const TermsPage = () => {
         대표 허희경 · 사업자등록번호 449-56-00430<br/>
         통신판매업신고: [번호 발급 후 기재]<br/>
         사업장 주소: 경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
-        문의: 010-9090-9029 / leedoo80@gmail.com
+        문의: 010-9109-8277 / leedoo80@gmail.com
       </div>
     </div>
   );
@@ -209,7 +209,7 @@ const PrivacyPage = () => {
       <Section n="09" title="개인정보 보호책임자">
         <div style={{ padding: 14, background: "rgba(0,200,240,0.04)", border: "1px solid rgba(0,200,240,0.2)", borderRadius: 8, fontSize: 13 }}>
           <div><strong style={{ color: "var(--white)" }}>개인정보 보호책임자</strong>: 허희경 (대표)</div>
-          <div>연락처: 010-9090-9029</div>
+          <div>연락처: 010-9109-8277</div>
           <div>이메일: leedoo80@gmail.com</div>
         </div>
       </Section>
