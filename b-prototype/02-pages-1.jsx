@@ -10,25 +10,39 @@ const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsM
 // 새 영상 적용 시 캐시 무효화 (?v=숫자 증가)
 const HERO_VIDEO_VER = 4;
 const HERO_VIDEO_IDS = ["UB-BEP2","UB-BEW2","UB-BLN2","UB-BS2A","UB-BS3","UB-BS3-L","UB-BS3-R","UB-XP2_G","UB-XP2_M","UB-XS2"];
+const HERO_PLAYBACK_RATE = 0.65;  // 1 = 원래 속도, 0.65 = 35% 느림
 
 const HeroProductSlideshow = ({ size = 320 }) => {
   const [idx, setIdx] = uS2(0);
+  const [ready, setReady] = uS2(false);   // 새 영상이 onCanPlay 발생까지 숨김 → 깜빡임 방지
   const ref = uR2(null);
+
   uE2(() => {
+    setReady(false);  // idx 바뀌면 즉시 숨김 (key 로 element 자체도 갈아끼움)
     const v = ref.current;
     if (!v) return;
-    try { v.load(); v.play().catch(() => {}); } catch (e) {}
+    v.playbackRate = HERO_PLAYBACK_RATE;
+    try { v.play().catch(() => {}); } catch (e) {}
   }, [idx]);
+
   const next = () => setIdx(p => (p + 1) % HERO_VIDEO_IDS.length);
   const id = HERO_VIDEO_IDS[idx];
+
   return (
     <div style={{ width: size, height: size, position: "relative" }}>
       <video
+        key={`hero-vid-${idx}`}                // idx 변경 시 fresh mount — 이전 프레임 잔존/포스터 깜빡임 제거
         ref={ref}
-        autoPlay muted playsInline
+        autoPlay muted playsInline preload="auto"
+        onCanPlay={() => setReady(true)}      // 재생 준비 끝나면 fade in
         onEnded={next}
         onError={next}
-        style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+        style={{
+          width: "100%", height: "100%",
+          objectFit: "contain", display: "block",
+          opacity: ready ? 1 : 0,
+          transition: "opacity 0.45s ease-out",
+        }}
       >
         <source src={`/videos/${id}_360.webm?v=${HERO_VIDEO_VER}`} type="video/webm" />
         <source src={`/videos/${id}_360.mp4?v=${HERO_VIDEO_VER}`} type="video/mp4" />
