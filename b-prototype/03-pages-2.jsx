@@ -46,7 +46,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                 <div className="ub-spec-key">SD샵 · 스마트스토어</div>
                 <div className="ub-mono" style={{ fontSize: 28, color: "var(--white)", fontWeight: 700, marginTop: 4 }}>₩{(m.price * qty).toLocaleString()}</div>
               </div>
-              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>배송비 ₩{SHIP.FEE.toLocaleString()} 별도</div>
+              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>배송비 ₩{SHIP.FEE.toLocaleString()} 별도<br/>평균 2~5영업일 출고</div>
             </div>
             <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 14 }}>
               <span className="ub-spec-key">수량</span>
@@ -95,7 +95,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           })()}
 
           <div className="ub-tabs">
-            {[["desc", "제품 설명"], ["spec", "스펙"], ["return", "교환·반품"]].map(([k, l]) => (
+            {[["desc", "제품 설명"], ["spec", "스펙"], ["return", "배송·교환·반품"]].map(([k, l]) => (
               <div key={k} className={`ub-tab ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>{l}</div>
             ))}
           </div>
@@ -133,7 +133,26 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
                 </table>
               );
             })()}
-            {tab === "return" && <>맞춤 제작 특성상 단순 변심 반품은 제한됩니다. 제품 하자 시 7일 이내 100% 무상 교환 가능. 상세는 FAQ 참조.</>}
+            {tab === "return" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                <div>
+                  <div style={{ color: "var(--cyan-400)", fontWeight: 700, marginBottom: 4 }}>배송 기간</div>
+                  결제 확인 후 <strong style={{ color: "var(--white)" }}>1영업일 이내 제작 착수</strong>에 들어가며, 평균 <strong style={{ color: "var(--white)" }}>2~5영업일 이내 출고</strong>합니다. (도서산간 지역 추가 1~2일)
+                </div>
+                <div>
+                  <div style={{ color: "var(--cyan-400)", fontWeight: 700, marginBottom: 4 }}>단순 변심 반품</div>
+                  본 제품은 사용자 주문에 따라 개별 생산되는 <strong style={{ color: "var(--white)" }}>맞춤 제작 제품</strong>으로, 「전자상거래법 제17조 제2항 제5호」에 따라 출고 후 단순 변심에 의한 취소·반품·교환은 제한됩니다.
+                </div>
+                <div>
+                  <div style={{ color: "var(--cyan-400)", fontWeight: 700, marginBottom: 4 }}>제품 하자</div>
+                  제품 수령 후 <strong style={{ color: "var(--white)" }}>7일 이내 명백한 제품 하자</strong>(파손·출력 불량·모델 불일치)가 확인된 경우 <strong style={{ color: "var(--white)" }}>100% 무상 교환·환불</strong>해 드립니다.
+                </div>
+                <div>
+                  <div style={{ color: "var(--cyan-400)", fontWeight: 700, marginBottom: 4 }}>모델 선택 오류</div>
+                  주문 모델 변경/취소는 <strong style={{ color: "var(--white)" }}>제작 착수 전까지</strong>만 가능합니다. 제작 착수 이후에는 환불·교환이 어려우므로 결제 전 모델 호환 여부를 반드시 확인해 주세요.
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

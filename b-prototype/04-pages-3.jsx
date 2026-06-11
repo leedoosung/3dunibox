@@ -557,7 +557,11 @@ const Footer = ({ onNav }) => {
         <img src="/sd_white.png" alt="에스디컨버전스 (SD Convergence)"
              style={{ height: 26, width: "auto", display: "block", marginTop: 14 }} />
         <div style={{ marginTop: 10, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.7 }}>
-          대표 허희경 · 사업자등록번호 449-56-00430<br/>통신판매업신고 [번호 발급 후 기재]<br/>경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호
+          <strong style={{ color: "var(--gray-100)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
+          대표 허희경 · 사업자등록번호 449-56-00430<br/>
+          통신판매업신고 [번호 발급 후 기재]<br/>
+          경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
+          대표전화 010-9109-8277
         </div>
       </div>
       {[
