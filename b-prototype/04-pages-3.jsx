@@ -73,11 +73,11 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
   const ship = calcShip(subtotal);
   const total = subtotal + ship;
 
+  // 카드 정보는 토스페이먼츠 결제창에서 직접 입력 — valid 조건에서 제거
   const valid =
     data.items.length > 0 && data.items.every(i => i.qty > 0) &&
     data.name && data.phone &&
     data.zip && data.addr1 && data.addr2 &&
-    data.cardCo && data.cardNo &&
     data.agreeTerms && data.agreePay;
 
   return (
