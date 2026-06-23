@@ -480,24 +480,31 @@ const payWithToss = async ({ amount, orderName, customerEmail = "", customerName
   try {
     const tossPayments = window.TossPayments(TOSS_CLIENT_KEY);
     const sbUser = window.__ub_auth && window.__ub_auth.user;
-    const customerKey = (sbUser && sbUser.id) || ("anon_" + Math.random().toString(36).slice(2, 14));
+    // customerKey — 영문/숫자/일부 기호만 허용 (2~50자 권장). UUID 또는 anonymous_<랜덤>.
+    const rawKey = (sbUser && sbUser.id) || ("anonymous-" + Math.random().toString(36).slice(2, 14));
+    const customerKey = String(rawKey).replace(/[^a-zA-Z0-9\-_=.@]/g, "").slice(0, 50);
     const payment = tossPayments.payment({ customerKey });
-    const orderId = "ub_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
-    await payment.requestPayment({
+    const orderId = ("ub" + Date.now() + Math.random().toString(36).slice(2, 8)).slice(0, 64);
+    // requestPayment 파라미터 — undefined 는 절대 전달하지 않음 (토스 SDK 가 unknown error 발생)
+    const params = {
       method: "CARD",
       amount: { currency: "KRW", value: Number(amount) },
       orderId,
-      orderName: String(orderName).slice(0, 100),
+      orderName: String(orderName || "주문").slice(0, 100),
       successUrl: `${location.origin}/?toss=success`,
       failUrl:    `${location.origin}/?toss=fail`,
-      customerEmail: customerEmail || undefined,
-      customerName:  customerName  || undefined,
-    });
+    };
+    if (customerEmail) params.customerEmail = String(customerEmail);
+    if (customerName)  params.customerName  = String(customerName);
+    console.log("[toss] requestPayment params:", params, "customerKey:", customerKey);
+    await payment.requestPayment(params);
     return true;
   } catch (e) {
     if (e && (e.code === "USER_CANCEL" || e.code === "PAY_PROCESS_CANCELED")) return false;
     console.error("[toss] payment error:", e);
-    alert("결제 진행 중 오류: " + (e?.message || e));
+    const code = (e && e.code) ? e.code : "UNKNOWN";
+    const msg  = (e && e.message) ? e.message : String(e);
+    alert(`결제 오류 [${code}]\n${msg}\n\n(개발자 도구 콘솔 F12 → Console 탭에서 상세 확인)`);
     return false;
   }
 };
