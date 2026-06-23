@@ -185,7 +185,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
               <div className="ub-spec-key" style={{ color: "var(--warning, #FBBF24)", margin: 0 }}>주문 시 유의사항 (필독)</div>
             </div>
             <div style={{ fontSize: 13, color: "var(--gray-100)", lineHeight: 1.75 }}>
-              본 제품은 슈프리마 단말기 모델별로 정밀 매칭되는 <strong style={{ color: "var(--white)" }}>3D 프린팅 맞춤 출력 제품</strong>입니다. 결제 전 아래 사항을 반드시 확인해 주세요.
+              본 제품은 단말기 모델별로 정밀 매칭되는 <strong style={{ color: "var(--white)" }}>3D 프린팅 맞춤 출력 제품</strong>입니다. 결제 전 아래 사항을 반드시 확인해 주세요.
               <ul style={{ margin: "10px 0 0", paddingLeft: 20, color: "var(--gray-200)", fontSize: 12.5, lineHeight: 1.8 }}>
                 <li><strong style={{ color: "var(--white)" }}>주문 확정(결제 완료) 후에는 단순 변심에 의한 취소·반품·교환이 불가</strong>합니다.</li>
                 <li>모델 선택 오류로 인한 취소는 <strong style={{ color: "var(--white)" }}>제작 착수 전</strong>까지만 가능하며, 제작 착수 이후에는 환불·교환이 어렵습니다.</li>
