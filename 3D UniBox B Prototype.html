@@ -201,17 +201,13 @@ function App() {
       {route.name === "terms" && <TermsPage />}
       {route.name === "privacy" && <PrivacyPage />}
       {route.name === "order" && (
-        user ? (
-          <OrderPage
-            onNav={navTo}
-            presetId={route.presetId}
-            cart={cart}
-            onClear={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
-            onDone={(data) => setDoneData(data)}
-          />
-        ) : (
-          <LoginPage onAfter={() => navTo({ name: "order" })} />
-        )
+        <OrderPage
+          onNav={navTo}
+          presetId={route.presetId}
+          cart={cart}
+          onClear={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
+          onDone={(data) => setDoneData(data)}
+        />
       )}
       {!isAdmin && <Footer onNav={navTo} />}
       {!isAdmin && <BottomTabs route={route} onNav={navTo} cartCount={cart.length} onOpenCart={() => setCartOpen(true)} />}
