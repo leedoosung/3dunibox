@@ -470,7 +470,8 @@ const Orbit = ({ size = 320, count = 8, speed = 22 }) => {
 //   2. TOSS_CLIENT_KEY → 라이브 키 (live_ck_...)
 //   3. successUrl / failUrl 페이지 백엔드 처리 (paymentKey 받아 /v1/payments/confirm 호출 → 결제 승인)
 //   4. orders 테이블 신설 + 결제 정보·상태 저장
-const TOSS_CLIENT_KEY = "test_ck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+// 에스디컨버전스 가맹점 전용 테스트 키 (외부 도메인 401 차단 없음, 실 결제 시뮬 가능)
+const TOSS_CLIENT_KEY = "test_ck_vZnjEJeQVxbKza1L6qoP8PmOoBN0";
 
 const payWithToss = async ({ amount, orderName, customerEmail = "", customerName = "" }) => {
   if (!window.TossPayments) {
