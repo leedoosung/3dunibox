@@ -8,8 +8,8 @@ const { MODELS, FAQS, STEPS, Ic, Btn, Badge, Bracket, Orbit, useIsMobile: useIsM
 // 영상 파일은 /videos/<ID>_360.{webm,mp4} 에 위치. WebM(VP9 알파) 우선, MP4 폴백.
 // 영상 끝(onEnded)에 다음으로 전환. 영상이 없는 ID 는 onError 로 즉시 건너뜀.
 // 새 영상 적용 시 캐시 무효화 (?v=숫자 증가)
-const HERO_VIDEO_VER = 5;
-const HERO_VIDEO_IDS = ["UB-BEP2","UB-BEW2","UB-BLN2","UB-BS2A","UB-BS3","UB-XP2_G","UB-XP2_M","UB-XS2"];
+const HERO_VIDEO_VER = 6;
+const HERO_VIDEO_IDS = ["UB-BEP2","UB-BEW2","UB-BLN2","UB-BS2A","UB-BS3","UB-BS3-45","UB-XP2_G","UB-XP2_M","UB-XS2"];
 const HERO_PLAYBACK_RATE = 0.65;  // 1 = 원래 속도, 0.65 = 35% 느림
 
 const HeroProductSlideshow = ({ size = 320 }) => {
