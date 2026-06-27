@@ -76,17 +76,30 @@
 - Supabase SMTP 설정 완료 — 비밀번호 재설정 등에 사용
 - 가입 인증 메일은 OFF라 발송 안 함
 
-### 결제 (토스페이먼츠 v2) — 🟡 스캐폴드만 (실결제 불가)
+### 결제 (토스페이먼츠 v2) — 🟢 풀세트 구축 완료 (라이브 키만 대기)
+- **가맹점**: 에스디컨버전스 · MID `HJ_3dunibv8cd` · 업종 기타잡화 · 카드사 심사 진행 중
 - **SDK**: `https://js.tosspayments.com/v2/standard` HTML head 로드
-- **헬퍼**: `window.UB.payWithToss({amount, orderName, customerEmail, customerName})` — [01-core.jsx](b-prototype/01-core.jsx) 하단
-- **연결 위치**: DetailPage 즉시 구매 버튼 + OrderPage 결제 버튼
-- **현재 키**: `test_ck_docs_Ovk5rk1EwkEbP0W43n07xlzm` (토스 공식 테스트 키 — 결제창은 뜨지만 실 결제 불가)
-- **라이브 전환 절차 (TODO)**:
-  1. https://www.tosspayments.com 가맹점 가입 (사업자등록증 필요)
-  2. 콘솔에서 라이브 클라이언트 키 발급 → `TOSS_CLIENT_KEY` 교체
-  3. **백엔드 결제 승인 엔드포인트 구축** — `successUrl` (`/?toss=success`) 에 도달한 paymentKey/orderId/amount 를 받아서 `/v1/payments/confirm` 호출 (Supabase Edge Function 또는 Vercel Serverless)
-  4. `orders` 테이블 신설 + 결제 정보·상태 저장 (orderId / paymentKey / 금액 / 상태)
-  5. 운영자 알림 메일 (Resend) — 결제 성공시
+- **클라이언트 헬퍼**: `window.UB.payWithToss({...})` — [01-core.jsx](b-prototype/01-core.jsx) 하단
+- **클라이언트 키 (현재 테스트)**: `test_ck_vZnjEJeQVxbKza1L6qoP8PmOoBN0` (가맹점 발급, 외부 도메인 OK)
+- **연결 위치**: DetailPage 즉시 구매 + OrderPage 결제 + OrderResultPage(success/fail) 자동 처리
+- **백엔드 confirm**: [api/toss/confirm.js](api/toss/confirm.js) — 토스 confirm → orders INSERT + Resend 메일
+- **DB**: `public.orders` — [supabase/orders.sql](supabase/orders.sql) 1회 실행 필요
+- **흐름**: 결제하기 클릭 → 토스창 → successUrl `/?toss=success` 복귀 → OrderResultPage 가 `/api/toss/confirm` POST → DB 저장 + 메일 → 결과 화면
+- **결제 컨텍스트 보존**: 결제창 호출 직전 OrderPage 가 `ub:pending-order` localStorage 저장 (페이지 떠나도 유지) → 복귀 후 OrderResultPage 가 읽어서 confirm body 에 동봉
+- **카드사 심사 동결 항목**: 푸터 사업자 정보·전화번호·카테고리·품절·비회원 결제수단 — 통과까지 손대지 말 것
+
+#### Vercel 환경변수 (사용자 직접 설정 필요)
+- `TOSS_SECRET_KEY` — 토스 가맹점 콘솔 → 개발자센터 → API 키 → 시크릿 키 "보기" (test_sk_…, 심사 통과 후 live_sk_…)
+- `SUPABASE_URL` — `https://cdpigjktddwyajyjhqtw.supabase.co`
+- `SUPABASE_SERVICE_ROLE_KEY` — Supabase 대시보드 → Settings → API → service_role 키 (RLS 우회 INSERT 용)
+- `RESEND_API_KEY` — Resend 대시보드 → API Keys
+- `ADMIN_NOTIFY_EMAIL` (선택) — 운영자 메일, 기본 `leedoo80@gmail.com`
+- 설정: Vercel 대시보드 → 프로젝트 → Settings → Environment Variables (Production)
+
+#### 라이브 전환 절차 (카드사 심사 통과 후)
+1. [01-core.jsx](b-prototype/01-core.jsx) `TOSS_CLIENT_KEY` → `live_ck_…` 1줄 교체
+2. Vercel 환경변수 `TOSS_SECRET_KEY` → `live_sk_…` 로 교체 후 redeploy
+3. 본인 카드로 최소 금액 (1,000원) 테스트 결제 → 즉시 환불 확인
 
 ### 캐시 정책 — 절대 변경하지 마라
 - `service-worker.js`: 자살 모드 (옛 SW 제거 후 재등록 안 함)

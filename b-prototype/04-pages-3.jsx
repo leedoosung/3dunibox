@@ -240,6 +240,20 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
             const orderName = (m0 && cart.length > 1)
               ? `${m0.name} 외 ${cart.length - 1}건`
               : (m0 ? `${m0.name} ${cart0.qty}개` : "3D UniBox 주문");
+            // 결제창은 페이지를 떠나므로 successUrl 복귀 시 필요한 정보를 localStorage 에 임시 저장
+            try {
+              const itemsCtx = data.items.map(it => {
+                const m = window.UB.MODELS.find(x => x.id === it.id);
+                return { id: it.id, name: m ? m.name : it.id, code: m ? m.code : "", qty: it.qty, price: m ? m.price : 0 };
+              });
+              localStorage.setItem("ub:pending-order", JSON.stringify({
+                user_id:  authUser ? authUser.id : null,
+                customer: { name: data.name, phone: data.phone, email: data.email || null },
+                address:  { zip: data.zip, addr1: data.addr1, addr2: data.addr2, memo: data.memo || null },
+                items:    itemsCtx,
+                amount:   total,
+              }));
+            } catch (e) { console.warn("[order] pending-order localStorage 저장 실패:", e); }
             await window.UB.payWithToss({
               amount: total,
               orderName,
@@ -588,7 +602,138 @@ const Footer = ({ onNav }) => {
   );
 };
 
+// ─── ORDER RESULT PAGE (토스 successUrl / failUrl 처리) ──────────────────
+// URL 예:
+//   성공: /?toss=success&paymentKey=xxx&orderId=ub_xxx&amount=22500
+//   실패: /?toss=fail&code=PAY_PROCESS_CANCELED&message=...&orderId=ub_xxx
+const OrderResultPage = ({ onNav, onClearCart }) => {
+  const isMobile = useIsMobile4(1024);
+  const [state, setState] = uS4({ phase: "loading", data: null, error: null });
+
+  uE4(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get("toss");
+
+    if (mode === "fail") {
+      setState({
+        phase: "failed",
+        data: {
+          code: params.get("code") || "UNKNOWN",
+          message: params.get("message") || "결제가 실패했거나 취소되었습니다.",
+          orderId: params.get("orderId") || "",
+        },
+        error: null,
+      });
+      return;
+    }
+
+    // success — 백엔드 confirm 호출
+    const paymentKey = params.get("paymentKey");
+    const orderId    = params.get("orderId");
+    const amount     = params.get("amount");
+    if (!paymentKey || !orderId || !amount) {
+      setState({ phase: "failed", data: { code: "INVALID_RETURN", message: "결제 응답이 불완전합니다.", orderId: orderId || "" }, error: null });
+      return;
+    }
+
+    (async () => {
+      try {
+        // localStorage 에 저장해둔 주문 컨텍스트 (customer/address/items) 불러오기
+        let ctx = {};
+        try { ctx = JSON.parse(localStorage.getItem("ub:pending-order") || "{}"); } catch (e) {}
+
+        const r = await fetch("/api/toss/confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentKey, orderId, amount: Number(amount),
+            user_id:  ctx.user_id  || null,
+            customer: ctx.customer || null,
+            address:  ctx.address  || null,
+            items:    ctx.items    || null,
+          }),
+        });
+        const j = await r.json();
+        if (!r.ok || !j.ok) {
+          setState({ phase: "failed", data: { code: j.code || "CONFIRM_FAILED", message: j.message || "결제 승인 실패", orderId }, error: j });
+          return;
+        }
+        // 성공 — 장바구니 + 보류 주문 컨텍스트 정리
+        try { localStorage.removeItem("ub:pending-order"); } catch (e) {}
+        if (onClearCart) onClearCart();
+        setState({ phase: "succeeded", data: j, error: null });
+      } catch (e) {
+        console.error("[order-result] confirm exception:", e);
+        setState({ phase: "failed", data: { code: "NETWORK", message: "네트워크 오류 — 잠시 후 다시 확인해주세요.", orderId }, error: e });
+      }
+    })();
+  }, []);
+
+  const wrap = { padding: isMobile ? "40px 16px 60px" : "60px 80px 80px", maxWidth: 720, margin: "0 auto" };
+
+  if (state.phase === "loading") {
+    return (
+      <div style={wrap}>
+        <div className="ub-eyebrow" style={{ marginBottom: 10 }}>PAYMENT</div>
+        <h2 className="ub-h2">결제 확인 중…</h2>
+        <p style={{ color: "var(--gray-300)", marginTop: 14 }}>토스페이먼츠에서 결제 결과를 확인하고 있습니다. 페이지를 닫지 말고 잠시만 기다려 주세요.</p>
+      </div>
+    );
+  }
+
+  if (state.phase === "succeeded") {
+    const d = state.data || {};
+    return (
+      <div style={wrap}>
+        <div className="ub-eyebrow" style={{ color: "var(--success, #4ADE80)", marginBottom: 10 }}>PAYMENT SUCCESS</div>
+        <h2 className="ub-h2" style={{ marginBottom: 6 }}>주문이 완료되었습니다 🎉</h2>
+        <p style={{ color: "var(--gray-300)", marginBottom: 24 }}>결제 확인 후 <strong style={{ color: "var(--cyan-400)" }}>1영업일 이내 제작</strong>에 착수하며, 평균 <strong style={{ color: "var(--cyan-400)" }}>2~5영업일 이내 출고</strong>합니다.</p>
+        <div className="ub-card" style={{ padding: 20, marginBottom: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", gap: 10, fontSize: 13 }}>
+            <div style={{ color: "var(--gray-400)" }}>주문번호</div><div className="ub-mono" style={{ color: "var(--white)" }}>{d.orderId}</div>
+            <div style={{ color: "var(--gray-400)" }}>결제금액</div><div className="ub-mono" style={{ color: "var(--white)", fontWeight: 700 }}>₩{Number(d.amount || 0).toLocaleString()}</div>
+            <div style={{ color: "var(--gray-400)" }}>결제수단</div><div style={{ color: "var(--white)" }}>{d.method || "-"}</div>
+            <div style={{ color: "var(--gray-400)" }}>승인일시</div><div className="ub-mono" style={{ color: "var(--gray-200)" }}>{d.approvedAt ? new Date(d.approvedAt).toLocaleString("ko-KR") : "-"}</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 10, flexDirection: isMobile ? "column" : "row" }}>
+          <Btn variant="primary" size="lg" full={isMobile} onClick={() => onNav({ name: "home" })}>홈으로</Btn>
+          <Btn variant="ghost" size="lg" full={isMobile} onClick={() => onNav({ name: "catalog" })}>더 둘러보기</Btn>
+        </div>
+        <div style={{ marginTop: 24, fontSize: 12, color: "var(--gray-400)" }}>
+          ※ 결제 영수증은 토스페이먼츠에서 SMS·이메일로 발송됩니다. 문의: 010-9109-8277 / leedoo80@gmail.com
+        </div>
+      </div>
+    );
+  }
+
+  // failed
+  const f = state.data || {};
+  return (
+    <div style={wrap}>
+      <div className="ub-eyebrow" style={{ color: "var(--warning, #FBBF24)", marginBottom: 10 }}>PAYMENT FAILED</div>
+      <h2 className="ub-h2" style={{ marginBottom: 6 }}>결제가 완료되지 않았습니다</h2>
+      <p style={{ color: "var(--gray-300)", marginBottom: 24 }}>아래 사유로 결제가 처리되지 않았습니다. 카드 정보를 확인하시거나 다른 결제 수단으로 다시 시도해 주세요.</p>
+      <div className="ub-card" style={{ padding: 20, marginBottom: 20, borderColor: "rgba(251,191,36,0.35)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", gap: 10, fontSize: 13 }}>
+          <div style={{ color: "var(--gray-400)" }}>주문번호</div><div className="ub-mono" style={{ color: "var(--white)" }}>{f.orderId || "-"}</div>
+          <div style={{ color: "var(--gray-400)" }}>에러 코드</div><div className="ub-mono" style={{ color: "var(--warning, #FBBF24)" }}>{f.code}</div>
+          <div style={{ color: "var(--gray-400)" }}>사유</div><div style={{ color: "var(--white)" }}>{f.message}</div>
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 10, flexDirection: isMobile ? "column" : "row" }}>
+        <Btn variant="primary" size="lg" full={isMobile} onClick={() => onNav({ name: "order" })}>다시 결제하기</Btn>
+        <Btn variant="ghost" size="lg" full={isMobile} onClick={() => onNav({ name: "home" })}>홈으로</Btn>
+      </div>
+      <div style={{ marginTop: 24, fontSize: 12, color: "var(--gray-400)" }}>
+        ※ 카드사 한도·승인 거절 등 사유가 반복되면 고객센터 010-9109-8277 로 문의주세요.
+      </div>
+    </div>
+  );
+};
+
 window.UB.OrderPage = OrderPage;
+window.UB.OrderResultPage = OrderResultPage;
 window.UB.CartDrawer = CartDrawer;
 window.UB.DoneModal = DoneModal;
 window.UB.AboutPage = AboutPage;

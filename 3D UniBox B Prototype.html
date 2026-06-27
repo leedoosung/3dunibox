@@ -142,6 +142,9 @@ function App() {
 
   useEffect(() => {
     const apply = () => {
+      // 1순위: 토스 결제 결과 (?toss=success | ?toss=fail) — query string 으로 도착
+      const qs = new URLSearchParams(location.search);
+      if (qs.get("toss")) { setRoute({ name: "order-result" }); return; }
       const h = (location.hash || "").replace(/^#/, "").trim();
       if (h.startsWith("detail/")) {
         const id = h.slice(7);
@@ -207,6 +210,12 @@ function App() {
           cart={cart}
           onClear={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
           onDone={(data) => setDoneData(data)}
+        />
+      )}
+      {route.name === "order-result" && (
+        <OrderResultPage
+          onNav={navTo}
+          onClearCart={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
         />
       )}
       {!isAdmin && <Footer onNav={navTo} />}
