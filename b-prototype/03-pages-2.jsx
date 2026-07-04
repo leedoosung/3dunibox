@@ -43,8 +43,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           <div className="ub-card" style={{ marginBottom: 20, background: "rgba(0,200,240,0.03)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
               <div>
-                <div className="ub-spec-key">SD샵 · 스마트스토어</div>
-                <div className="ub-mono" style={{ fontSize: 28, color: "var(--white)", fontWeight: 700, marginTop: 4 }}>₩{(m.price * qty).toLocaleString()}</div>
+                <div className="ub-mono" style={{ fontSize: 28, color: "var(--white)", fontWeight: 700 }}>₩{(m.price * qty).toLocaleString()}</div>
               </div>
               <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>배송비 ₩{SHIP.FEE.toLocaleString()} 별도<br/>평균 2~5영업일 출고</div>
             </div>
