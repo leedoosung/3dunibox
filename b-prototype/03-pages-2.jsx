@@ -59,13 +59,10 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
               {m.status === "live" ? (
                 <>
                   <Btn variant="primary" size="lg" full onClick={() => {
-                    const sub = m.price * qty;
-                    window.UB.payWithToss({
-                      amount: sub + calcShip(sub),
-                      orderName: `${m.name} ${qty}개`,
-                    });
+                    onAdd(m, qty);
+                    onNav({ name: "order" });
                   }}>
-                    토스페이먼츠로 결제 (₩{((m.price * qty) + calcShip(m.price * qty)).toLocaleString()}) {Ic.arrow}
+                    바로 구매 (₩{(m.price * qty).toLocaleString()}) {Ic.arrow}
                   </Btn>
                   <Btn variant="ghost" size="lg" onClick={() => { onAdd(m, qty); toast(`${m.name} ${qty}개 장바구니에 담김`); }}>장바구니</Btn>
                 </>
