@@ -154,7 +154,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
           {isPickup ? (
             <div className="ub-card">
               <div className="ub-spec-key" style={{ marginBottom: 12 }}>연락처</div>
-              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
                 <div>
                   <label className="ub-label ub-label-req">받는 분</label>
                   <input className="ub-input" placeholder="홍길동" value={data.name} onChange={e => upd("name", e.target.value)} />
@@ -163,7 +163,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                   <label className="ub-label ub-label-req">연락처</label>
                   <input className="ub-input" placeholder="010-0000-0000" value={data.phone} onChange={e => upd("phone", e.target.value)} />
                 </div>
-                <div style={{ gridColumn: "span 2" }}>
+                <div style={{ gridColumn: "1 / -1" }}>
                   <label className="ub-label">이메일 <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(선택)</span></label>
                   <input className="ub-input" placeholder="name@example.com" value={data.email} onChange={e => upd("email", e.target.value)} />
                 </div>
@@ -186,7 +186,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                 <span style={{ fontSize: 11, color: "var(--gray-400)" }}>마이페이지에서 주소를 저장하면 자동 입력됩니다</span>
               )}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
               <div>
                 <label className="ub-label ub-label-req">받는 분</label>
                 <input className="ub-input" placeholder="홍길동" value={data.name} onChange={e => upd("name", e.target.value)} />
@@ -195,7 +195,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                 <label className="ub-label ub-label-req">연락처</label>
                 <input className="ub-input" placeholder="010-0000-0000" value={data.phone} onChange={e => upd("phone", e.target.value)} />
               </div>
-              <div style={{ gridColumn: "span 2" }}>
+              <div style={{ gridColumn: "1 / -1" }}>
                 <label className="ub-label">이메일 <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(선택)</span></label>
                 <input className="ub-input" placeholder="name@example.com" value={data.email} onChange={e => upd("email", e.target.value)} />
               </div>
@@ -206,13 +206,12 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                   <Btn variant="ghost" onClick={() => window.UB.openPostcode(({ zip, addr1 }) => { upd("zip", zip); upd("addr1", addr1); })}>검색</Btn>
                 </div>
               </div>
-              <div />
-              <div style={{ gridColumn: "span 2" }}>
+              <div style={{ gridColumn: "1 / -1" }}>
                 <label className="ub-label ub-label-req">주소</label>
                 <input className="ub-input" placeholder="기본 주소" value={data.addr1} onChange={e => upd("addr1", e.target.value)} style={{ marginBottom: 8 }} />
                 <input className="ub-input" placeholder="상세 주소 (동·호수 등)" value={data.addr2} onChange={e => upd("addr2", e.target.value)} />
               </div>
-              <div style={{ gridColumn: "span 2" }}>
+              <div style={{ gridColumn: "1 / -1" }}>
                 <label className="ub-label">배송 메모</label>
                 <textarea className="ub-textarea" rows={2} value={data.memo} onChange={e => upd("memo", e.target.value)} placeholder="(선택) 부재 시 경비실 보관 등" style={{ resize: "vertical" }} />
               </div>
