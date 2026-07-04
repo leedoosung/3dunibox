@@ -22,6 +22,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
     name: "", phone: "", email: "",
     zip: "", addr1: "", addr2: "",
     memo: "",
+    deliveryMethod: "delivery",   // "delivery" | "pickup"
     cardCo: "", cardNo: "", installments: "0",
     agreeTerms: false, agreePay: false,
   });
@@ -70,14 +71,17 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
     const m = MODELS.find(x => x.id === it.id);
     return s + (m ? m.price * it.qty : 0);
   }, 0);
-  const ship = calcShip(subtotal);
+  const isPickup = data.deliveryMethod === "pickup";
+  const ship = calcShip(subtotal, { zip: data.zip, method: data.deliveryMethod });
   const total = subtotal + ship;
+  const isRemote = (window.UB.isRemoteArea || (() => false))(data.zip);
 
   // 카드 정보는 토스페이먼츠 결제창에서 직접 입력 — valid 조건에서 제거
+  // 직접 수령 시 주소 필드 필수 아님 (사업장 방문)
   const valid =
     data.items.length > 0 && data.items.every(i => i.qty > 0) &&
     data.name && data.phone &&
-    data.zip && data.addr1 && data.addr2 &&
+    (isPickup || (data.zip && data.addr1 && data.addr2)) &&
     data.agreeTerms && data.agreePay;
 
   return (
@@ -120,7 +124,56 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
             </div>
           </div>
 
-          {/* 배송지 */}
+          {/* 배송 방법 */}
+          <div className="ub-card">
+            <div className="ub-spec-key" style={{ marginBottom: 12 }}>배송 방법</div>
+            <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
+              {[
+                { v: "delivery", t: "일반 배송",  d: `기본 ₩${SHIP.FEE.toLocaleString()} · 제주·도서산간 자동 +₩${SHIP.REMOTE_EXTRA.toLocaleString()}`, s: "택배 배송 (평균 2~5영업일)" },
+                { v: "pickup",   t: "직접 수령",  d: "무료 · 사업장 방문 수령",  s: "경기 용인시 기흥구 기흥역로58번길 78 103동 1303호 (전화 후 방문)" },
+              ].map(o => (
+                <label key={o.v}
+                  style={{
+                    display: "block", padding: 14, borderRadius: 8, cursor: "pointer",
+                    border: `1px solid ${data.deliveryMethod === o.v ? "var(--cyan-400)" : "var(--line-strong)"}`,
+                    background: data.deliveryMethod === o.v ? "rgba(0,200,240,0.06)" : "transparent",
+                  }}>
+                  <input type="radio" name="ub-delivery" value={o.v}
+                    checked={data.deliveryMethod === o.v}
+                    onChange={e => upd("deliveryMethod", e.target.value)}
+                    style={{ marginRight: 8 }} />
+                  <span style={{ fontSize: 14, color: "var(--white)", fontWeight: 600 }}>{o.t}</span>
+                  <div style={{ fontSize: 12, color: "var(--cyan-400)", marginTop: 4, marginLeft: 20 }}>{o.d}</div>
+                  <div style={{ fontSize: 11, color: "var(--gray-400)", marginTop: 2, marginLeft: 20 }}>{o.s}</div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* 배송지 — 직접 수령이면 축약 */}
+          {isPickup ? (
+            <div className="ub-card">
+              <div className="ub-spec-key" style={{ marginBottom: 12 }}>연락처</div>
+              <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
+                <div>
+                  <label className="ub-label ub-label-req">받는 분</label>
+                  <input className="ub-input" placeholder="홍길동" value={data.name} onChange={e => upd("name", e.target.value)} />
+                </div>
+                <div>
+                  <label className="ub-label ub-label-req">연락처</label>
+                  <input className="ub-input" placeholder="010-0000-0000" value={data.phone} onChange={e => upd("phone", e.target.value)} />
+                </div>
+                <div style={{ gridColumn: "span 2" }}>
+                  <label className="ub-label">이메일 <span style={{ color: "var(--gray-400)", fontWeight: 400 }}>(선택)</span></label>
+                  <input className="ub-input" placeholder="name@example.com" value={data.email} onChange={e => upd("email", e.target.value)} />
+                </div>
+              </div>
+              <div style={{ marginTop: 12, padding: 10, borderRadius: 6, background: "rgba(0,200,240,0.06)", fontSize: 12, color: "var(--gray-200)", lineHeight: 1.6 }}>
+                📍 <strong style={{ color: "var(--white)" }}>수령 장소</strong>: 경기 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
+                📞 방문 전 <strong style={{ color: "var(--cyan-400)" }}>010-9109-8277</strong> 로 연락 후 방문 부탁드립니다.
+              </div>
+            </div>
+          ) : (
           <div className="ub-card">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
               <div className="ub-spec-key">배송지</div>
@@ -164,7 +217,16 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                 <textarea className="ub-textarea" rows={2} value={data.memo} onChange={e => upd("memo", e.target.value)} placeholder="(선택) 부재 시 경비실 보관 등" style={{ resize: "vertical" }} />
               </div>
             </div>
+            {/* 배송비 안내 (동적) */}
+            <div style={{ marginTop: 12, padding: 10, borderRadius: 6, background: isRemote ? "rgba(251,191,36,0.08)" : "rgba(0,200,240,0.06)", fontSize: 12, color: "var(--gray-200)", lineHeight: 1.6 }}>
+              {isRemote ? (
+                <><span style={{ color: "var(--warning, #FBBF24)", fontWeight: 700 }}>⚠ 제주·도서산간 지역</span> — 배송비 <strong style={{ color: "var(--white)" }}>₩{ship.toLocaleString()}</strong> (기본 ₩{SHIP.FEE.toLocaleString()} + 추가 ₩{SHIP.REMOTE_EXTRA.toLocaleString()}) 자동 적용됩니다.</>
+              ) : (
+                <>※ 배송비 <strong style={{ color: "var(--white)" }}>₩{SHIP.FEE.toLocaleString()}</strong>. 우편번호 자동 판별로 <strong style={{ color: "var(--cyan-400)" }}>제주·도서산간</strong>은 <strong style={{ color: "var(--white)" }}>+₩{SHIP.REMOTE_EXTRA.toLocaleString()}</strong> 자동 적용됩니다.</>
+              )}
+            </div>
           </div>
+          )}
 
           {/* 결제 수단 */}
           <div className="ub-card">
@@ -217,9 +279,9 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
           </div>
 
           <Btn variant="primary" size="lg" full disabled={!valid} onClick={async () => {
-            // 결제 시 입력한 새 주소가 있으면 사용자 주소록에 자동 추가 (DB)
+            // 직접 수령이면 주소록 저장 스킵
             const sb = window.SUPABASE;
-            if (sb && authUser && data.zip && data.addr1) {
+            if (!isPickup && sb && authUser && data.zip && data.addr1) {
               const exists = savedAddresses.some(a =>
                 a.zip === data.zip && a.addr1 === data.addr1 && a.addr2 === data.addr2);
               if (!exists) {
@@ -246,12 +308,16 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                 const m = window.UB.MODELS.find(x => x.id === it.id);
                 return { id: it.id, name: m ? m.name : it.id, code: m ? m.code : "", qty: it.qty, price: m ? m.price : 0 };
               });
+              const addrCtx = isPickup
+                ? { zip: "17095", addr1: "경기 용인시 기흥구 기흥역로58번길 78", addr2: "103동 1303호", memo: "직접 수령 (사업장 방문)" }
+                : { zip: data.zip, addr1: data.addr1, addr2: data.addr2, memo: data.memo || null };
               localStorage.setItem("ub:pending-order", JSON.stringify({
                 user_id:  authUser ? authUser.id : null,
                 customer: { name: data.name, phone: data.phone, email: data.email || null },
-                address:  { zip: data.zip, addr1: data.addr1, addr2: data.addr2, memo: data.memo || null },
+                address:  addrCtx,
                 items:    itemsCtx,
                 amount:   total,
+                delivery_method: data.deliveryMethod,
               }));
             } catch (e) { console.warn("[order] pending-order localStorage 저장 실패:", e); }
             await window.UB.payWithToss({
@@ -281,8 +347,10 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
               <span>상품 금액</span><span className="ub-mono">₩{subtotal.toLocaleString()}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, fontSize: 12, color: "var(--gray-300)" }}>
-              <span>배송비</span>
-              <span className="ub-mono" style={{ color: "var(--white)" }}>₩{SHIP.FEE.toLocaleString()}</span>
+              <span>배송비 {isPickup ? "(직접 수령)" : isRemote ? "(제주·도서산간)" : ""}</span>
+              <span className="ub-mono" style={{ color: isPickup ? "var(--success, #4ADE80)" : (isRemote ? "var(--warning, #FBBF24)" : "var(--white)") }}>
+                {isPickup ? "무료" : `₩${ship.toLocaleString()}`}
+              </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingTop: 12, borderTop: "1px solid var(--line)" }}>
               <div className="ub-spec-key">총 결제 금액</div>
@@ -484,9 +552,12 @@ const CartDrawer = ({ open, onClose, cart, onUpdate, onRemove, onCheckout, onBro
               <span>상품 금액</span>
               <span className="ub-mono">₩{subtotal.toLocaleString()}</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10, fontSize: 12, color: "var(--gray-300)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4, fontSize: 12, color: "var(--gray-300)" }}>
               <span>배송비</span>
               <span className="ub-mono" style={{ color: "var(--white)" }}>₩{SHIP.FEE.toLocaleString()}</span>
+            </div>
+            <div style={{ fontSize: 10.5, color: "var(--gray-400)", marginBottom: 10, lineHeight: 1.5 }}>
+              ※ 제주·도서산간 +₩{SHIP.REMOTE_EXTRA.toLocaleString()} · 직접 수령 시 무료 (결제 페이지에서 선택)
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14, paddingTop: 12, borderTop: "1px solid var(--line)" }}>
               <div className="ub-spec-key">합계</div>

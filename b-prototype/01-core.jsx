@@ -10,9 +10,28 @@ const MODELS = [
 ];
 
 // ─── 배송비 정책 ─────────────────────────────────────────────────────────────
-// 고정 배송비 3,500원 (도서산간 등 추가 정책은 PG/배송 연동 시 확장).
-const SHIP = { FEE: 3500 };
-const calcShip = (subtotal) => (subtotal === 0 ? 0 : SHIP.FEE);
+// 일반 배송 3,500원 · 제주/도서산간 +3,000원 · 직접 수령 0원.
+// 우편번호 앞자리로 자동 판별 (63xxx 제주, 40200~40240 울릉).
+const SHIP = { FEE: 3500, REMOTE_EXTRA: 3000 };
+const isRemoteArea = (zip) => {
+  if (!zip) return false;
+  const z = String(zip).replace(/\D/g, "");
+  if (z.length < 5) return false;
+  if (z.startsWith("63")) return true;                            // 제주
+  const n = parseInt(z.substring(0, 5), 10);
+  if (n >= 40200 && n <= 40240) return true;                      // 울릉
+  return false;
+};
+// calcShip(subtotal[, { zip, method }])
+// - method === "pickup" → 0
+// - 그 외 → FEE + (제주/도서산간이면 REMOTE_EXTRA)
+const calcShip = (subtotal, opts) => {
+  if (subtotal === 0) return 0;
+  const method = opts && opts.method;
+  if (method === "pickup") return 0;
+  const zip = opts && opts.zip;
+  return SHIP.FEE + (isRemoteArea(zip) ? SHIP.REMOTE_EXTRA : 0);
+};
 
 // ─── 회원 등급 정책 ──────────────────────────────────────────────────────────
 // VIP: 누적 구매 100만원 이상 또는 4건 이상
@@ -519,6 +538,7 @@ window.UB = {
   useIsMobile,
   openPostcode,
   loadProducts, useProducts,
+  isRemoteArea,
   payWithToss,
   Ic, Btn, Badge, Logo, Bracket, Orbit, TopNav, BottomTabs,
 };

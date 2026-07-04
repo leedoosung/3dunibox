@@ -45,7 +45,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
               <div>
                 <div className="ub-mono" style={{ fontSize: 28, color: "var(--white)", fontWeight: 700 }}>₩{(m.price * qty).toLocaleString()}</div>
               </div>
-              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>배송비 ₩{SHIP.FEE.toLocaleString()} 별도<br/>평균 2~5영업일 출고</div>
+              <div style={{ fontSize: 11, color: "var(--gray-400)", textAlign: "right" }}>VAT 포함<br/>배송비 ₩{SHIP.FEE.toLocaleString()} 별도<br/>제주·도서산간 +₩{SHIP.REMOTE_EXTRA.toLocaleString()}<br/>평균 2~5영업일 출고</div>
             </div>
             <div style={{ display: "flex", gap: 10, alignItems: "center", marginBottom: 14 }}>
               <span className="ub-spec-key">수량</span>
