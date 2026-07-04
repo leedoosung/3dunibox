@@ -76,9 +76,9 @@
       if (regs.length > 0) navigator.serviceWorker.register("/service-worker.js").catch(function () {});
     }).catch(function () {});
   }
-  // 메인 페이지로 부드럽게 이동
+  // 메인 페이지로 부드럽게 이동 — query(?toss=success 등)와 hash 모두 보존
   setTimeout(function () {
-    location.replace("/3D%20UniBox%20B%20Prototype.html" + (location.hash || ""));
+    location.replace("/3D%20UniBox%20B%20Prototype.html" + (location.search || "") + (location.hash || ""));
   }, 50);
 </script>
 </body>
