@@ -22,11 +22,17 @@ const STATUS_COLORS = {
 const SEED_ORDERS = [];
 
 const orderSubtotal = (o) => o.items.reduce((s, it) => {
+  // 신규 주문: items[i].price 가 저장돼 있으면 그걸 우선 사용 (제품 삭제·가격 변동 시에도 정확)
+  if (it && it.price != null) return s + (Number(it.price) || 0) * (Number(it.qty) || 0);
   const m = MODELS5.find(x => x.id === it.id);
   return s + (m ? m.price * it.qty : 0);
 }, 0);
-const orderShip = (o) => calcShip5(orderSubtotal(o));
-const orderTotal = (o) => orderSubtotal(o) + orderShip(o);
+const orderShip = (o) => {
+  // Supabase 주문 row 는 total(=amount) - subtotal 로 배송비 역산 (직접수령=0, 제주=+3000 반영됨)
+  if (o.total != null) return Math.max(0, Number(o.total) - orderSubtotal(o));
+  return calcShip5(orderSubtotal(o));
+};
+const orderTotal = (o) => (o.total != null) ? Number(o.total) : (orderSubtotal(o) + orderShip(o));
 
 const formatItems = (items) => items.map(it => {
   const m = MODELS5.find(x => x.id === it.id);
@@ -134,6 +140,46 @@ const AdminPageInner = () => {
   const [statusFilter, setStatusFilter] = uS5("all");
   const [selected, setSelected] = uS5(null);     // 주문번호 (디테일 드로어)
 
+  // 주문 — Supabase RPC 로 fetch
+  const [ordLoading, setOrdLoading] = uS5(true);
+  const [ordError, setOrdError] = uS5(null);
+
+  const reloadOrders = async () => {
+    const sb = window.SUPABASE;
+    if (!sb) { setOrdLoading(false); setOrdError("Supabase 클라이언트 미초기화"); return; }
+    setOrdLoading(true); setOrdError(null);
+    try {
+      const { data, error } = await sb.rpc("admin_list_orders", { p_secret: ADMIN_PW, p_limit: 500 });
+      if (error) throw error;
+      const rows = (data || []).map(r => ({
+        no:         r.order_id,
+        date:       r.created_at ? String(r.created_at).slice(0, 19).replace("T", " ") : "",
+        customer:   r.customer_name || "-",
+        phone:      r.customer_phone || "-",
+        email:      r.customer_email || "",
+        addr:       `(${r.addr_zip || ''}) ${r.addr1 || ''} ${r.addr2 || ''}`.trim(),
+        memo:       r.memo || "",
+        items:      Array.isArray(r.items) ? r.items : [],
+        status:     r.status === "paid" ? "결제완료"
+                    : r.status === "refunded" ? "취소"
+                    : r.status === "canceled" ? "취소"
+                    : r.status === "failed" ? "취소"
+                    : (r.status || "결제완료"),
+        total:      Number(r.amount) || 0,
+        method:     r.method || "-",
+        paymentKey: r.payment_key || "",
+        waybill:    "",
+      }));
+      setOrders(rows);
+    } catch (e) {
+      console.warn("[admin] orders fetch 실패:", e);
+      setOrdError(e?.message || String(e));
+      setOrders([]);
+    } finally {
+      setOrdLoading(false);
+    }
+  };
+
   // 회원 — Supabase RPC 로 fetch
   const [members, setMembers] = uS5([]);
   const [memLoading, setMemLoading] = uS5(true);
@@ -168,7 +214,7 @@ const AdminPageInner = () => {
     }
   };
 
-  uE5(() => { reloadMembers(); }, []);
+  uE5(() => { reloadMembers(); reloadOrders(); }, []);
 
   const filtered = uM5(() => {
     return orders.filter(o => {
