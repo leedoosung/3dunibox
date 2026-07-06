@@ -78,7 +78,7 @@ const HomePage = ({ onNav }) => {
             <span style={{ color: "var(--cyan-400)" }}>여유 공간 설계로<br/>커넥터 눌림 없이 딱 맞게</span>
           </h1>
           <p style={{ color: "var(--gray-300)", fontSize: 13, lineHeight: 1.5, margin: "10px 0 18px" }}>
-            3D 프린팅으로 현장의 불편함을 해결합니다.
+            유리문이라 시공 못 하셨나요? <strong style={{ color: "var(--white)" }}>이제 가능합니다</strong>
           </p>
           <div style={{ display: "grid", placeItems: "center", marginTop: 8 }}>
             <HeroProductSlideshow size={240} />
@@ -94,7 +94,7 @@ const HomePage = ({ onNav }) => {
                 <span style={{ color: "var(--cyan-400)" }}>여유 공간 설계로 커넥터 눌림 없이 딱 맞게</span>
               </h1>
               <p style={{ color: "var(--gray-200)", fontSize: 18, lineHeight: 1.6, marginBottom: 0, maxWidth: 540 }}>
-                3D 프린팅으로 <strong style={{ color: "var(--white)" }}>현장의 불편함</strong>을 해결합니다.
+                유리문이라 시공 못 하셨나요? <strong style={{ color: "var(--white)" }}>이제 가능합니다</strong>
               </p>
             </div>
             <div style={{ display: "grid", placeItems: "center", height: 360 }}>
