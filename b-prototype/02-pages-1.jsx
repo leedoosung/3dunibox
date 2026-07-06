@@ -73,9 +73,9 @@ const HomePage = ({ onNav }) => {
         // 모바일: 컴팩트 Hero + 슬라이드쇼
         <section style={{ padding: "20px 16px 28px" }}>
           <div className="ub-eyebrow" style={{ marginBottom: 6, fontSize: 10 }}>SD CONVERGENCE · 3D PRINTING STUDIO</div>
-          <h1 style={{ fontSize: "clamp(22px, 6.5vw, 30px)", lineHeight: 1.25, color: "var(--white)", margin: 0, fontWeight: 800, wordBreak: "keep-all" }}>
-            정밀하게 설계했습니다<br/>
-            <span style={{ color: "var(--cyan-400)" }}>PETG 소재로 더 가볍게</span>
+          <h1 style={{ fontSize: "clamp(20px, 5.6vw, 26px)", lineHeight: 1.3, color: "var(--white)", margin: 0, fontWeight: 800, wordBreak: "keep-all" }}>
+            뒤엉킨 배선 뭉치,<br/>억지로 구겨 넣으셨나요?<br/>
+            <span style={{ color: "var(--cyan-400)" }}>여유 공간 설계로<br/>커넥터 눌림 없이 딱 맞게</span>
           </h1>
           <p style={{ color: "var(--gray-300)", fontSize: 13, lineHeight: 1.5, margin: "10px 0 18px" }}>
             3D 프린팅으로 현장의 불편함을 해결합니다.
@@ -89,9 +89,9 @@ const HomePage = ({ onNav }) => {
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 60, alignItems: "center" }}>
             <div>
               <div className="ub-eyebrow" style={{ marginBottom: 16 }}>SD CONVERGENCE · 3D PRINTING STUDIO</div>
-              <h1 className="ub-h1" style={{ fontSize: 60, marginBottom: 20, lineHeight: 1.1, wordBreak: "keep-all", letterSpacing: -1 }}>
-                정밀하게 설계했습니다<br/>
-                <span style={{ color: "var(--cyan-400)" }}>PETG 소재로 더 가볍게</span>
+              <h1 className="ub-h1" style={{ fontSize: 46, marginBottom: 20, lineHeight: 1.2, wordBreak: "keep-all", letterSpacing: -1 }}>
+                뒤엉킨 배선 뭉치,<br/>억지로 구겨 넣으셨나요?<br/>
+                <span style={{ color: "var(--cyan-400)" }}>여유 공간 설계로 커넥터 눌림 없이 딱 맞게</span>
               </h1>
               <p style={{ color: "var(--gray-200)", fontSize: 18, lineHeight: 1.6, marginBottom: 0, maxWidth: 540 }}>
                 3D 프린팅으로 <strong style={{ color: "var(--white)" }}>현장의 불편함</strong>을 해결합니다.
