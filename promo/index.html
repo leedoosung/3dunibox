@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#00C8F0">
+<title>3D UniBox — 출입통제 단말기 전용 배선정리·설치 브라켓</title>
+<meta name="description" content="순정 브라켓의 한계를 넘는 출입통제 단말기 전용 PETG 브라켓. 배선 완전 수납, 유리문 무타공 시공, Suprema·ZKTeco 단말기 호환. 현장을 아는 설치 전문가가 직접 설계했습니다.">
+<link rel="canonical" href="https://3dunibox.co.kr/promo">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="3D UniBox">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="3D UniBox — 배선은 감추고, 시공은 유리문까지">
+<meta property="og:description" content="출입통제 단말기 전용 PETG 배선정리 브라켓. 배선 완전 수납·유리문 무타공 시공, Suprema·ZKTeco 호환.">
+<meta property="og:url" content="https://3dunibox.co.kr/promo">
+<meta property="og:image" content="https://3dunibox.co.kr/promo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="3D UniBox — 배선은 감추고, 시공은 유리문까지">
+<meta name="twitter:description" content="출입통제 단말기 전용 PETG 배선정리 브라켓. 배선 완전 수납·유리문 무타공 시공.">
+<meta name="twitter:image" content="https://3dunibox.co.kr/promo/og-image.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#000000; --bg-soft:#08090c; --card:#101116; --card2:#16171d;
+    --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.18);
+    --ink:#ededed; --sub:#c9c9c9; --sub2:#8b909a;
+    --cyan:#00c8f0; --cyan-600:#00a8d0; --cyan-300:#5bddf5; --cyan-glow:rgba(0,200,240,.32);
+    --orange:#ff7e36; --orange-400:#ff9357; --orange-glow:rgba(255,126,54,.35);
+    --success:#4ade80;
+    --kr:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic","맑은 고딕","Apple SD Gothic Neo",sans-serif;
+    --display:"Bebas Neue","Pretendard Variable",Pretendard,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--kr);line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:11px;font-size:18px;font-weight:800;color:#fff;letter-spacing:-.2px}
+  .topbar .cta{font-size:13.5px;color:var(--sub);border:1px solid var(--line2);padding:8px 15px;border-radius:22px}
+  .topbar .cta:hover{color:#00252e;background:var(--cyan);border-color:transparent}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:90px 0 70px;text-align:center}
+  .hero::before{content:"";position:absolute;top:-34%;left:50%;transform:translateX(-50%);width:900px;height:900px;border-radius:50%;
+    background:radial-gradient(circle,var(--cyan-glow),rgba(0,200,240,0) 60%);pointer-events:none}
+  .hero::after{content:"";position:absolute;bottom:-40%;right:-10%;width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle,var(--orange-glow),rgba(255,126,54,0) 62%);pointer-events:none}
+  .hero .kicker{position:relative;font-family:var(--display);letter-spacing:4px;font-size:15px;color:var(--cyan);margin:0 0 18px}
+  .hero h1{position:relative;font-size:47px;line-height:1.22;margin:0 0 20px;font-weight:800;letter-spacing:-.6px}
+  .hero h1 .g{background:linear-gradient(100deg,var(--cyan),var(--cyan-300));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero h1 .o{color:var(--orange-400)}
+  .hero p.lead{position:relative;max-width:660px;margin:0 auto 30px;font-size:17.5px;color:var(--sub)}
+  .hero p.lead b{color:#fff}
+  .chips{position:relative;display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:9px 16px;font-size:13.5px;color:#e6e6e6}
+  .chip b{color:var(--cyan)}
+  .chip.o b{color:var(--orange-400)}
+
+  /* section */
+  .sec{padding:58px 0}
+  .sec.alt{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .eyebrow{text-align:center;font-family:var(--display);letter-spacing:3.5px;font-size:15px;color:var(--cyan);margin:0 0 10px}
+  .sec h2{text-align:center;font-size:31px;font-weight:800;margin:0 0 8px;letter-spacing:-.5px}
+  .sec .subtitle{text-align:center;color:var(--sub);max-width:640px;margin:0 auto 40px;font-size:15.5px}
+
+  /* feature grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .feat{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:18px;
+    padding:26px 24px;position:relative;transition:transform .18s,border-color .18s,box-shadow .18s}
+  .feat:hover{transform:translateY(-4px);border-color:rgba(0,200,240,.5);box-shadow:0 10px 34px rgba(0,200,240,.10)}
+  .feat .num{font-family:var(--display);font-size:20px;color:var(--cyan);letter-spacing:1.5px}
+  .feat .ic{width:46px;height:46px;border-radius:12px;background:rgba(0,200,240,.12);display:grid;place-items:center;margin:10px 0 16px}
+  .feat .ic svg{width:24px;height:24px;stroke:var(--cyan);fill:none;stroke-width:1.9}
+  .feat h3{margin:0 0 12px;font-size:18.5px;font-weight:700;letter-spacing:-.3px}
+  .feat ul{margin:0;padding:0;list-style:none}
+  .feat li{position:relative;padding-left:22px;margin:9px 0;color:var(--sub);font-size:14.3px;line-height:1.6}
+  .feat li::before{content:"";position:absolute;left:2px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 3px rgba(0,200,240,.16)}
+  .feat li b{color:#fff;font-weight:600}
+
+  /* trust */
+  .trust{background:radial-gradient(120% 120% at 50% 0,rgba(0,200,240,.10),rgba(0,0,0,0) 60%),linear-gradient(180deg,var(--card),#0b0c10);
+    border:1px solid var(--line2);border-radius:22px;padding:46px 40px;text-align:center;position:relative;overflow:hidden}
+  .trust::before{content:"\201C";position:absolute;top:-16px;left:28px;font-size:130px;color:rgba(0,200,240,.16);font-family:Georgia,serif}
+  .trust .q{font-size:25px;font-weight:800;line-height:1.5;letter-spacing:-.4px;margin:0 0 12px}
+  .trust .q .g{background:linear-gradient(100deg,var(--cyan),var(--cyan-300));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .trust p{color:var(--sub);margin:6px auto 0;max-width:620px;font-size:15px}
+  .trust .badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+  .trust .badges span{font-size:13px;color:#e6e6e6;background:rgba(255,255,255,.05);border:1px solid var(--line);padding:8px 15px;border-radius:20px}
+  .trust .badges span b{color:var(--cyan)}
+
+  /* compatibility */
+  .compat{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:center}
+  .compat .brands{display:flex;flex-wrap:wrap;gap:12px}
+  .compat .brands .b{flex:1 1 150px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 14px}
+  .compat .brands .b .nm{font-weight:800;font-size:18px;letter-spacing:.4px;color:#fff}
+  .compat .brands .b .ds{font-size:12px;color:var(--sub2);margin-top:5px;line-height:1.5}
+  .compat .special{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:18px;padding:24px}
+  .compat .special h4{margin:0 0 14px;font-size:16px}
+  .compat .special .row{display:flex;align-items:center;gap:12px;margin:12px 0;font-size:14px;color:var(--sub)}
+  .compat .special .row .t{width:34px;height:34px;border-radius:9px;background:rgba(255,126,54,.14);display:grid;place-items:center;flex:0 0 34px}
+  .compat .special .row .t svg{width:18px;height:18px;stroke:var(--orange-400);fill:none;stroke-width:2}
+  .compat .special .row b{color:#fff}
+
+  .lineup{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-top:26px}
+  .lineup .sku{font-size:12.5px;color:#d4d4d4;background:var(--card);border:1px solid var(--line);padding:7px 13px;border-radius:10px}
+  .lineup .sku b{color:var(--cyan);font-family:var(--display);letter-spacing:.6px;font-size:13.5px}
+
+  /* closing */
+  .closing{text-align:center;padding:66px 0 30px;position:relative;overflow:hidden}
+  .closing::before{content:"";position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;
+    background:radial-gradient(circle,var(--cyan-glow),rgba(0,200,240,0) 60%);pointer-events:none}
+  .closing h2{position:relative;font-size:31px;font-weight:800;margin:0 0 12px;letter-spacing:-.5px}
+  .closing p{position:relative;color:var(--sub);margin:0 auto 26px;max-width:560px}
+  .btns{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{padding:14px 26px;border-radius:12px;font-weight:700;font-size:15px;border:1px solid var(--line2)}
+  .btn.primary{background:var(--cyan);color:#00252e;border-color:transparent;box-shadow:0 0 24px var(--cyan-glow)}
+  .btn.primary:hover{background:var(--cyan-300)}
+  .btn.ghost{color:#fff}
+  .btn.ghost:hover{border-color:var(--orange-400);color:var(--orange-400)}
+
+  /* footer */
+  footer{background:var(--bg-soft);border-top:1px solid var(--line);padding:36px 0;margin-top:42px}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:flex-start}
+  footer .co{font-size:13px;color:var(--sub2);line-height:1.9}
+  footer .co .n{color:#fff;font-weight:800;font-size:15px;letter-spacing:.4px;margin-bottom:6px}
+  footer .contact{font-size:13.5px;color:var(--sub);text-align:right;line-height:1.95}
+  footer .contact a{color:#e6e6e6}
+  footer .contact a:hover{color:var(--cyan)}
+
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.compat{grid-template-columns:1fr}}
+  @media(max-width:640px){
+    .hero{padding:64px 0 50px}.hero h1{font-size:33px}.hero p.lead{font-size:15.5px}
+    .sec h2{font-size:25px}.grid{grid-template-columns:1fr}.trust{padding:34px 22px}.trust .q{font-size:20px}
+    footer .wrap{flex-direction:column}footer .contact{text-align:left}
+  }
+</style>
+</head>
+<body>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand">3D UniBox</div>
+      <a class="cta" href="https://3dunibox.co.kr" target="_blank" rel="noopener">제품 라인업 보기 →</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="kicker">SD CONVERGENCE · 3D PRINTING STUDIO</p>
+      <h1>배선은 완벽히 감추고,<br><span class="g">시공은 유리문까지</span> <span class="o">넓히다</span></h1>
+      <p class="lead"><b>순정 브라켓의 한계를 넘는 출입통제 단말기 전용 PETG 브라켓</b>.<br>현장을 아는 설치 전문가가 직접 설계하고 검증했습니다.</p>
+      <div class="chips">
+        <span class="chip"><b>13종</b> 제품 라인업</span>
+        <span class="chip">Suprema · <b>ZKTeco</b> 단말기 호환</span>
+        <span class="chip o">유리문 <b>무타공</b> 시공</span>
+        <span class="chip">케이블 <b>완전 수납</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 Features -->
+  <section class="sec">
+    <div class="wrap">
+      <p class="eyebrow">WHY 3D UNIBOX</p>
+      <h2>현장이 증명한 7가지 강점</h2>
+      <p class="subtitle">단말기 순정 브라켓만으로는 해결되지 않던 현장의 불편을, 순정과 단말기 사이 한 겹으로 해결합니다.</p>
+      <div class="grid">
+
+        <div class="feat">
+          <div class="num">01</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7h6a4 4 0 0 1 4 4v6"/><path d="M20 17h-6"/><circle cx="4" cy="7" r="1.6"/><path d="M17 4l3 3-3 3"/></svg></div>
+          <h3>배선·커넥터 공간 확보</h3>
+          <ul>
+            <li>순정 브라켓만으로는 <b>배선 뭉치(LAN 커넥터·다회선)</b> 수용 공간이 부족</li>
+            <li>순정 브라켓과 단말기 <b>사이에 결합</b>되어 여유 공간을 추가 확보</li>
+            <li><b>커넥터 눌림·접촉불량 없이</b> 안정적으로 장착</li>
+          </ul>
+        </div>
+
+        <div class="feat">
+          <div class="num">02</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M4 9h16M9 3v18"/></svg></div>
+          <h3>유리 표면 설치 대응</h3>
+          <ul>
+            <li><b>양면테이프 방식</b>으로 유리 표면에 <b>천공 없이</b> 직접 부착</li>
+            <li>순정 브라켓으로는 <b>시공 불가능했던 유리 현장</b>에도 대응</li>
+            <li>강화유리 도어·파티션 등 난시공 환경 해결</li>
+          </ul>
+        </div>
+
+        <div class="feat">
+          <div class="num">03</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6 2 2 6-6a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/></svg></div>
+          <h3>유지보수 효율성</h3>
+          <ul>
+            <li>단말기 뒷면에 회선 수용 공간이 있어 <b>A/S 편의성 향상</b></li>
+            <li>배선이 정리된 상태로 유지 → 점검·수리 시 <b>케이블 엉킴 없이</b> 작업</li>
+            <li>재시공·재배선 부담 감소</li>
+          </ul>
+        </div>
+
+        <div class="feat">
+          <div class="num">04</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.2L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.8-.8L12 3z"/></svg></div>
+          <h3>심미성·마감 품질</h3>
+          <ul>
+            <li><b>케이블 완전 수납</b>으로 깔끔한 마감</li>
+            <li>노출 배선 없이 정렬된 설치</li>
+            <li><b>준공검사·고객 만족도</b> 향상</li>
+          </ul>
+        </div>
+
+        <div class="feat">
+          <div class="num">05</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>제품 신뢰도</h3>
+          <ul>
+            <li><b>설치업체가 만든 제품</b> — 현장을 아는 사람이 설계</li>
+            <li><b>쓰는 사람이 직접</b> 설계·검증</li>
+            <li>현장 피드백 기반 <b>지속 개선</b>, 라인업 계속 확장</li>
+          </ul>
+        </div>
+
+        <div class="feat">
+          <div class="num">06</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><path d="M9 2v6M15 2v6M8 8h8v3a4 4 0 0 1-8 0V8zM12 15v7"/></svg></div>
+          <h3>폭넓은 호환성</h3>
+          <ul>
+            <li><b>Suprema</b>(BioEntry·FaceStation·BioLite·BioStation·X-Station·XPass 등)·<b>ZKTeco</b> 등 주요 단말기 대응</li>
+            <li><b>45° 각도형·데스크 스탠드형</b> 등 특수 설치별 제품군 확보</li>
+            <li><b>EM Lock GE-1000 전용 지본</b> 등 부가 제품 보유</li>
+          </ul>
+        </div>
+
+        <div class="feat">
+          <div class="num">07</div>
+          <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg></div>
+          <h3>관리자 등록용 탁상 활용</h3>
+          <ul>
+            <li><b>데스크 스탠드(UB-STD)</b>로 탁상에서 바로 사용</li>
+            <li>일반 벽면용 브라켓도 <b>눕혀서 탁상 거치대</b>로 활용 — 별도 스탠드 없이 임시 등록 작업</li>
+            <li>사무실·관리실 등 <b>벽 시공이 불필요한 환경</b>에 적합</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust band -->
+  <section class="sec alt">
+    <div class="wrap">
+      <div class="trust">
+        <p class="q"><span class="g">"설치업체가 만든 제품,<br>쓰는 사람이 직접 만듭니다."</span></p>
+        <p>책상 위 상상이 아니라 현장의 불편에서 출발했습니다. 실제 시공 데이터를 바탕으로 설계하고, 현장 피드백으로 계속 다듬어 갑니다.</p>
+        <div class="badges">
+          <span><b>✔</b> 현장 검증 설계</span>
+          <span><b>✔</b> 지속 개선</span>
+          <span><b>✔</b> 라인업 확장 중</span>
+          <span><b>✔</b> PETG 정밀 3D 프린팅</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compatibility -->
+  <section class="sec">
+    <div class="wrap">
+      <p class="eyebrow">COMPATIBILITY</p>
+      <h2>주요 출입통제 제조사에 대응</h2>
+      <p class="subtitle">기종별 전용 설계 + 특수 설치 상황별 제품군으로, 현장 어디에나 맞춥니다.</p>
+      <div class="compat">
+        <div class="brands">
+          <div class="b"><div class="nm">Suprema</div><div class="ds">BioStation · BioEntry · BioLite · FaceStation · X-Station · XPass</div></div>
+          <div class="b"><div class="nm">ZKTeco</div><div class="ds">SpeedFace-V5L 등</div></div>
+        </div>
+        <div class="special">
+          <h4>특수·전용 제품군</h4>
+          <div class="row"><span class="t"><svg viewBox="0 0 24 24"><path d="M4 20L20 4M4 12v8h8"/></svg></span><div><b>45° 각도형</b> — 사각 없는 인식 각도 확보</div></div>
+          <div class="row"><span class="t"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="11" rx="1.5"/><path d="M8 20h8"/></svg></span><div><b>데스크 스탠드형</b> — 탁상 등록·관리 작업용</div></div>
+          <div class="row"><span class="t"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/></svg></span><div><b>벽면·유리문 겸용</b> — 무타공 부착 대응</div></div>
+          <div class="row"><span class="t"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="1.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><div><b>EM Lock GE-1000 전용 지본</b> — 전자석 잠금장치 설치용</div></div>
+        </div>
+      </div>
+      <div class="lineup">
+        <span class="sku"><b>UB-BEP2</b> BioEntry P2</span>
+        <span class="sku"><b>UB-BEW2</b> BioEntry W2</span>
+        <span class="sku"><b>UB-BLN2</b> BioLite N2</span>
+        <span class="sku"><b>UB-BS2A</b> BioStation 2A</span>
+        <span class="sku"><b>UB-BS3</b> BioStation 3</span>
+        <span class="sku"><b>UB-BS3-45</b> BioStation 3 45°</span>
+        <span class="sku"><b>UB-FSF2</b> FaceStation F2</span>
+        <span class="sku"><b>UB-XP2_G</b> XPass 2_G</span>
+        <span class="sku"><b>UB-XP2_M</b> XPass 2_M</span>
+        <span class="sku"><b>UB-XS2</b> X-Station 2</span>
+        <span class="sku"><b>UB-V5L</b> SpeedFace-V5L</span>
+        <span class="sku"><b>UB-GE1000</b> EM Lock GE-1000</span>
+        <span class="sku"><b>UB-STD</b> Desk Stand</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing">
+    <div class="wrap">
+      <h2>현장의 불편, 한 겹으로 해결하세요</h2>
+      <p>제품 상세·가격·규격은 홈페이지에서 확인하실 수 있습니다.</p>
+      <div class="btns">
+        <a class="btn primary" href="https://3dunibox.co.kr" target="_blank" rel="noopener">제품 라인업 보러가기 →</a>
+        <a class="btn ghost" href="tel:01091098277">전화 문의 010-9109-8277</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="co">
+        <div class="n">에스디컨버전스 (SD Convergence)</div>
+        대표 허희경 · 사업자등록번호 449-56-00430<br>
+        경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br>
+        © 2026 SD Convergence. All rights reserved.
+      </div>
+      <div class="contact">
+        <a href="https://3dunibox.co.kr" target="_blank" rel="noopener">3dunibox.co.kr</a><br>
+        <a href="tel:01091098277">010-9109-8277</a> · 평일 09–18시<br>
+        <a href="mailto:leedoo80@gmail.com">leedoo80@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
