@@ -3,6 +3,7 @@
   "cleanUrls": false,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/b2b", "destination": "/b2b.html" },
     { "source": "/app", "destination": "/index.html" },
     { "source": "/admin", "destination": "/index.html" },
     { "source": "/me", "destination": "/index.html" },
