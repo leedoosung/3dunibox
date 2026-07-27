@@ -102,7 +102,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                   <div key={idx} style={{ display: "flex", gap: 12, alignItems: "center", padding: "10px 0", borderBottom: idx < data.items.length - 1 ? "1px dashed var(--line)" : "none" }}>
                     <div style={{ width: 48, height: 48, background: "rgba(255,255,255,0.03)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", border: "1px solid var(--line)" }}>
                       {m && m.image_url
-                        ? <img src={m.image_url} alt={m.name} style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block" }} />
+                        ? <img src={imgCDN(m.image_url, 240)} alt={m.name} loading="lazy" decoding="async" style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block" }} />
                         : <Bracket size={36} />}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -502,7 +502,7 @@ const CartDrawer = ({ open, onClose, cart, onUpdate, onRemove, onCheckout, onBro
                   <div key={i} className="ub-card" style={{ padding: 14, display: "flex", gap: 12 }}>
                     <div style={{ width: 56, height: 56, background: "rgba(255,255,255,0.03)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden", border: "1px solid var(--line)" }}>
                       {m.image_url
-                        ? <img src={m.image_url} alt={m.name} style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block" }} />
+                        ? <img src={imgCDN(m.image_url, 240)} alt={m.name} loading="lazy" decoding="async" style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block" }} />
                         : <Bracket size={42} />}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>

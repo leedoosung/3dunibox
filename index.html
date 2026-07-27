@@ -33,9 +33,9 @@
 <link rel="preconnect" href="https://cdpigjktddwyajyjhqtw.supabase.co" crossorigin />
 <link rel="dns-prefetch" href="https://cdpigjktddwyajyjhqtw.supabase.co" />
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<!-- React 운영판(min) — 개발판 대비 대폭 경량. Babel Standalone 제거(JSX는 사전 컴파일된 .js 로드). -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
 
 <!-- 3D 제품 뷰어 (three.js) — 제품 상세에서 실제 필요할 때만 지연 로딩 -->
 <script type="importmap">
@@ -136,7 +136,18 @@ body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inse
 </script>
 </head>
 <body>
-<div id="root"></div>
+<div id="root">
+  <!-- 초기 로딩 표시 — 접속 즉시 표시되어 빈 화면(브라우저 JSX 컴파일 대기)을 가린다.
+       React가 #root에 렌더되는 순간 이 내용은 자동으로 교체된다. -->
+  <div style="position:fixed;inset:0;background:#0C111D;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:1;">
+    <div style="display:flex;align-items:center;gap:9px;">
+      <div style="width:30px;height:30px;background:#FF7E36;border-radius:6px;display:grid;place-items:center;color:#fff;font-weight:900;font-family:'Poppins',system-ui,sans-serif;font-size:15px;">3D</div>
+      <span style="color:#fff;font-weight:800;font-family:'Poppins',system-ui,sans-serif;font-size:19px;letter-spacing:.5px;">UNIBOX</span>
+    </div>
+    <div style="width:26px;height:26px;border:3px solid rgba(255,255,255,.15);border-top-color:#FF7E36;border-radius:50%;animation:ubspin .8s linear infinite;"></div>
+  </div>
+  <style>@keyframes ubspin{to{transform:rotate(360deg)}}</style>
+</div>
 
 <!-- 토스페이먼츠 v2 결제 SDK (테스트 키 사용 중 — 라이브 전환은 OPERATIONS 참조) -->
 <script src="https://js.tosspayments.com/v2/standard"></script>
@@ -153,195 +164,42 @@ body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inse
   }
 </script>
 
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel" src="b-prototype/01-core.jsx"></script>
-<script type="text/babel" src="b-prototype/00-auth.jsx"></script>
-<script type="text/babel" src="b-prototype/02-pages-1.jsx"></script>
-<script type="text/babel" src="b-prototype/03-pages-2.jsx"></script>
-<script type="text/babel" src="b-prototype/04-pages-3.jsx"></script>
-<script type="text/babel" src="b-prototype/05-admin.jsx"></script>
-<script type="text/babel" src="b-prototype/06-mypage.jsx"></script>
-<script type="text/babel" src="b-prototype/07-policy.jsx"></script>
+<!-- 사전 컴파일된 JS (원본은 동일 이름의 .jsx). 수정 시: .jsx 편집 → build.mjs 실행 → 재배포 -->
+<script src="tweaks-panel.js"></script>
+<script src="b-prototype/01-core.js"></script>
+<script src="b-prototype/00-auth.js"></script>
+<script src="b-prototype/02-pages-1.js"></script>
+<script src="b-prototype/03-pages-2.js"></script>
+<script src="b-prototype/04-pages-3.js"></script>
+<script src="b-prototype/05-admin.js"></script>
+<script src="b-prototype/06-mypage.js"></script>
+<script src="b-prototype/07-policy.js"></script>
 
-<script type="text/babel" data-presets="env,react">
-const { useState, useEffect } = React;
-const { TopNav, BottomTabs, HomePage, CatalogPage, DetailPage, GuidePage, FAQPage, OrderPage, CartDrawer, DoneModal, AboutPage, AdminPage, MyPage, Footer, MODELS, LoginPage, useAuth, TermsPage, PrivacyPage } = window.UB;
+<!-- 앱 부트스트랩 — 사전 컴파일된 b-prototype/08-app.js (원본: b-prototype/08-app.jsx, EDITMODE 마커 포함) -->
+<script src="b-prototype/08-app.js"></script>
 
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "accent": "#00C8F0",
-  "density": "regular",
-  "showBadges": true
-}/*EDITMODE-END*/;
-
-function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [route, setRoute] = useState({ name: "home" });
-  // cart — 새로고침해도 유지되도록 localStorage 영속화
-  const CART_KEY = "ub:cart:v1";
-  const [cart, setCart] = useState(() => {
-    try {
-      const raw = localStorage.getItem(CART_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed.filter(x => x && x.id && x.qty > 0) : [];
-    } catch (e) { return []; }
-  });
-  useEffect(() => {
-    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) {}
-  }, [cart]);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [toastMsg, setToastMsg] = useState(null);
-  const [doneData, setDoneData] = useState(null);
-  const { user, ready: authReady } = useAuth();
-
-  useEffect(() => { document.documentElement.style.setProperty("--cyan-400", t.accent); }, [t.accent]);
-  useEffect(() => { window.scrollTo(0, 0); }, [route]);
-
-  // 라우터 — 해시(#admin, #detail/<id>) + 짧은 path(/admin) 둘 다 인식
-  const VALID_ROUTES = ["home", "catalog", "guide", "faq", "about", "order", "admin", "me", "login", "terms", "privacy"];
-  const routeToHash = (r) => {
-    if (!r || !r.name || r.name === "home") return "";
-    if (r.name === "detail" && r.id) return `#detail/${r.id}`;
-    return `#${r.name}`;
-  };
-
-  useEffect(() => {
-    const apply = () => {
-      // 1순위: 토스 결제 결과 (?toss=success | ?toss=fail) — query string 으로 도착
-      const qs = new URLSearchParams(location.search);
-      if (qs.get("toss")) { setRoute({ name: "order-result" }); return; }
-      const h = (location.hash || "").replace(/^#/, "").trim();
-      if (h.startsWith("detail/")) {
-        const id = h.slice(7);
-        if (id) { setRoute({ name: "detail", id }); return; }
-      }
-      if (VALID_ROUTES.includes(h)) { setRoute({ name: h }); return; }
-      const seg = (location.pathname || "/").split("/").filter(Boolean)[0] || "";
-      if (VALID_ROUTES.includes(seg)) { setRoute({ name: seg }); return; }
-      setRoute({ name: "home" });
-    };
-    apply();
-    window.addEventListener("hashchange", apply);
-    window.addEventListener("popstate", apply);
-    return () => {
-      window.removeEventListener("hashchange", apply);
-      window.removeEventListener("popstate", apply);
-    };
-  }, []);
-
-  const showToast = (msg) => { setToastMsg(msg); setTimeout(() => setToastMsg(null), 2400); };
-  const addToCart = (m, qty = 1) => {
-    setCart(c => {
-      const i = c.findIndex(x => x.id === m.id);
-      if (i >= 0) { const next = [...c]; next[i] = { ...next[i], qty: next[i].qty + qty }; return next; }
-      return [...c, { id: m.id, qty }];
-    });
-    showToast(`${m.name} ${qty}개 장바구니에 담김`);
-  };
-  const updateCart = (i, qty) => setCart(c => c.map((x, j) => j === i ? { ...x, qty } : x));
-  const removeCart = (i) => setCart(c => c.filter((_, j) => j !== i));
-
-  // navTo — 브라우저 history 에 push 해서 뒤로가기 시 이전 라우트로 복귀 (사이트 내 이동 보존)
-  const navTo = (r) => {
-    const newHash = routeToHash(r);
-    if ((location.hash || "") !== newHash) {
-      const targetUrl = newHash || (location.pathname + location.search);
-      try { history.pushState(null, "", targetUrl); } catch (e) {}
-    }
-    setRoute(r);
-    setCartOpen(false);
-  };
-
-  const isAdmin = route.name === "admin";
-
-  return (
-    <div>
-      {!isAdmin && <TopNav route={route} onNav={navTo} cartCount={cart.length} onOpenCart={() => setCartOpen(true)} />}
-      <main style={{ maxWidth: isAdmin ? "100%" : 1240, margin: "0 auto", width: "100%" }}>
-      {route.name === "home" && <HomePage onNav={navTo} />}
-      {route.name === "catalog" && <CatalogPage onNav={navTo} onAdd={addToCart} />}
-      {route.name === "detail" && <DetailPage id={route.id} onNav={navTo} onAdd={addToCart} toast={showToast} />}
-      {route.name === "guide" && <GuidePage />}
-      {route.name === "faq" && <FAQPage />}
-      {route.name === "about" && <AboutPage />}
-      {route.name === "admin" && <AdminPage />}
-      {route.name === "me" && (user ? <MyPage /> : <LoginPage onAfter={() => navTo({ name: "me" })} />)}
-      {route.name === "login" && <LoginPage onAfter={() => navTo({ name: "me" })} />}
-      {route.name === "terms" && <TermsPage />}
-      {route.name === "privacy" && <PrivacyPage />}
-      {route.name === "order" && (
-        <OrderPage
-          onNav={navTo}
-          presetId={route.presetId}
-          cart={cart}
-          onClear={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
-          onDone={(data) => setDoneData(data)}
-        />
-      )}
-      {route.name === "order-result" && (
-        <OrderResultPage
-          onNav={navTo}
-          onClearCart={() => { setCart([]); try { localStorage.removeItem("ub:cart:v1"); } catch (e) {} }}
-        />
-      )}
-      </main>
-      {!isAdmin && <Footer onNav={navTo} />}
-      {!isAdmin && <BottomTabs route={route} onNav={navTo} cartCount={cart.length} onOpenCart={() => setCartOpen(true)} />}
-
-      <CartDrawer
-        open={cartOpen}
-        onClose={() => setCartOpen(false)}
-        cart={cart}
-        onUpdate={updateCart}
-        onRemove={removeCart}
-        onCheckout={() => { setCartOpen(false); navTo({ name: "order" }); }}
-        onBrowse={() => { setCartOpen(false); navTo({ name: "catalog" }); }}
-      />
-
-      {doneData && <DoneModal data={doneData} onClose={() => { setDoneData(null); navTo({ name: "guide" }); }} onHome={() => { setDoneData(null); navTo({ name: "home" }); }} />}
-
-      {toastMsg && (
-        <div style={{
-          position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", zIndex: 300,
-          padding: "12px 20px", borderRadius: 100, background: "rgba(10,22,40,0.95)",
-          border: "1px solid var(--cyan-400)", color: "var(--white)", fontSize: 13, fontWeight: 500,
-          backdropFilter: "blur(8px)", boxShadow: "0 10px 40px rgba(0,0,0,0.5)",
-          display: "flex", alignItems: "center", gap: 8,
-        }}>
-          <span style={{ color: "var(--cyan-400)" }}>✓</span>
-          {toastMsg}
-        </div>
-      )}
-
-      <TweaksPanel>
-        <TweakSection label="테마" />
-        <TweakColor label="액센트 컬러" value={t.accent} onChange={(v) => setTweak("accent", v)} />
-        <TweakSection label="제품" />
-        <TweakToggle label="상태 배지 표시" value={t.showBadges} onChange={(v) => setTweak("showBadges", v)} />
-        <TweakRadio label="밀도" value={t.density} options={["compact", "regular", "comfy"]} onChange={(v) => setTweak("density", v)} />
-        <TweakSection label="빠른 이동" />
-        <TweakButton onClick={() => navTo({ name: "home" })}>홈</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "catalog" })}>카탈로그</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "detail", id: "fsf2" })}>제품 상세 (FSF2)</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "guide" })}>시공사례</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "faq" })}>FAQ</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "order" })}>결제 폼</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "admin" })}>관리자 (윤곽)</TweakButton>
-        <TweakButton onClick={() => navTo({ name: "me" })}>마이페이지</TweakButton>
-      </TweaksPanel>
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-</script>
-
-<!-- 사업자 정보 — 초기 HTML 소스에 항상 존재 (전자상거래법·PG 심사, JS 켜짐/꺼짐 크롤러 모두 읽힘) -->
-<footer style="padding:20px 16px;border-top:1px solid #1E2C4A;background:#0C111D;font-size:11.5px;color:#8B97AB;line-height:1.7;text-align:center;font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;">
+<!-- 사업자 정보 — 초기 HTML 소스에 항상 존재 (전자상거래법·PG 심사, JS 꺼짐 크롤러가 원본 소스로 읽음).
+     React 앱 푸터에 동일 정보가 있어, 앱이 마운트되면 화면 중복을 막기 위해 이 정적 푸터는 숨김 처리(소스엔 유지). -->
+<footer id="static-biz-footer" style="padding:20px 16px;border-top:1px solid #1E2C4A;background:#0C111D;font-size:11.5px;color:#8B97AB;line-height:1.7;text-align:center;font-family:'Noto Sans KR',system-ui,-apple-system,sans-serif;">
   <strong style="color:#c9d2df;">에스디컨버전스 (SD Convergence)</strong><br/>
   상호: 에스디컨버전스 · 대표자: 허희경 · 사업자등록번호: 449-56-00430<br/>
   통신판매업신고: 제 2026-용인기흥-01256 호 · 사업장 주소: 경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
   대표전화: 010-2776-9109 · 이메일: <a href="mailto:leedoo80@gmail.com" style="color:#8B97AB;">leedoo80@gmail.com</a> · 평일 09–18시<br/>
   © 2026 SD Convergence. All rights reserved.
 </footer>
+<script>
+  // React 앱이 #root에 마운트되면(= 앱 푸터가 렌더되면) 정적 푸터를 화면에서 숨겨 중복 제거.
+  // JS 꺼짐/렌더 안 되는 크롤러·PG 심사는 위 <footer>가 소스에 그대로 남아 계속 노출됨.
+  (function () {
+    var root = document.getElementById("root");
+    var stat = document.getElementById("static-biz-footer");
+    if (!root || !stat) return;
+    var hide = function () { if (root.children.length) { stat.style.display = "none"; return true; } return false; };
+    if (!hide()) {
+      var obs = new MutationObserver(function () { if (hide()) obs.disconnect(); });
+      obs.observe(root, { childList: true });
+    }
+  })();
+</script>
 </body>
 </html>

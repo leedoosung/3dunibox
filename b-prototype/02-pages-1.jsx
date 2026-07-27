@@ -150,7 +150,7 @@ const ProductCard = ({ m, onClick, onAdd }) => {
   <div onClick={onClick} style={{ cursor: "pointer" }}>
     <div style={{ aspectRatio: "3 / 4", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? 12 : 16, overflow: "hidden", padding: 4, boxSizing: "border-box" }}>
       {m.image_url ? (
-        <img src={m.image_url} alt={m.name} loading="eager"
+        <img src={imgCDN(m.image_url, 800)} alt={m.name} loading="lazy" decoding="async"
              style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block", borderRadius: 16, filter: "drop-shadow(0 14px 26px rgba(0,0,0,0.55))" }} />
       ) : (
         <span className="ub-mono" style={{ fontSize: 11, color: "var(--gray-500, #6B7280)" }}>{m.code}</span>

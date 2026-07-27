@@ -31,7 +31,14 @@
       ]
     },
     {
-      "source": "/b-prototype/(.*)",
+      "source": "/b-prototype/(.*\\.js)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript; charset=utf-8" },
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/b-prototype/(.*\\.jsx)",
       "headers": [
         { "key": "Content-Type", "value": "text/babel; charset=utf-8" },
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }

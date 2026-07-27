@@ -205,18 +205,30 @@ auth.users                       ← Supabase 내장. id, email, encrypted_passw
 
 ## 8. 배포 — 코드 바꾼 뒤 사이트 반영하기
 
+> ⚠️ **중요 — 코드(.jsx)를 고쳤으면 배포 전에 반드시 `node build.mjs` 먼저!**
+> 이 사이트는 화면 속도를 위해 JSX를 **미리 컴파일**해 둔다. 브라우저는 `.jsx`가 아니라
+> **`build.mjs`가 만든 `.js`** 를 로드한다. `.jsx`만 고치고 빌드를 안 돌리면 **옛 `.js`가 그대로
+> 나가서 수정이 반영되지 않는다.** (제품·가격·재고·시공사례·주문은 DB라서 빌드와 무관 — §6 참고)
+
 1. PowerShell 열기
-2.
+2. **코드(.jsx) 수정한 경우에만** 빌드:
    ```
    cd "C:\3D UniBox _p\3D UniBox"
+   npm i @babel/standalone@7.29.0   # 최초 1회만
+   node build.mjs                   # b-prototype/*.jsx, tweaks-panel.jsx → 같은 이름 .js
+   ```
+3. 배포:
+   ```
    vercel --prod
    ```
-3. URL 출력되면 https://3dunibox.co.kr 에서 확인
-4. 캐시 안 잡히면:
-   - 브라우저 강력 새로고침 (Ctrl+Shift+R)
-   - 또는 시크릿 창에서 열기
+4. URL 출력되면 https://3dunibox.co.kr 에서 확인
+5. 캐시 안 잡히면: 브라우저 강력 새로고침 (Ctrl+Shift+R) 또는 시크릿 창
 
 > Vercel은 자동으로 CDN 캐시 무효화. service-worker 가 자기소멸 모드라 PWA 캐시 문제 없음.
+>
+> **빌드 주의:** `build.mjs`는 반드시 Babel(env+react) 프리셋을 쓴다(const→var). esbuild 등
+> const를 유지하는 도구로 바꾸면 여러 .js가 같은 전역(MODELS 등)을 재선언해 "already declared"로
+> 앱이 죽는다. 원본 `.jsx`는 보존되므로 문제가 생기면 언제든 되돌릴 수 있다.
 
 ---
 

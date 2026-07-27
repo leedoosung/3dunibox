@@ -390,6 +390,18 @@ try {
   }
 } catch (e) {}
 
+// Supabase Storage 원본 이미지를 실시간 리사이즈(render/image) URL로 변환해 전송량을 대폭 줄인다.
+// (예: 2MB 원본 → width=800 기준 약 0.25MB). 변환 대상이 아니면(로컬/외부 URL) 원본 그대로 반환.
+function imgCDN(url, width) {
+  if (!url || typeof url !== "string") return url;
+  const marker = "/storage/v1/object/public/";
+  if (!url.includes(marker)) return url;
+  const base = url.replace(marker, "/storage/v1/render/image/public/");
+  const sep = base.includes("?") ? "&" : "?";
+  // resize=contain: 원본 비율 유지(EXIF 회전 포함) — width만 줄 때 왜곡/잘림 방지.
+  return base + sep + "width=" + (width || 800) + "&resize=contain&quality=72";
+}
+
 const loadProducts = async () => {
   const sb = window.SUPABASE;
   if (!sb) return false;

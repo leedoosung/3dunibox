@@ -28,7 +28,7 @@ const DetailPage = ({ id, onNav, onAdd, toast }) => {
           </div>
           <div style={{ aspectRatio: "3 / 4", maxHeight: "75vh", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
             {m.image_url ? (
-              <img src={m.image_url} alt={m.name} loading="eager"
+              <img src={imgCDN(m.image_url, 1100)} alt={m.name} loading="eager" decoding="async"
                    style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block", borderRadius: 20, filter: "drop-shadow(0 22px 44px rgba(0,0,0,0.6))" }} />
             ) : (
               <span className="ub-mono" style={{ fontSize: 12, color: "var(--gray-500, #6B7280)" }}>{m.code}</span>
@@ -200,7 +200,7 @@ const GuidePage = () => {
               return (
                 <div key={c.id || i}>
                   <div style={{ position: "relative", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "#0d0d0d", border: "1px solid var(--line)" }}>
-                    <img src={c.image_url} alt={label || "브라켓 없이 시공한 현장"} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                    <img src={imgCDN(c.image_url, 800)} alt={label || "브라켓 없이 시공한 현장"} loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                     <span className="ub-mono" style={{ position: "absolute", top: 8, left: 8, fontSize: 9, fontWeight: 800, letterSpacing: 0.5, color: "#111", background: "var(--warning, #FBBF24)", padding: "3px 7px", borderRadius: 5 }}>BEFORE</span>
                   </div>
                   {label && <div style={{ marginTop: 8, fontSize: 13, color: "var(--white)", fontWeight: 700, lineHeight: 1.4, wordBreak: "keep-all" }}>{label}</div>}
@@ -222,7 +222,7 @@ const GuidePage = () => {
             <div key={c.id || i}>
               <div style={{ aspectRatio: "1 / 1", background: "#0d0d0d", borderRadius: 16, display: "grid", placeItems: "center", position: "relative", overflow: "hidden" }}>
                 {c.image_url ? (
-                  <img src={c.image_url} alt={c.caption} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                  <img src={imgCDN(c.image_url, 800)} alt={c.caption} loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 ) : (
                   <>
                     <div className="ub-grid-bg" style={{ position: "absolute", inset: 0, opacity: 0.3 }} />
