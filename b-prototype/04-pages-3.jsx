@@ -136,7 +136,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                   style={{
                     display: "block", padding: 14, borderRadius: 8, cursor: "pointer",
                     border: `1px solid ${data.deliveryMethod === o.v ? "var(--cyan-400)" : "var(--line-strong)"}`,
-                    background: data.deliveryMethod === o.v ? "rgba(0,200,240,0.06)" : "transparent",
+                    background: data.deliveryMethod === o.v ? "rgba(46,124,246,0.06)" : "transparent",
                   }}>
                   <input type="radio" name="ub-delivery" value={o.v}
                     checked={data.deliveryMethod === o.v}
@@ -168,9 +168,9 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
                   <input className="ub-input" placeholder="name@example.com" value={data.email} onChange={e => upd("email", e.target.value)} />
                 </div>
               </div>
-              <div style={{ marginTop: 12, padding: 10, borderRadius: 6, background: "rgba(0,200,240,0.06)", fontSize: 12, color: "var(--gray-200)", lineHeight: 1.6 }}>
+              <div style={{ marginTop: 12, padding: 10, borderRadius: 6, background: "rgba(46,124,246,0.06)", fontSize: 12, color: "var(--gray-200)", lineHeight: 1.6 }}>
                 📍 <strong style={{ color: "var(--white)" }}>수령 장소</strong>: 경기 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
-                📞 방문 전 <strong style={{ color: "var(--cyan-400)" }}>010-9109-8277</strong> 로 연락 후 방문 부탁드립니다.
+                📞 방문 전 <strong style={{ color: "var(--cyan-400)" }}>010-2776-9109</strong> 로 연락 후 방문 부탁드립니다.
               </div>
             </div>
           ) : (
@@ -179,7 +179,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
               <div className="ub-spec-key">배송지</div>
               {savedAddresses.length > 0 ? (
                 <button type="button" onClick={() => setPickerOpen(true)}
-                  style={{ fontSize: 11, color: "var(--cyan-400)", background: "rgba(0,200,240,0.08)", border: "1px solid rgba(0,200,240,0.3)", borderRadius: 100, padding: "4px 12px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  style={{ fontSize: 11, color: "var(--cyan-400)", background: "rgba(46,124,246,0.08)", border: "1px solid rgba(46,124,246,0.3)", borderRadius: 100, padding: "4px 12px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6 }}>
                   📒 주소록 불러오기 ({savedAddresses.length})
                 </button>
               ) : (
@@ -217,7 +217,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
               </div>
             </div>
             {/* 배송비 안내 (동적) */}
-            <div style={{ marginTop: 12, padding: 10, borderRadius: 6, background: isRemote ? "rgba(251,191,36,0.08)" : "rgba(0,200,240,0.06)", fontSize: 12, color: "var(--gray-200)", lineHeight: 1.6 }}>
+            <div style={{ marginTop: 12, padding: 10, borderRadius: 6, background: isRemote ? "rgba(251,191,36,0.08)" : "rgba(46,124,246,0.06)", fontSize: 12, color: "var(--gray-200)", lineHeight: 1.6 }}>
               {isRemote ? (
                 <><span style={{ color: "var(--warning, #FBBF24)", fontWeight: 700 }}>⚠ 제주·도서산간 지역</span> — 배송비 <strong style={{ color: "var(--white)" }}>₩{ship.toLocaleString()}</strong> (기본 ₩{SHIP.FEE.toLocaleString()} + 추가 ₩{SHIP.REMOTE_EXTRA.toLocaleString()}) 자동 적용됩니다.</>
               ) : (
@@ -376,7 +376,7 @@ const OrderPage = ({ onNav, presetId, cart, onClear, onDone }) => {
             <div style={{ flex: 1, overflow: "auto", padding: 18, display: "flex", flexDirection: "column", gap: 8 }}>
               {savedAddresses.map(a => (
                 <button type="button" key={a.id} onClick={() => applyAddress(a)}
-                  style={{ textAlign: "left", padding: 14, borderRadius: 10, border: "1px solid var(--line)", background: a.isDefault ? "rgba(0,200,240,0.04)" : "transparent", cursor: "pointer", color: "inherit", transition: "all 0.15s" }}
+                  style={{ textAlign: "left", padding: 14, borderRadius: 10, border: "1px solid var(--line)", background: a.isDefault ? "rgba(46,124,246,0.04)" : "transparent", cursor: "pointer", color: "inherit", transition: "all 0.15s" }}
                   onMouseEnter={e => e.currentTarget.style.borderColor = "var(--cyan-400)"}
                   onMouseLeave={e => e.currentTarget.style.borderColor = "var(--line)"}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
@@ -576,7 +576,7 @@ const DoneModal = ({ data, onClose, onHome }) => (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 200, backdropFilter: "blur(8px)" }} />
     <div style={{ position: "fixed", inset: 0, zIndex: 201, display: "grid", placeItems: "center", padding: 40 }}>
       <div className="ub-card" style={{ maxWidth: 500, width: "100%", textAlign: "center", padding: 40, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 400px 200px at 50% 0%, rgba(0,200,240,0.15), transparent 60%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 400px 200px at 50% 0%, rgba(46,124,246,0.15), transparent 60%)" }} />
         <div style={{ position: "relative" }}>
           <div style={{ width: 72, height: 72, margin: "0 auto 20px", borderRadius: "50%", background: "linear-gradient(135deg, var(--cyan-400), var(--cyan-500))", display: "grid", placeItems: "center", color: "var(--navy-950)", boxShadow: "0 20px 60px -10px var(--cyan-glow)" }}>{Ic.check}</div>
           <div className="ub-eyebrow" style={{ marginBottom: 8 }}>ORDER · #2026-04-30-{Math.floor(Math.random()*9000+1000)}</div>
@@ -618,7 +618,7 @@ const AboutPage = () => (
       <div className="ub-spec-key" style={{ marginBottom: 14 }}>회사 정보</div>
       <table style={{ width: "100%", fontSize: 13 }}>
         <tbody>
-          {[["대표", "허희경"], ["사업자등록번호", "449-56-00430"], ["통신판매업", "[번호 발급 후 기재]"], ["사업장 주소", "경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호"], ["연락처", "010-9109-8277 / leedoo80@gmail.com"]].map(([k, v]) => (
+          {[["대표", "허희경"], ["사업자등록번호", "449-56-00430"], ["통신판매업", "제 2026-용인기흥-01256 호"], ["사업장 주소", "경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호"], ["연락처", "010-2776-9109 / leedoo80@gmail.com"]].map(([k, v]) => (
             <tr key={k} style={{ borderTop: "1px solid var(--line)" }}>
               <td style={{ padding: "12px 0", color: "var(--gray-400)", width: 160, fontFamily: "var(--font-mono)", fontSize: 11 }}>{k.toUpperCase()}</td>
               <td style={{ padding: "12px 0", color: "var(--white)" }}>{v}</td>
@@ -634,7 +634,7 @@ const AboutPage = () => (
 const Footer = ({ onNav }) => {
   const isMobile = useIsMobile4(1024);
   return (
-  <footer style={{ borderTop: "1px solid var(--line)", padding: isMobile ? "28px 16px" : "32px 80px", background: "var(--navy-900)", marginTop: isMobile ? 40 : 60 }}>
+  <footer style={{ borderTop: "1px solid var(--line)", padding: isMobile ? "28px 16px" : "32px max(24px, calc((100% - 1240px) / 2))", background: "var(--navy-950)", marginTop: isMobile ? 40 : 60 }}>
     <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1.4fr 1fr 1fr 1fr", gap: isMobile ? 20 : 48, marginBottom: 24 }}>
       <div style={{ gridColumn: isMobile ? "span 2" : "auto" }}>
         <div className="ub-logo"><div className="ub-logo-mark">3D</div><span>UNIBOX</span></div>
@@ -643,15 +643,15 @@ const Footer = ({ onNav }) => {
         <div style={{ marginTop: 10, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.7 }}>
           <strong style={{ color: "var(--gray-100)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
           대표 허희경 · 사업자등록번호 449-56-00430<br/>
-          통신판매업신고 [번호 발급 후 기재]<br/>
+          통신판매업신고 제 2026-용인기흥-01256 호<br/>
           경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
-          대표전화 010-9109-8277
+          대표전화 010-2776-9109
         </div>
       </div>
       {[
         { t: "제품", items: [["전체보기", () => onNav({ name: "catalog" })], ["장바구니", () => onNav({ name: "catalog" })]] },
         { t: "고객지원", items: [["시공사례", () => onNav({ name: "guide" })], ["FAQ", () => onNav({ name: "faq" })]] },
-        { t: "문의", items: [["010-9109-8277", null], ["leedoo80@gmail.com", null], ["평일 09–18시", null]] },
+        { t: "문의", items: [["010-2776-9109", null], ["leedoo80@gmail.com", null], ["평일 09–18시", null]] },
       ].map(c => (
         <div key={c.t}>
           <div className="ub-spec-key" style={{ marginBottom: 12 }}>{c.t}</div>
@@ -771,7 +771,7 @@ const OrderResultPage = ({ onNav, onClearCart }) => {
           <Btn variant="ghost" size="lg" full={isMobile} onClick={() => onNav({ name: "catalog" })}>더 둘러보기</Btn>
         </div>
         <div style={{ marginTop: 24, fontSize: 12, color: "var(--gray-400)" }}>
-          ※ 결제 영수증은 토스페이먼츠에서 SMS·이메일로 발송됩니다. 문의: 010-9109-8277 / leedoo80@gmail.com
+          ※ 결제 영수증은 토스페이먼츠에서 SMS·이메일로 발송됩니다. 문의: 010-2776-9109 / leedoo80@gmail.com
         </div>
       </div>
     );
@@ -796,7 +796,7 @@ const OrderResultPage = ({ onNav, onClearCart }) => {
         <Btn variant="ghost" size="lg" full={isMobile} onClick={() => onNav({ name: "home" })}>홈으로</Btn>
       </div>
       <div style={{ marginTop: 24, fontSize: 12, color: "var(--gray-400)" }}>
-        ※ 카드사 한도·승인 거절 등 사유가 반복되면 고객센터 010-9109-8277 로 문의주세요.
+        ※ 카드사 한도·승인 거절 등 사유가 반복되면 고객센터 010-2776-9109 로 문의주세요.
       </div>
     </div>
   );

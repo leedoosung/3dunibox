@@ -95,9 +95,9 @@ const TermsPage = () => {
       <div style={{ marginTop: 40, padding: 18, border: "1px dashed var(--line-strong)", borderRadius: 10, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.8 }}>
         <strong style={{ color: "var(--white)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
         대표 허희경 · 사업자등록번호 449-56-00430<br/>
-        통신판매업신고: [번호 발급 후 기재]<br/>
+        통신판매업신고: 제 2026-용인기흥-01256 호<br/>
         사업장 주소: 경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호<br/>
-        문의: 010-9109-8277 / leedoo80@gmail.com
+        문의: 010-2776-9109 / leedoo80@gmail.com
       </div>
     </div>
   );
@@ -195,10 +195,12 @@ const PrivacyPage = () => {
 
       <Section n="07" title="개인정보의 안전성 확보 조치">
         <ul style={{ paddingLeft: 20, margin: 0 }}>
-          <li>비밀번호 암호화 저장 (Supabase Auth)</li>
-          <li>SSL/TLS 암호화 통신(HTTPS)</li>
-          <li>접근 권한 최소화 및 접근 기록 보관</li>
-          <li>정기적인 보안 점검</li>
+          <li>비밀번호는 단방향 암호화(해시)로 저장되며 회사도 원문을 알 수 없습니다 (Supabase Auth).</li>
+          <li>웹사이트 전 구간 SSL/TLS(HTTPS) 암호화 통신.</li>
+          <li>회원 개인정보 데이터베이스는 <strong style={{ color: "var(--white)" }}>대한민국 내 데이터센터(AWS 아시아·태평양 서울 리전)</strong>에 저장·처리됩니다.</li>
+          <li>개인정보에 대한 접근은 서버 측 인증을 통과한 관리자만 가능하며, 서비스 키 등 민감 정보는 서버에만 보관되어 외부에 노출되지 않습니다.</li>
+          <li>관리자 화면의 목록에서는 이름·연락처·이메일 등을 마스킹하여 표시합니다.</li>
+          <li>관리자 접근 및 서버 처리 기록(로그)을 보관하고 정기적으로 점검합니다.</li>
         </ul>
       </Section>
 
@@ -207,9 +209,9 @@ const PrivacyPage = () => {
       </Section>
 
       <Section n="09" title="개인정보 보호책임자">
-        <div style={{ padding: 14, background: "rgba(0,200,240,0.04)", border: "1px solid rgba(0,200,240,0.2)", borderRadius: 8, fontSize: 13 }}>
+        <div style={{ padding: 14, background: "rgba(46,124,246,0.04)", border: "1px solid rgba(46,124,246,0.2)", borderRadius: 8, fontSize: 13 }}>
           <div><strong style={{ color: "var(--white)" }}>개인정보 보호책임자</strong>: 허희경 (대표)</div>
-          <div>연락처: 010-9109-8277</div>
+          <div>연락처: 010-2776-9109</div>
           <div>이메일: leedoo80@gmail.com</div>
         </div>
       </Section>
@@ -221,7 +223,7 @@ const PrivacyPage = () => {
       <div style={{ marginTop: 40, padding: 18, border: "1px dashed var(--line-strong)", borderRadius: 10, fontSize: 12, color: "var(--gray-300)", lineHeight: 1.8 }}>
         <strong style={{ color: "var(--white)" }}>에스디컨버전스 (SD Convergence)</strong><br/>
         대표 허희경 · 사업자등록번호 449-56-00430<br/>
-        통신판매업신고: [번호 발급 후 기재]<br/>
+        통신판매업신고: 제 2026-용인기흥-01256 호<br/>
         사업장 주소: 경기도 용인시 기흥구 기흥역로58번길 78 103동 1303호
       </div>
     </div>

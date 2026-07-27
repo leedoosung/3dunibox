@@ -14,3 +14,9 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# 로컬 백업 (커밋 금지)
+_backup_pre3d/
+_preview_recolor/
+*.bak
+*.bak2

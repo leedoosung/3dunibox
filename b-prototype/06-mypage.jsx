@@ -13,7 +13,7 @@ const EMPTY_ME = { name: "", phone: "", email: "", addresses: [] };
 // 주문 이력은 추후 Supabase orders 테이블에서 fetch (Phase 다음)
 
 const STATUS_TINT = {
-  "결제완료": "#00C8F0", "제작중": "#FBBF24", "배송중": "#A78BFA", "완료": "#4ADE80", "취소": "#9CA3AF",
+  "결제완료": "#2E7CF6", "제작중": "#FBBF24", "배송중": "#A78BFA", "완료": "#4ADE80", "취소": "#9CA3AF",
 };
 
 const MyPage = () => {
@@ -170,7 +170,7 @@ const MyPage = () => {
               return (
                 <button key={it.id} type="button" onClick={() => setTab(it.id)}
                   style={{ flexShrink: 0, padding: "8px 14px", borderRadius: 100,
-                    background: active ? "rgba(0,200,240,0.12)" : "transparent",
+                    background: active ? "rgba(46,124,246,0.12)" : "transparent",
                     color: active ? "var(--cyan-400)" : "var(--gray-200)",
                     border: `1px solid ${active ? "var(--cyan-400)" : "var(--line)"}`,
                     fontSize: 12, fontWeight: active ? 700 : 500, cursor: "pointer",
@@ -199,9 +199,9 @@ const MyPage = () => {
                   style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                     padding: "10px 12px", borderRadius: 8,
-                    background: active ? "rgba(0,200,240,0.10)" : "transparent",
+                    background: active ? "rgba(46,124,246,0.10)" : "transparent",
                     color: active ? "var(--cyan-400)" : "var(--gray-200)",
-                    border: active ? "1px solid rgba(0,200,240,0.25)" : "1px solid transparent",
+                    border: active ? "1px solid rgba(46,124,246,0.25)" : "1px solid transparent",
                     fontSize: 13, fontWeight: active ? 600 : 500,
                     cursor: "pointer", textAlign: "left",
                   }}>
@@ -319,7 +319,7 @@ const MyPage = () => {
 };
 
 const AddressRow = ({ a, onEdit, onRemove, onDefault }) => (
-  <div className="ub-card" style={{ padding: 16, display: "flex", gap: 14, background: a.isDefault ? "rgba(0,200,240,0.04)" : undefined }}>
+  <div className="ub-card" style={{ padding: 16, display: "flex", gap: 14, background: a.isDefault ? "rgba(46,124,246,0.04)" : undefined }}>
     <div style={{ flex: 1 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
         <span style={{ fontSize: 14, fontWeight: 700, color: "var(--white)" }}>{a.label}</span>
@@ -347,7 +347,7 @@ const AddressEditor = ({ draft, setDraft, onSave, onCancel }) => {
   const upd = (k, v) => setDraft(d => ({ ...d, [k]: v }));
   const isMobile = useIsMobile6(1024);
   return (
-    <div className="ub-card" style={{ padding: 16, border: "1px solid var(--cyan-400)", boxShadow: "0 0 0 4px rgba(0,200,240,0.08)" }}>
+    <div className="ub-card" style={{ padding: 16, border: "1px solid var(--cyan-400)", boxShadow: "0 0 0 4px rgba(46,124,246,0.08)" }}>
       <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 12 }}>
         <div>
           <label className="ub-label ub-label-req">주소 라벨</label>

@@ -10,7 +10,7 @@ const { MODELS: MODELS5, Ic: Ic5, Btn: Btn5, calcShip: calcShip5,
 // 결제완료 → 제작중 → 배송중 → 완료. 취소는 별도.
 const STATUS_FLOW = ["결제완료", "제작중", "배송중", "완료"];
 const STATUS_COLORS = {
-  "결제완료": { bg: "rgba(0,200,240,0.15)",   fg: "#00C8F0", dot: "#00C8F0" },
+  "결제완료": { bg: "rgba(46,124,246,0.15)",   fg: "#2E7CF6", dot: "#2E7CF6" },
   "제작중":   { bg: "rgba(251,191,36,0.15)",  fg: "#FBBF24", dot: "#FBBF24" },
   "배송중":   { bg: "rgba(167,139,250,0.15)", fg: "#A78BFA", dot: "#A78BFA" },
   "완료":     { bg: "rgba(74,222,128,0.15)",  fg: "#4ADE80", dot: "#4ADE80" },
@@ -57,7 +57,7 @@ const downloadCSV = (filename, headers, rows) => {
 // ─── 작은 컴포넌트 ────────────────────────────────────────────────────────────
 const KpiCard = ({ label, value, sub, accent }) => (
   <div className="ub-card" style={{ padding: 20, position: "relative", overflow: "hidden" }}>
-    <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 200px 80px at 90% 0%, ${accent || "rgba(0,200,240,0.10)"}, transparent 70%)` }} />
+    <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 200px 80px at 90% 0%, ${accent || "rgba(46,124,246,0.10)"}, transparent 70%)` }} />
     <div style={{ position: "relative" }}>
       <div className="ub-spec-key" style={{ marginBottom: 10 }}>{label}</div>
       <div className="ub-mono" style={{ fontSize: 26, fontWeight: 700, color: "var(--white)" }}>{value}</div>
@@ -82,23 +82,70 @@ const StatusPill = ({ status }) => {
 
 // ─── ADMIN PAGE ───────────────────────────────────────────────────────────────
 // ─── 관리자 진입 게이트 ─────────────────────────────────────────────────────
-// 클라이언트 측 ID/PW 차단. 우연한 외부인 차단용 — 진짜 보안은 추후 RLS로.
+// 인증은 서버(/api/admin/rpc)에서 검증. 비밀번호·service_role 키는 서버 환경변수에만 존재.
+// 클라이언트 소스에는 어떤 비밀정보도 두지 않는다 (개인정보 보호).
 const ADMIN_GATE_KEY = "ub:admin:authed";
-const ADMIN_ID = "admin";
-const ADMIN_PW = "lee91059105*";
+const ADMIN_SECRET_KEY = "ub:admin:secret";   // 로그인 시 입력한 비밀번호를 세션 메모리에만 임시 보관
+
+// 관리자 데이터는 반드시 서버 프록시를 통해서만 접근. 공개키로는 조회 불가.
+const getAdminSecret = () => { try { return sessionStorage.getItem(ADMIN_SECRET_KEY) || ""; } catch (e) { return ""; } };
+const adminApi = async (fn, args) => {
+  const resp = await fetch("/api/admin/rpc", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret: getAdminSecret(), fn, args: args || {} }),
+  });
+  let body = {};
+  try { body = await resp.json(); } catch (e) {}
+  if (resp.status === 401) {
+    // 비밀번호 불일치/세션 만료 → 게이트 초기화 후 재로그인 유도
+    try { sessionStorage.removeItem(ADMIN_GATE_KEY); sessionStorage.removeItem(ADMIN_SECRET_KEY); } catch (e) {}
+  }
+  if (!resp.ok) throw new Error(body.error || `HTTP ${resp.status}`);
+  return body.data;
+};
+
+// ─── 개인정보 마스킹 (목록 화면 노출용) ──────────────────────────────────────
+const maskName = (s) => {
+  const t = String(s || "").trim();
+  if (!t) return "-";
+  if (t.length === 1) return t;
+  if (t.length === 2) return t[0] + "*";
+  return t[0] + "*".repeat(t.length - 2) + t[t.length - 1];
+};
+const maskPhone = (s) => {
+  const d = String(s || "").replace(/\D/g, "");
+  if (d.length < 7) return d ? "***" : "-";
+  return d.slice(0, 3) + "-****-" + d.slice(-4);
+};
+const maskEmail = (s) => {
+  const t = String(s || "").trim();
+  if (!t || t.indexOf("@") < 0) return t ? "***" : "";
+  const [u, dom] = t.split("@");
+  const uu = u.length <= 2 ? u[0] + "*" : u.slice(0, 2) + "*".repeat(Math.max(1, u.length - 2));
+  return uu + "@" + dom;
+};
 
 const AdminGate = ({ onPass }) => {
   const [id, setId] = uS5("");
   const [pw, setPw] = uS5("");
   const [err, setErr] = uS5(false);
+  const [busy, setBusy] = uS5(false);
 
-  const submit = () => {
-    if (id === ADMIN_ID && pw === ADMIN_PW) {
+  const submit = async () => {
+    if (busy) return;
+    setBusy(true); setErr(false);
+    try {
+      try { sessionStorage.setItem(ADMIN_SECRET_KEY, pw); } catch (e) {}
+      await adminApi("__verify");   // 서버가 비밀번호 검증
       try { sessionStorage.setItem(ADMIN_GATE_KEY, "1"); } catch (e) {}
       onPass();
-    } else {
+    } catch (e) {
+      try { sessionStorage.removeItem(ADMIN_SECRET_KEY); } catch (e2) {}
       setErr(true);
-      setTimeout(() => setErr(false), 2000);
+      setTimeout(() => setErr(false), 2500);
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -122,11 +169,11 @@ const AdminGate = ({ onPass }) => {
           </div>
         )}
 
-        <button type="button" onClick={submit}
+        <button type="button" onClick={submit} disabled={busy}
           style={{ width: "100%", padding: "12px 14px", borderRadius: 10, marginTop: 18,
             background: "var(--cyan-400)", color: "var(--navy-950)", border: 0,
-            fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
-          로그인
+            fontSize: 14, fontWeight: 700, cursor: busy ? "wait" : "pointer", opacity: busy ? 0.7 : 1 }}>
+          {busy ? "확인 중…" : "로그인"}
         </button>
       </div>
     </div>
@@ -149,8 +196,7 @@ const AdminPageInner = () => {
     if (!sb) { setOrdLoading(false); setOrdError("Supabase 클라이언트 미초기화"); return; }
     setOrdLoading(true); setOrdError(null);
     try {
-      const { data, error } = await sb.rpc("admin_list_orders", { p_secret: ADMIN_PW, p_limit: 500 });
-      if (error) throw error;
+      const data = await adminApi("admin_list_orders", { p_limit: 500 });
       const rows = (data || []).map(r => ({
         no:         r.order_id,
         date:       r.created_at ? String(r.created_at).slice(0, 19).replace("T", " ") : "",
@@ -190,8 +236,7 @@ const AdminPageInner = () => {
     if (!sb) { setMemLoading(false); setMemError("Supabase 클라이언트 미초기화"); return; }
     setMemLoading(true); setMemError(null);
     try {
-      const { data, error } = await sb.rpc("admin_list_members", { p_secret: ADMIN_PW });
-      if (error) throw error;
+      const data = await adminApi("admin_list_members", {});
       const rows = (data || []).map(r => ({
         id: r.id,
         email: r.email || "",
@@ -273,7 +318,7 @@ const AdminPageInner = () => {
                 <button key={it.id} type="button" onClick={() => setTab(it.id)}
                   style={{
                     flexShrink: 0, padding: "8px 14px", borderRadius: 100,
-                    background: active ? "rgba(0,200,240,0.12)" : "transparent",
+                    background: active ? "rgba(46,124,246,0.12)" : "transparent",
                     color: active ? "var(--cyan-400)" : "var(--gray-200)",
                     border: `1px solid ${active ? "var(--cyan-400)" : "var(--line)"}`,
                     fontSize: 12, fontWeight: active ? 700 : 500, cursor: "pointer",
@@ -307,9 +352,9 @@ const AdminPageInner = () => {
                   style={{
                     display: "flex", justifyContent: "space-between", alignItems: "center",
                     padding: "10px 12px", borderRadius: 8,
-                    background: active ? "rgba(0,200,240,0.10)" : "transparent",
+                    background: active ? "rgba(46,124,246,0.10)" : "transparent",
                     color: active ? "var(--cyan-400)" : "var(--gray-200)",
-                    border: active ? "1px solid rgba(0,200,240,0.25)" : "1px solid transparent",
+                    border: active ? "1px solid rgba(46,124,246,0.25)" : "1px solid transparent",
                     fontSize: 13, fontWeight: active ? 600 : 500,
                     cursor: "pointer", textAlign: "left",
                   }}>
@@ -325,9 +370,9 @@ const AdminPageInner = () => {
             })}
           </nav>
           <div style={{ marginTop: 28, padding: 12, border: "1px dashed var(--line-strong)", borderRadius: 8, fontSize: 11, lineHeight: 1.6, color: "var(--gray-400)" }}>
-            <div style={{ color: "var(--warning, #FBBF24)", fontWeight: 600, marginBottom: 4 }}>⚠ 프로토타입</div>
-            인증·결제·배송 API는 미연동.<br/>
-            데이터는 메모리에서만 변동됩니다.
+            <div style={{ color: "var(--success, #4ADE80)", fontWeight: 600, marginBottom: 4 }}>🔒 보안 접근</div>
+            개인정보는 서버 인증을 거쳐야만<br/>
+            조회됩니다 (목록은 마스킹 표시).
           </div>
 
           <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
@@ -357,7 +402,7 @@ const AdminPageInner = () => {
 
         {/* KPI */}
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? 8 : 14, marginBottom: 22 }}>
-          <KpiCard label="미처리 주문"  value={kpis.open}                                                  sub="결제완료 / 제작중"        accent="rgba(0,200,240,0.12)" />
+          <KpiCard label="미처리 주문"  value={kpis.open}                                                  sub="결제완료 / 제작중"        accent="rgba(46,124,246,0.12)" />
           <KpiCard label="오늘 매출"    value={`₩${kpis.todaySales.toLocaleString()}`}                     sub="2026-04-30"                accent="rgba(74,222,128,0.12)" />
           <KpiCard label="출고 대기"    value={kpis.shipping}                                              sub="배송중 상태"               accent="rgba(167,139,250,0.12)" />
           <KpiCard label="누적 매출"    value={`₩${kpis.lifetime.toLocaleString()}`}                       sub="취소 제외"                 accent="rgba(251,191,36,0.12)" />
@@ -428,8 +473,8 @@ const AdminPageInner = () => {
                           </td>
                           <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-300)", fontSize: 11 }}>{o.date}</td>
                           <td style={{ padding: "12px 14px", color: "var(--white)" }}>
-                            <div style={{ fontWeight: 600 }}>{o.customer}</div>
-                            <div className="ub-mono" style={{ fontSize: 10, color: "var(--gray-400)" }}>{o.phone}</div>
+                            <div style={{ fontWeight: 600 }}>{maskName(o.customer)}</div>
+                            <div className="ub-mono" style={{ fontSize: 10, color: "var(--gray-400)" }}>{maskPhone(o.phone)}</div>
                           </td>
                           <td style={{ padding: "12px 14px", color: "var(--gray-200)", maxWidth: 240 }}>{formatItems(o.items)}</td>
                           <td style={{ padding: "12px 14px" }}>
@@ -464,7 +509,7 @@ const AdminPageInner = () => {
                           <td style={{ padding: "12px 14px" }}>
                             <button type="button" onClick={() => advance(o.no)} disabled={last}
                               style={{
-                                background: last ? "transparent" : "rgba(0,200,240,0.10)",
+                                background: last ? "transparent" : "rgba(46,124,246,0.10)",
                                 border: `1px solid ${last ? "var(--line)" : "var(--cyan-400)"}`,
                                 color: last ? "var(--gray-500, #6B7280)" : "var(--cyan-400)",
                                 padding: "5px 10px", borderRadius: 6, fontSize: 11, fontWeight: 600,
@@ -673,9 +718,9 @@ const MembersTab = ({ orders, members = [], loading = false, error = null, onRel
                 return (
                   <tr key={m.id} style={{ borderTop: "1px solid var(--line)", cursor: "pointer" }}
                       onClick={() => setSelected(m.id)}>
-                    <td style={{ padding: "12px 14px", color: "var(--white)", fontWeight: 600 }}>{m.name}</td>
-                    <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-200)", fontSize: 11 }}>{m.phone}</td>
-                    <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-300)", fontSize: 11 }}>{m.email}</td>
+                    <td style={{ padding: "12px 14px", color: "var(--white)", fontWeight: 600 }}>{maskName(m.name)}</td>
+                    <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-200)", fontSize: 11 }}>{maskPhone(m.phone)}</td>
+                    <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-300)", fontSize: 11 }}>{maskEmail(m.email)}</td>
                     <td style={{ padding: "12px 14px", color: "var(--gray-200)", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {def ? <span><span className="ub-mono" style={{ fontSize: 10, color: "var(--gray-400)", marginRight: 6 }}>{def.zip}</span>{def.addr1}</span> : <span style={{ color: "var(--gray-500, #6B7280)" }}>미등록</span>}
                     </td>
@@ -732,7 +777,7 @@ const MembersTab = ({ orders, members = [], loading = false, error = null, onRel
                 ) : (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                     {sel.addresses.map(a => (
-                      <div key={a.id} style={{ padding: 12, borderRadius: 8, border: "1px solid var(--line)", background: a.isDefault ? "rgba(0,200,240,0.04)" : "transparent" }}>
+                      <div key={a.id} style={{ padding: 12, borderRadius: 8, border: "1px solid var(--line)", background: a.isDefault ? "rgba(46,124,246,0.04)" : "transparent" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                           <span style={{ fontSize: 12, fontWeight: 600, color: "var(--white)" }}>{a.label}</span>
                           {a.isDefault && <span style={{ fontSize: 10, color: "var(--cyan-400)", padding: "1px 6px", border: "1px solid var(--cyan-400)", borderRadius: 100 }}>기본</span>}
@@ -811,8 +856,7 @@ const ProductsTab = () => {
     if (!sb) { setLoading(false); setError("Supabase 미초기화"); return; }
     setLoading(true); setError(null);
     try {
-      const { data, error } = await sb.rpc("admin_list_products", { p_secret: ADMIN_PW });
-      if (error) throw error;
+      const data = await adminApi("admin_list_products", {});
       setRows(data || []);
     } catch (e) {
       setError(e?.message || String(e));
@@ -847,8 +891,7 @@ const ProductsTab = () => {
     if (!sb) return;
     setBusy(true);
     try {
-      const { error } = await sb.rpc("admin_upsert_product", {
-        p_secret:      ADMIN_PW,
+      await adminApi("admin_upsert_product", {
         p_id:          editing.id,
         p_code:        editing.code,
         p_name:        editing.name,
@@ -863,16 +906,13 @@ const ProductsTab = () => {
         p_image_url:   editing.image_url || null,
         p_sort_order:  Number(editing.sort_order) || 100,
       });
-      if (error) throw error;
       // 본문/재질/호환태그는 통합 extras RPC 로 — 기존 upsert 시그니처 변경 없이 추가
-      const { error: exErr } = await sb.rpc("admin_update_product_extras", {
-        p_secret:           ADMIN_PW,
+      await adminApi("admin_update_product_extras", {
         p_id:               editing.id,
         p_material:         editing.material || null,
         p_compat_tags:      editing.compat_tags || null,
         p_long_description: editing.long_description || null,
       });
-      if (exErr) throw exErr;
       setEditing(null);
       await reload();
       // 고객 카탈로그도 같이 갱신
@@ -887,8 +927,7 @@ const ProductsTab = () => {
     const sb = window.SUPABASE;
     if (!sb) return;
     try {
-      const { error } = await sb.rpc("admin_delete_product", { p_secret: ADMIN_PW, p_id: id });
-      if (error) throw error;
+      await adminApi("admin_delete_product", { p_id: id });
       await reload();
       if (window.UB && window.UB.loadProducts) window.UB.loadProducts();
     } catch (e) {
@@ -933,6 +972,40 @@ const ProductsTab = () => {
     if (f) uploadImage(f);
   };
 
+  // ── 상태 변경 (판매중 ↔ 재고없음 등) + 일괄 적용 ──
+  const P_STATUS = [
+    { v: "live",     label: "판매중",   color: "#6BA5FF", bg: "rgba(46,124,246,0.16)" },
+    { v: "sold_out", label: "재고없음", color: "#FF6B6B", bg: "rgba(239,68,68,0.16)" },
+    { v: "soon",     label: "출시예정", color: "#FBBF24", bg: "rgba(251,191,36,0.14)" },
+    { v: "hidden",   label: "숨김",     color: "#9CA3AF", bg: "rgba(255,255,255,0.06)" },
+  ];
+  const [selected, setSelected] = uS5(new Set());
+  const toggleSel = (id) => setSelected(s => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const allSel = filtered.length > 0 && filtered.every(r => selected.has(r.id));
+  const toggleAll = () => setSelected(allSel ? new Set() : new Set(filtered.map(r => r.id)));
+  const applyStatus = (r, st) => adminApi("admin_upsert_product", {
+    p_id: r.id, p_code: r.code, p_name: r.name, p_cat: r.cat || "multi",
+    p_price: Number(r.price) || 0, p_status: st, p_description: r.description || "",
+    p_w: r.w, p_h: r.h, p_d: r.d, p_weight: r.weight,
+    p_image_url: r.image_url || null, p_sort_order: r.sort_order,
+  });
+  const changeStatus = async (r, st) => {
+    try { await applyStatus(r, st); await reload(); if (window.UB && window.UB.loadProducts) window.UB.loadProducts(); }
+    catch (e) { alert("상태 변경 실패: " + (e?.message || e)); }
+  };
+  const bulkStatus = async (st) => {
+    const ids = [...selected]; if (!ids.length) return;
+    const lbl = (P_STATUS.find(s => s.v === st) || {}).label;
+    if (!confirm(`선택한 ${ids.length}개 제품을 "${lbl}"(으)로 변경할까요?`)) return;
+    setBusy(true);
+    try {
+      for (const id of ids) { const r = rows.find(x => x.id === id); if (r) await applyStatus(r, st); }
+      setSelected(new Set()); await reload();
+      if (window.UB && window.UB.loadProducts) window.UB.loadProducts();
+    } catch (e) { alert("일괄 변경 실패: " + (e?.message || e)); }
+    finally { setBusy(false); }
+  };
+
   return (
     <>
       {/* 검색·액션 */}
@@ -945,6 +1018,19 @@ const ProductsTab = () => {
         <Btn5 variant="ghost" onClick={reload}>새로고침</Btn5>
         <Btn5 variant="primary" onClick={startNew}>+ 새 제품 {Ic5.arrow}</Btn5>
       </div>
+
+      {/* 일괄 상태 변경 바 */}
+      {selected.size > 0 && (
+        <div style={{ marginBottom: 12, padding: "10px 14px", borderRadius: 8, background: "rgba(46,124,246,0.08)", border: "1px solid rgba(46,124,246,0.3)", display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--white)" }}>
+          <span><b>{selected.size}개</b> 선택됨 →</span>
+          <button type="button" onClick={() => bulkStatus("sold_out")} disabled={busy}
+            style={{ background: "rgba(239,68,68,0.14)", border: "1px solid rgba(239,68,68,0.45)", color: "#FF6B6B", padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>재고없음으로</button>
+          <button type="button" onClick={() => bulkStatus("live")} disabled={busy}
+            style={{ background: "rgba(46,124,246,0.16)", border: "1px solid rgba(46,124,246,0.45)", color: "#6BA5FF", padding: "6px 12px", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>판매중으로</button>
+          <button type="button" onClick={() => setSelected(new Set())}
+            style={{ marginLeft: "auto", background: "transparent", border: "1px solid var(--line-strong)", color: "var(--gray-300)", padding: "6px 12px", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>선택 해제</button>
+        </div>
+      )}
 
       {error && (
         <div style={{ marginBottom: 14, padding: "10px 14px", borderRadius: 8, background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.3)", color: "var(--warning, #FBBF24)", fontSize: 12 }}>
@@ -959,6 +1045,9 @@ const ProductsTab = () => {
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, minWidth: 920 }}>
             <thead>
               <tr style={{ background: "rgba(255,255,255,0.02)", color: "var(--gray-400)", fontFamily: "var(--font-mono)" }}>
+                <th style={{ padding: "12px 14px", borderBottom: "1px solid var(--line)", width: 36 }}>
+                  <input type="checkbox" checked={allSel} onChange={toggleAll} aria-label="전체 선택" />
+                </th>
                 {["순서", "ID", "코드", "이름", "가격", "상태", "사진", "액션"].map(h => (
                   <th key={h} style={{ padding: "12px 14px", textAlign: "left", fontWeight: 500, fontSize: 10, letterSpacing: 1.2, borderBottom: "1px solid var(--line)" }}>{h.toUpperCase()}</th>
                 ))}
@@ -968,27 +1057,34 @@ const ProductsTab = () => {
               {loading ? (
                 <tr><td colSpan={9} style={{ padding: 40, textAlign: "center", color: "var(--gray-400)" }}>불러오는 중…</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={8} style={{ padding: 40, textAlign: "center", color: "var(--gray-400)" }}>{rows.length === 0 ? "등록된 제품이 없습니다" : "일치하는 제품이 없습니다"}</td></tr>
+                <tr><td colSpan={9} style={{ padding: 40, textAlign: "center", color: "var(--gray-400)" }}>{rows.length === 0 ? "등록된 제품이 없습니다" : "일치하는 제품이 없습니다"}</td></tr>
               ) : filtered.map(r => (
-                <tr key={r.id} style={{ borderTop: "1px solid var(--line)" }}>
+                <tr key={r.id} style={{ borderTop: "1px solid var(--line)", background: selected.has(r.id) ? "rgba(46,124,246,0.06)" : undefined }}>
+                  <td style={{ padding: "12px 14px", textAlign: "center" }}>
+                    <input type="checkbox" checked={selected.has(r.id)} onChange={() => toggleSel(r.id)} aria-label={`${r.name} 선택`} />
+                  </td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-300)" }}>{r.sort_order}</td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--cyan-400)" }}>{r.id}</td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--gray-200)" }}>{r.code}</td>
                   <td style={{ padding: "12px 14px", color: "var(--white)", fontWeight: 600 }}>{r.name}</td>
                   <td className="ub-mono" style={{ padding: "12px 14px", color: "var(--white)", fontWeight: 600 }}>₩{Number(r.price || 0).toLocaleString()}</td>
                   <td style={{ padding: "12px 14px" }}>
-                    <span style={{
-                      padding: "3px 10px", borderRadius: 100, fontSize: 11, fontWeight: 600,
-                      color: r.status === "live" ? "#4ADE80" : r.status === "soon" ? "#FBBF24" : "#9CA3AF",
-                      background: r.status === "live" ? "rgba(74,222,128,0.12)" : r.status === "soon" ? "rgba(251,191,36,0.12)" : "rgba(255,255,255,0.05)",
-                    }}>{r.status === "live" ? "판매중" : r.status === "soon" ? "출시예정" : "숨김"}</span>
+                    {(() => {
+                      const cur = P_STATUS.find(s => s.v === r.status) || P_STATUS[3];
+                      return (
+                        <select value={r.status} onChange={(e) => changeStatus(r, e.target.value)}
+                          style={{ background: cur.bg, border: `1px solid ${cur.color}66`, color: cur.color, borderRadius: 100, padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", outline: "none" }}>
+                          {P_STATUS.map(s => <option key={s.v} value={s.v} style={{ background: "var(--navy-900)", color: "var(--white)" }}>{s.label}</option>)}
+                        </select>
+                      );
+                    })()}
                   </td>
                   <td style={{ padding: "12px 14px" }}>
                     {r.image_url ? <img src={r.image_url} alt="" style={{ width: 36, height: 36, objectFit: "cover", borderRadius: 4 }} /> : <span style={{ fontSize: 10, color: "var(--gray-500, #6B7280)" }}>없음</span>}
                   </td>
                   <td style={{ padding: "12px 14px", display: "flex", gap: 6 }}>
                     <button type="button" onClick={() => startEdit(r)}
-                      style={{ background: "rgba(0,200,240,0.10)", border: "1px solid var(--cyan-400)", color: "var(--cyan-400)", padding: "5px 10px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                      style={{ background: "rgba(46,124,246,0.10)", border: "1px solid var(--cyan-400)", color: "var(--cyan-400)", padding: "5px 10px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
                       수정
                     </button>
                     <button type="button" onClick={() => remove(r.id)}
@@ -1036,6 +1132,7 @@ const ProductsTab = () => {
                 <label className="ub-label ub-label-req">상태</label>
                 <select className="ub-input" value={editing.status} onChange={e => upd("status", e.target.value)}>
                   <option value="live">판매중</option>
+                  <option value="sold_out">재고없음</option>
                   <option value="soon">출시예정</option>
                   <option value="hidden">숨김</option>
                 </select>
@@ -1082,7 +1179,7 @@ const ProductsTab = () => {
                     display: "block", cursor: uploadBusy ? "wait" : "pointer",
                     padding: 18, borderRadius: 10, textAlign: "center",
                     border: `2px dashed ${dragOver ? "var(--cyan-400)" : "var(--line-strong)"}`,
-                    background: dragOver ? "rgba(0,200,240,0.06)" : "rgba(255,255,255,0.02)",
+                    background: dragOver ? "rgba(46,124,246,0.06)" : "rgba(255,255,255,0.02)",
                     transition: "all 0.15s",
                   }}
                 >
@@ -1164,8 +1261,7 @@ const CasesTab = () => {
     if (!sb) { setLoading(false); setError("Supabase 미초기화"); return; }
     setLoading(true); setError(null);
     try {
-      const { data, error } = await sb.rpc("admin_list_install_cases", { p_secret: ADMIN_PW });
-      if (error) throw error;
+      const data = await adminApi("admin_list_install_cases", {});
       setRows(data || []);
     } catch (e) {
       setError(e?.message || String(e));
@@ -1216,8 +1312,7 @@ const CasesTab = () => {
     if (!sb) return;
     setBusy(true);
     try {
-      const { error } = await sb.rpc("admin_upsert_install_case", {
-        p_secret:      ADMIN_PW,
+      await adminApi("admin_upsert_install_case", {
         p_id:          editing.id || null,
         p_wall_type:   null,
         p_caption:     editing.caption,
@@ -1225,7 +1320,6 @@ const CasesTab = () => {
         p_image_url:   editing.image_url || null,
         p_sort_order:  Number(editing.sort_order) || 100,
       });
-      if (error) throw error;
       setEditing(null);
       await reload();
     } catch (e) {
@@ -1238,8 +1332,7 @@ const CasesTab = () => {
     const sb = window.SUPABASE;
     if (!sb) return;
     try {
-      const { error } = await sb.rpc("admin_delete_install_case", { p_secret: ADMIN_PW, p_id: r.id });
-      if (error) throw error;
+      await adminApi("admin_delete_install_case", { p_id: r.id });
       await reload();
     } catch (e) {
       alert("삭제 실패: " + (e?.message || e));
@@ -1282,7 +1375,7 @@ const CasesTab = () => {
                 {r.description && <div style={{ fontSize: 11, color: "var(--gray-300)", marginBottom: 8, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{r.description}</div>}
                 <div style={{ display: "flex", gap: 6 }}>
                   <button type="button" onClick={() => startEdit(r)}
-                    style={{ flex: 1, background: "rgba(0,200,240,0.10)", border: "1px solid var(--cyan-400)", color: "var(--cyan-400)", padding: "5px 0", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                    style={{ flex: 1, background: "rgba(46,124,246,0.10)", border: "1px solid var(--cyan-400)", color: "var(--cyan-400)", padding: "5px 0", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
                     수정
                   </button>
                   <button type="button" onClick={() => remove(r)}
@@ -1338,7 +1431,7 @@ const CasesTab = () => {
                     display: "block", cursor: uploadBusy ? "wait" : "pointer",
                     padding: 18, borderRadius: 10, textAlign: "center",
                     border: `2px dashed ${dragOver ? "var(--cyan-400)" : "var(--line-strong)"}`,
-                    background: dragOver ? "rgba(0,200,240,0.06)" : "rgba(255,255,255,0.02)",
+                    background: dragOver ? "rgba(46,124,246,0.06)" : "rgba(255,255,255,0.02)",
                     transition: "all 0.15s",
                   }}
                 >

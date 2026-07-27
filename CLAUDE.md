@@ -106,11 +106,16 @@
 - `vercel.json`: 모든 정적 자원 (HTML/CSS/JSX/manifest) `Cache-Control: no-cache, no-store, must-revalidate`
 - HTML에 SW 등록 코드 없음 — 옛 SW 자동 정리만
 
-### 관리자 진입
+### 관리자 진입 (2026-07-16 보안 재구축)
 - URL: `https://3dunibox.co.kr/admin`
-- ID: `admin`, PW: `lee91059105*` (sessionStorage 게이트)
-- ⚠ 클라이언트 측 차단 — 진짜 보안은 Supabase RLS + role 도입 시점에 추가
-- 데이터: 빈 상태에서 시작 (SEED_ORDERS = [], MEMBERS = [])
+- PW: **Vercel 환경변수 `ADMIN_SECRET`** 값 (현재 `UBadmin-21134905`). 옛 비번 `lee91059105*`는 공개 노출돼 폐기 — 절대 재사용 금지.
+- **인증은 서버에서 검증**: 클라이언트 소스에 비밀번호·service_role 키 없음. 모든 관리자 조회/수정은 [api/admin/rpc.js](api/toss/../admin/rpc.js) 프록시 경유.
+  - 클라이언트 → `POST /api/admin/rpc {secret, fn, args}` → 서버가 `ADMIN_SECRET` 검증 후 service_role 로 Supabase RPC 호출.
+  - `05-admin.jsx` 는 `adminApi(fn, args)` 헬퍼만 사용 (sb.rpc 직접호출·ADMIN_PW 하드코딩 전부 제거됨).
+- **DB 잠금**: [supabase/lockdown_admin_rpc.sql](supabase/lockdown_admin_rpc.sql) 로 `admin_*` 함수를 anon/authenticated 에서 revoke → 공개키로 개인정보 조회 불가. service_role(서버)만 실행 가능.
+- **개인정보 마스킹**: 관리자 목록 화면은 이름/전화/이메일 마스킹 (`maskName/maskPhone/maskEmail`). 상세 드로어만 전체 표시.
+- 비번 변경 시: Vercel `ADMIN_SECRET` 값만 교체 후 redeploy (코드·DB 수정 불필요).
+- 데이터: Supabase orders/profiles 실연동 (SEED_ORDERS=[] 초기값이나 서버에서 실주문 fetch).
 
 ---
 
@@ -235,7 +240,7 @@
 
 - **이메일**: leedoo80@gmail.com (또는 leedoo80@naver.com)
 - **회사**: 에스디컨버전스 (대표 이두성)
-- **전화**: 010-9109-8277 (실제 운영자 번호, 2026-05-08 확정)
+- **전화**: 010-2776-9109 (실제 운영자 번호, 2026-05-08 확정)
 - **메일**: leedoo80@gmail.com (사이트 내 표시 메일, 2026-05-08 확정 — 이전 info@sdconv.kr 폐기)
 - **2026-05-08**: 제품 상세 페이지 "리뷰" 영역(별점 줄 + 탭 항목 + 탭 본문) 전체 삭제 — 실제 리뷰 데이터 없는 상태에서 가짜 카피("4.9 / 27건") 노출 방지
 - **카카오 디벨로퍼 앱 ID**: 1446402 (3D UniBox)

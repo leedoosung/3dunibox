@@ -140,6 +140,42 @@ module.exports = async function handler(req, res) {
     console.error("[toss/confirm] resend exception:", e);
   }
 
+  // ─── 3b. 텔레그램 운영자 알림 (메일보다 확실 — 스팸함/도메인 인증 불필요) ─
+  //   Vercel 환경변수: TELEGRAM_BOT_TOKEN (BotFather 발급), TELEGRAM_CHAT_ID (운영자 chat id)
+  try {
+    const tgToken  = process.env.TELEGRAM_BOT_TOKEN;
+    const tgChatId = process.env.TELEGRAM_CHAT_ID;
+    if (tgToken && tgChatId) {
+      const cust = body.customer || {};
+      const addr = body.address || {};
+      const itemsTxt = (body.items || [])
+        .map(it => `· ${it.name || it.id} × ${it.qty} (₩${(it.price * it.qty).toLocaleString()})`)
+        .join("\n");
+      const text =
+        `🔔 새 주문 결제완료\n` +
+        `━━━━━━━━━━━━━━\n` +
+        `💳 ₩${Number(amount).toLocaleString()}  (${tossResp.method || '-'})\n` +
+        `📦 주문번호: ${orderId}\n` +
+        `👤 ${cust.name || '-'} / ${cust.phone || '-'}\n` +
+        `📍 (${addr.zip || '-'}) ${addr.addr1 || ''} ${addr.addr2 || ''}\n` +
+        (addr.memo ? `📝 ${addr.memo}\n` : ``) +
+        `━━━━━━━━━━━━━━\n` +
+        `${itemsTxt || '(상품 정보 없음)'}\n` +
+        `━━━━━━━━━━━━━━\n` +
+        `👉 https://3dunibox.co.kr/admin`;
+      const tgResp = await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: tgChatId, text, disable_web_page_preview: true }),
+      });
+      if (!tgResp.ok) console.warn("[toss/confirm] telegram send failed:", tgResp.status, await tgResp.text());
+    } else {
+      console.warn("[toss/confirm] telegram env not set — skipping telegram notify");
+    }
+  } catch (e) {
+    console.error("[toss/confirm] telegram exception:", e);
+  }
+
   // ─── 4. 클라이언트 응답 ──────────────────────────────────────────────
   return json(res, 200, {
     ok: true,

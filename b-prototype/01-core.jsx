@@ -44,7 +44,7 @@ const calcGrade = (totalSpent, totalOrders, joinedAt) => {
 };
 const GRADE_COLORS = {
   "VIP":  { bg: "rgba(167,139,250,0.15)", fg: "#A78BFA" },
-  "일반": { bg: "rgba(0,200,240,0.15)",   fg: "#00C8F0" },
+  "일반": { bg: "rgba(46,124,246,0.15)",   fg: "#2E7CF6" },
   "신규": { bg: "rgba(74,222,128,0.15)",  fg: "#4ADE80" },
 };
 
@@ -127,7 +127,6 @@ const Btn = ({ variant = "primary", size = "md", children, onClick, style, type,
 
 const Badge = ({ kind, children }) => (
   <span className={`ub-badge ub-badge-${kind}`}>
-    {kind === "live" && <span className="ub-badge-dot" />}
     {children}
   </span>
 );
@@ -146,9 +145,9 @@ const Bracket = ({ size = 200, model }) => (
       <div style={{
         position: "absolute", inset: 0,
         background: "linear-gradient(135deg, #1a3a5c, #14263f)",
-        border: "1px solid rgba(0,200,240,0.3)",
+        border: "1px solid rgba(46,124,246,0.3)",
         borderRadius: 8,
-        boxShadow: "0 30px 60px -20px rgba(0,200,240,0.3), inset 0 0 0 1px rgba(255,255,255,0.05)",
+        boxShadow: "0 30px 60px -20px rgba(46,124,246,0.3), inset 0 0 0 1px rgba(255,255,255,0.05)",
       }}>
         {[[15, 15], [85, 15], [15, 85], [85, 85]].map(([x, y], i) => (
           <div key={i} style={{ position: "absolute", left: `${x}%`, top: `${y}%`, transform: "translate(-50%,-50%)", width: 6, height: 6, borderRadius: "50%", background: "#0a1628", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.6)" }} />
@@ -156,7 +155,7 @@ const Bracket = ({ size = 200, model }) => (
         <div style={{ position: "absolute", left: "50%", top: "30%", transform: "translateX(-50%)", width: 14, height: "40%", background: "rgba(0,0,0,0.4)", borderRadius: 4, boxShadow: "inset 0 0 4px rgba(0,0,0,0.6)" }} />
       </div>
       {model && (
-        <div style={{ position: "absolute", left: "20%", top: "15%", width: "60%", height: "70%", transform: "translateZ(20px)", background: "linear-gradient(160deg, #1a2940, #0d1828)", borderRadius: 8, border: "1px solid rgba(0,200,240,0.3)" }} />
+        <div style={{ position: "absolute", left: "20%", top: "15%", width: "60%", height: "70%", transform: "translateZ(20px)", background: "linear-gradient(160deg, #1a2940, #0d1828)", borderRadius: 8, border: "1px solid rgba(46,124,246,0.3)" }} />
       )}
     </div>
   </div>
@@ -207,9 +206,6 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
           )}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 6 : 14 }}>
-          {!isMobile && (
-            <span className="ub-mono" style={{ fontSize: 12, color: "var(--gray-300)" }}>010-9109-8277</span>
-          )}
           <button onClick={() => onNav({ name: user ? "me" : "login" })}
             aria-label={user ? "마이페이지" : "로그인"} style={{
             border: "1px solid var(--line-strong)", background: "transparent",
@@ -269,9 +265,9 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
                   <button key={n.id} type="button" onClick={() => onNav({ name: n.id })}
                     style={{
                       textAlign: "left", padding: "12px 14px", borderRadius: 8,
-                      background: active ? "rgba(0,200,240,0.10)" : "transparent",
+                      background: active ? "rgba(46,124,246,0.10)" : "transparent",
                       color: active ? "var(--cyan-400)" : "var(--gray-100)",
-                      border: active ? "1px solid rgba(0,200,240,0.25)" : "1px solid transparent",
+                      border: active ? "1px solid rgba(46,124,246,0.25)" : "1px solid transparent",
                       fontSize: 15, fontWeight: active ? 700 : 500, cursor: "pointer",
                     }}>{n.label}</button>
                 );
@@ -290,7 +286,7 @@ const TopNav = ({ route, onNav, cartCount, onOpenCart }) => {
             </nav>
             <div style={{ padding: 16, borderTop: "1px solid var(--line)" }}>
               <div style={{ fontSize: 11, color: "var(--gray-400)", marginBottom: 4 }}>고객센터</div>
-              <div className="ub-mono" style={{ fontSize: 16, color: "var(--white)", fontWeight: 600 }}>010-9109-8277</div>
+              <div className="ub-mono" style={{ fontSize: 16, color: "var(--white)", fontWeight: 600 }}>010-2776-9109</div>
               <div style={{ fontSize: 11, color: "var(--gray-400)", marginTop: 4 }}>평일 09–18시</div>
             </div>
           </div>
@@ -401,7 +397,7 @@ const loadProducts = async () => {
     const { data, error } = await sb
       .from("products")
       .select("*")
-      .eq("status", "live")
+      .in("status", ["live", "sold_out"])
       .order("sort_order");
     if (error) throw error;
     if (Array.isArray(data) && data.length > 0) {

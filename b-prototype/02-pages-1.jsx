@@ -60,49 +60,72 @@ const HeroProductSlideshow = ({ size = 320 }) => {
   );
 };
 
+// ─── 특수 라인업 카드 (홈) — 기존 360° 회전 영상(HeroProductSlideshow) 재사용 ──
+const Special3DBand = ({ onNav }) => {
+  const isMobile = useIsMobile2(1024);
+  return (
+    <section style={{ padding: isMobile ? "0 16px 40px" : "0 24px 60px" }}>
+      <div style={{ borderRadius: 24, overflow: "hidden", position: "relative",
+        background: "linear-gradient(110deg,#0a63d6 0%,#0b2f66 55%,#07203f 100%)",
+        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", minHeight: isMobile ? "auto" : 360, alignItems: "center" }}>
+        <div style={{ padding: isMobile ? "28px 22px 8px" : 44 }}>
+          <div style={{ fontSize: isMobile ? 22 : 26, fontWeight: 800, color: "#fff", letterSpacing: -0.5, marginBottom: 8 }}>360°로 살펴보는 제품</div>
+          <div style={{ color: "#cfe0ff", fontSize: 14, lineHeight: 1.6 }}>실제 제품을 360° 돌려가며 확인하세요. 배선 수납 구조와 마감 품질을 한눈에 볼 수 있습니다.</div>
+          <div onClick={() => onNav({ name: "catalog" })} style={{ marginTop: 22, display: "inline-block", background: "#fff", color: "#0b2f66", fontWeight: 800, fontSize: 14, padding: "12px 20px", borderRadius: 11, cursor: "pointer" }}>전 제품 보기 →</div>
+        </div>
+        <div style={{ display: "grid", placeItems: "center", padding: isMobile ? "6px 0 34px" : 24, minHeight: isMobile ? 240 : 300 }}>
+          <HeroProductSlideshow size={isMobile ? 220 : 300} />
+        </div>
+      </div>
+    </section>
+  );
+};
+
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 const HomePage = ({ onNav }) => {
   useProducts2();   // products fetch 완료 시 재렌더 구독
-  const live = MODELS.filter(m => m.status === "live");
+  const live = MODELS.filter(m => m.status === "live" || m.status === "sold_out");
   const isMobile = useIsMobile2(1024);
   const PAD = isMobile ? "32px 16px 28px" : "80px 80px 60px";
-  const SECTION_PAD = isMobile ? "40px 16px" : "60px 80px";
+  const SECTION_PAD = isMobile ? "40px 16px" : "52px 24px";
   return (
     <div>
-      {isMobile ? (
-        // 모바일: 컴팩트 Hero + 슬라이드쇼
-        <section style={{ padding: "20px 16px 28px" }}>
-          <div className="ub-eyebrow" style={{ marginBottom: 6, fontSize: 10 }}>SD CONVERGENCE · 3D PRINTING STUDIO</div>
-          <h1 style={{ fontSize: "clamp(20px, 5.6vw, 26px)", lineHeight: 1.3, color: "var(--white)", margin: 0, fontWeight: 800, wordBreak: "keep-all" }}>
-            뒤엉킨 배선 뭉치,<br/>억지로 구겨 넣으셨나요?<br/>
-            <span style={{ color: "var(--cyan-400)" }}>여유 공간 설계로<br/>커넥터 눌림 없이 딱 맞게</span>
-          </h1>
-          <p style={{ color: "var(--gray-300)", fontSize: 13, lineHeight: 1.5, margin: "10px 0 18px" }}>
-            유리문이라 시공 못 하셨나요? <strong style={{ color: "var(--white)" }}>이제 가능합니다</strong>
-          </p>
-          <div style={{ display: "grid", placeItems: "center", marginTop: 8 }}>
-            <HeroProductSlideshow size={240} />
-          </div>
-        </section>
-      ) : (
-        <section style={{ padding: PAD }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 60, alignItems: "center" }}>
-            <div>
-              <div className="ub-eyebrow" style={{ marginBottom: 16 }}>SD CONVERGENCE · 3D PRINTING STUDIO</div>
-              <h1 className="ub-h1" style={{ fontSize: 46, marginBottom: 20, lineHeight: 1.2, wordBreak: "keep-all", letterSpacing: -1 }}>
-                뒤엉킨 배선 뭉치,<br/>억지로 구겨 넣으셨나요?<br/>
-                <span style={{ color: "var(--cyan-400)" }}>여유 공간 설계로 커넥터 눌림 없이 딱 맞게</span>
-              </h1>
-              <p style={{ color: "var(--gray-200)", fontSize: 18, lineHeight: 1.6, marginBottom: 0, maxWidth: 540 }}>
-                유리문이라 시공 못 하셨나요? <strong style={{ color: "var(--white)" }}>이제 가능합니다</strong>
-              </p>
+      <section style={{ padding: isMobile ? "18px 16px 4px" : "32px 24px 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr 0.9fr", gap: isMobile ? 12 : 16 }}>
+          {[
+            { kick: "배선 정리", bg: "linear-gradient(160deg, #1e5fc0 0%, #103070 55%, #0b2050 100%)",
+              h: <>뒤엉킨 배선 뭉치,<br/><span style={{ color: "var(--cyan-400)" }}>억지로 구겨 넣으셨나요?</span></>,
+              pill: "여유 공간 설계로 딱 맞게 →", to: "catalog" },
+            { kick: "유리문 시공", bg: "linear-gradient(160deg, #16478f 0%, #0c2a5c 75%)",
+              h: <>유리문이라<br/>시공 못 하셨나요?</>,
+              pill: "이제 가능합니다 →", to: "catalog" },
+            { kick: "호환 브랜드", bg: "linear-gradient(160deg, #1f6aff 0%, #0f3c93 100%)",
+              h: <>SUPREMA · ZKTeco<br/><span style={{ color: "var(--cyan-400)" }}>glonexs</span></>,
+              pill: "전 제품 보기 →", to: "catalog" },
+          ].map((c, i) => (
+            <div key={i} style={{ position: "relative", borderRadius: 20, padding: isMobile ? "20px 18px" : "24px 22px", minHeight: isMobile ? 140 : 210, display: "flex", flexDirection: "column", overflow: "hidden", border: "1px solid var(--line)", background: c.bg }}>
+              <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1, color: "rgba(255,255,255,0.85)" }}>{c.kick}</div>
+              <h3 style={{ fontSize: isMobile ? 20 : 24, fontWeight: 800, lineHeight: 1.3, margin: "12px 0 0", color: "#fff", wordBreak: "keep-all" }}>{c.h}</h3>
+              <div onClick={() => onNav({ name: c.to })} style={{ marginTop: isMobile ? 16 : "auto", alignSelf: "flex-start", background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.22)", borderRadius: 100, padding: "9px 15px", fontSize: 12.5, fontWeight: 600, color: "#fff", cursor: "pointer" }}>{c.pill}</div>
             </div>
-            <div style={{ display: "grid", placeItems: "center", height: 360 }}>
-              <HeroProductSlideshow size={320} />
+          ))}
+          <aside style={{ border: "1px solid rgba(255,255,255,0.14)", borderRadius: 20, padding: "20px 20px", background: "var(--navy-950)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <h4 style={{ margin: "0 0 16px", fontSize: 16, fontWeight: 800, color: "var(--white)" }}>바로가기</h4>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 8px" }}>
+              {[
+                ["📦", "#3B82F6", "전 제품", "catalog"], ["🧰", "#22C3E6", "시공 사례", "guide"],
+                ["💬", "#A78BFA", "자주 묻는 질문", "faq"], ["📋", "#F59E0B", "주문 조회", "me"],
+                ["🏢", "#34D399", "회사 소개", "about"], ["🛒", "#F472B6", "대량구매", "about"],
+              ].map(([ic, col, label, to]) => (
+                <div key={label} onClick={() => onNav({ name: to })} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12.5, fontWeight: 600, color: "var(--gray-100)", cursor: "pointer" }}>
+                  <span style={{ width: 30, height: 30, borderRadius: 9, background: col + "22", display: "grid", placeItems: "center", fontSize: 15, flexShrink: 0 }}>{ic}</span>
+                  <span style={{ wordBreak: "keep-all", lineHeight: 1.2 }}>{label}</span>
+                </div>
+              ))}
             </div>
-          </div>
-        </section>
-      )}
+          </aside>
+        </div>
+      </section>
 
       <section style={{ padding: SECTION_PAD }}>
         <div style={{ marginBottom: isMobile ? 18 : 28 }}>
@@ -116,24 +139,7 @@ const HomePage = ({ onNav }) => {
         </div>
       </section>
 
-      <section style={{ padding: SECTION_PAD, background: "var(--navy-900)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
-        <div className="ub-eyebrow" style={{ marginBottom: 8, textAlign: "center" }}>WHY 3D</div>
-        <h2 className="ub-h2" style={{ marginBottom: isMobile ? 24 : 40, textAlign: "center" }}>왜 3D인가</h2>
-        <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: isMobile ? 10 : 20 }}>
-          {[
-            { t: "설치업체가 만든 제품입니다", d: "현장을 아니까 더 실용적으로 만듭니다." },
-            { t: "쓰는 사람이 직접 만듭니다",   d: "설치 전문가가 설계하고 검증한 제품입니다." },
-            { t: "불편하면 말씀해 주세요",     d: "현장 피드백으로 제품을 계속 개선합니다." },
-            { t: "계속 새로운 제품이 나옵니다", d: "현장 수요에 맞춰 라인업을 꾸준히 늘려갑니다." },
-          ].map((f, i) => (
-            <div key={i} className="ub-card" style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ fontFamily: "var(--font-display)", fontSize: 32, color: "var(--cyan-400)", marginBottom: 14, letterSpacing: 1 }}>0{i+1}</div>
-              <div style={{ fontSize: isMobile ? 14 : 15, fontWeight: 700, color: "var(--white)", marginBottom: 8, lineHeight: 1.35, wordBreak: "keep-all" }}>{f.t}</div>
-              <div style={{ fontSize: isMobile ? 12 : 13, color: "var(--gray-300)", lineHeight: 1.6, wordBreak: "keep-all" }}>{f.d}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Special3DBand onNav={onNav} />
     </div>
   );
 };
@@ -141,38 +147,23 @@ const HomePage = ({ onNav }) => {
 const ProductCard = ({ m, onClick, onAdd }) => {
   const isMobile = useIsMobile2(1024);
   return (
-  <div className="ub-card-product" onClick={onClick}>
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: isMobile ? 8 : 14 }}>
-      <Badge kind={m.status === "live" ? "live" : "soon"}>{m.status === "live" ? "판매중" : "출시예정"}</Badge>
-      <span className="ub-mono" style={{ fontSize: 10, color: "var(--gray-400)" }}>{m.code}</span>
-    </div>
-    <div style={{ aspectRatio: "3 / 4", background: "rgba(255,255,255,0.02)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? 10 : 14, border: "1px solid var(--line)", overflow: "hidden", padding: 10, boxSizing: "border-box" }}>
-      {m.image_url && (
+  <div onClick={onClick} style={{ cursor: "pointer" }}>
+    <div style={{ aspectRatio: "3 / 4", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: isMobile ? 12 : 16, overflow: "hidden", padding: 4, boxSizing: "border-box" }}>
+      {m.image_url ? (
         <img src={m.image_url} alt={m.name} loading="eager"
-             style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block" }} />
+             style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", display: "block", borderRadius: 16, filter: "drop-shadow(0 14px 26px rgba(0,0,0,0.55))" }} />
+      ) : (
+        <span className="ub-mono" style={{ fontSize: 11, color: "var(--gray-500, #6B7280)" }}>{m.code}</span>
       )}
     </div>
-    <div style={{ fontSize: isMobile ? 13 : 15, fontWeight: 700, color: "var(--white)", marginBottom: 2 }}>{m.name}</div>
+    <div style={{ fontSize: isMobile ? 14 : 16, fontWeight: 700, color: "var(--white)", marginBottom: 4, lineHeight: 1.3, wordBreak: "keep-all" }}>{m.name}</div>
     {m.desc && (
-      <div style={{
-        fontSize: isMobile ? 11 : 12,
-        color: "var(--gray-300)",
-        marginBottom: isMobile ? 8 : 14,
-        lineHeight: 1.4,
-        display: "-webkit-box",
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: "vertical",
-        overflow: "hidden",
-        wordBreak: "keep-all",
-      }}>{m.desc}</div>
+      <div style={{ fontSize: isMobile ? 12 : 13, color: "var(--gray-300)", marginBottom: 8, lineHeight: 1.45, wordBreak: "keep-all",
+        display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{m.desc}</div>
     )}
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: isMobile ? 8 : 0 }}>
-      <span className="ub-mono" style={{ fontSize: isMobile ? 13 : 14, color: "var(--white)", fontWeight: 700 }}>₩{m.price.toLocaleString()}</span>
-      {onAdd && m.status === "live" ? (
-        <span onClick={(e) => { e.stopPropagation(); onAdd(m); }} style={{ fontSize: 11, color: "var(--cyan-400)", fontWeight: 600, padding: "4px 8px", border: "1px solid var(--cyan-400)", borderRadius: 6 }}>+ 담기</span>
-      ) : (
-        <span style={{ fontSize: 11, color: "var(--cyan-400)", fontWeight: 600 }}>상세 →</span>
-      )}
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+      <span className="ub-mono" style={{ fontSize: isMobile ? 14 : 16, color: "var(--white)", fontWeight: 800 }}>₩{m.price.toLocaleString()}</span>
+      <Badge kind={m.status === "live" ? "live" : m.status === "sold_out" ? "soldout" : "soon"}>{m.status === "live" ? "판매중" : m.status === "sold_out" ? "재고없음" : "출시예정"}</Badge>
     </div>
   </div>
   );
@@ -186,7 +177,7 @@ const CatalogPage = ({ onNav, onAdd }) => {
   const [sort, setSort] = uS2("status");
 
   const filtered = uM2(() => {
-    let r = MODELS.filter(m => m.status === "live");
+    let r = MODELS.filter(m => m.status === "live" || m.status === "sold_out");
     if (q.trim()) {
       const k = q.toLowerCase();
       r = r.filter(m => m.name.toLowerCase().includes(k) || m.code.toLowerCase().includes(k) || m.desc.toLowerCase().includes(k));
@@ -196,7 +187,7 @@ const CatalogPage = ({ onNav, onAdd }) => {
     return r;
   }, [q, sort]);
 
-  const askCustom = () => alert("맞춤 제작은 010-9109-8277 또는 leedoo80@gmail.com로 문의 부탁드립니다.");
+  const askCustom = () => alert("맞춤 제작은 010-2776-9109 또는 leedoo80@gmail.com로 문의 부탁드립니다.");
 
   return (
     <div style={{ padding: isMobile ? "20px 16px 40px" : "32px 80px 60px" }}>
