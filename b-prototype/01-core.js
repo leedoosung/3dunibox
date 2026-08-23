@@ -955,16 +955,19 @@ try {
   }
 } catch (e) {}
 
-// Supabase Storage 원본 이미지를 실시간 리사이즈(render/image) URL로 변환해 전송량을 대폭 줄인다.
-// (예: 2MB 원본 → width=800 기준 약 0.25MB). 변환 대상이 아니면(로컬/외부 URL) 원본 그대로 반환.
+// ⚠ Supabase 이미지 변환(render/image)은 Pro 플랜 전용. 현재 FREE 플랜이라 변환 엔드포인트는
+// 403 "FeatureNotEnabled" 를 반환 → 제품 이미지가 전부 안 보임. 그래서 원본(object/public)을 그대로 전송한다.
+// Pro 전환 시 아래 주석 블록을 되살리면 실시간 리사이즈(전송량↓)가 활성화된다.
 function imgCDN(url, width) {
   if (!url || typeof url !== "string") return url;
-  var marker = "/storage/v1/object/public/";
+  return url; // FREE 플랜: 원본 URL 그대로 (변환 미지원)
+  /* Pro 전환 시:
+  const marker = "/storage/v1/object/public/";
   if (!url.includes(marker)) return url;
-  var base = url.replace(marker, "/storage/v1/render/image/public/");
-  var sep = base.includes("?") ? "&" : "?";
-  // resize=contain: 원본 비율 유지(EXIF 회전 포함) — width만 줄 때 왜곡/잘림 방지.
+  const base = url.replace(marker, "/storage/v1/render/image/public/");
+  const sep = base.includes("?") ? "&" : "?";
   return base + sep + "width=" + (width || 800) + "&resize=contain&quality=72";
+  */
 }
 var loadProducts = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
