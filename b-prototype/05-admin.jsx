@@ -947,6 +947,7 @@ const ProductsTab = () => {
 
     setUploadBusy(true); setUploadErr(null);
     try {
+      file = await resizeImageForUpload(file, 1600, 0.86); // 웹 표시 크기로 축소 후 업로드
       const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
       const slug = (editing && editing.id ? editing.id : "product").replace(/[^a-z0-9_-]/g, "");
       const filename = `${slug}_${Date.now()}.${ext || "jpg"}`;
@@ -1286,6 +1287,7 @@ const CasesTab = () => {
     if (!sb) { setUploadErr("Supabase 미초기화"); return; }
     setUploadBusy(true); setUploadErr(null);
     try {
+      file = await resizeImageForUpload(file, 1600, 0.86); // 웹 표시 크기로 축소 후 업로드
       const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
       const filename = `case_${Date.now()}.${ext || "jpg"}`;
       const { error: upErr } = await sb.storage.from("product-images").upload(filename, file, { upsert: false, cacheControl: "3600", contentType: file.type });

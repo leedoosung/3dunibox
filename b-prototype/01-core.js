@@ -958,6 +958,78 @@ try {
 // ⚠ Supabase 이미지 변환(render/image)은 Pro 플랜 전용. 현재 FREE 플랜이라 변환 엔드포인트는
 // 403 "FeatureNotEnabled" 를 반환 → 제품 이미지가 전부 안 보임. 그래서 원본(object/public)을 그대로 전송한다.
 // Pro 전환 시 아래 주석 블록을 되살리면 실시간 리사이즈(전송량↓)가 활성화된다.
+// 업로드 전 브라우저에서 이미지를 웹 표시 크기로 축소한다.
+// FREE 플랜은 서버 리사이즈(render/image)가 없으므로, 클라이언트에서 미리 줄여 올려 전송량을 낮춘다.
+// 긴 변 1600px면 카드(~500px)·상세(~600px)는 물론 레티나 2배까지 커버 → 표시 화질 손실 사실상 없음.
+// EXIF 회전은 createImageBitmap({imageOrientation:"from-image"})로 자동 보정해 굽는다.
+// SVG/GIF 등 캔버스 처리 부적합 형식은 원본 그대로 반환.
+function resizeImageForUpload(_x, _x2, _x3) {
+  return _resizeImageForUpload.apply(this, arguments);
+}
+function _resizeImageForUpload() {
+  _resizeImageForUpload = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3(file, maxDim, quality) {
+    var bitmap, W, H, scale, w, h, canvas, blob, base, _t3;
+    return _regenerator().w(function (_context3) {
+      while (1) switch (_context3.p = _context3.n) {
+        case 0:
+          maxDim = maxDim || 1600;
+          quality = quality || 0.86;
+          if (!(!file || !file.type || !/^image\/(jpe?g|png|webp)$/i.test(file.type))) {
+            _context3.n = 1;
+            break;
+          }
+          return _context3.a(2, file);
+        case 1:
+          _context3.p = 1;
+          _context3.n = 2;
+          return createImageBitmap(file, {
+            imageOrientation: "from-image"
+          });
+        case 2:
+          bitmap = _context3.v;
+          W = bitmap.width, H = bitmap.height;
+          if (!(Math.max(W, H) <= maxDim)) {
+            _context3.n = 3;
+            break;
+          }
+          if (bitmap.close) bitmap.close();
+          return _context3.a(2, file);
+        case 3:
+          // 이미 작으면 그대로
+          scale = maxDim / Math.max(W, H);
+          w = Math.round(W * scale), h = Math.round(H * scale);
+          canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext("2d").drawImage(bitmap, 0, 0, w, h);
+          if (bitmap.close) bitmap.close();
+          _context3.n = 4;
+          return new Promise(function (r) {
+            return canvas.toBlob(r, "image/jpeg", quality);
+          });
+        case 4:
+          blob = _context3.v;
+          if (!(!blob || blob.size >= file.size)) {
+            _context3.n = 5;
+            break;
+          }
+          return _context3.a(2, file);
+        case 5:
+          // 오히려 커지면 원본 유지
+          base = (file.name || "image").replace(/\.[^.]+$/, "");
+          return _context3.a(2, new File([blob], base + ".jpg", {
+            type: "image/jpeg"
+          }));
+        case 6:
+          _context3.p = 6;
+          _t3 = _context3.v;
+          console.warn("[resize] 원본 업로드로 폴백:", _t3);
+          return _context3.a(2, file);
+      }
+    }, _callee3, null, [[1, 6]]);
+  }));
+  return _resizeImageForUpload.apply(this, arguments);
+}
 function imgCDN(url, width) {
   if (!url || typeof url !== "string") return url;
   return url; // FREE 플랜: 원본 URL 그대로 (변환 미지원)
@@ -1188,7 +1260,7 @@ var payWithToss = /*#__PURE__*/function () {
       }
     }, _callee2, null, [[1, 3]]);
   }));
-  return function payWithToss(_x) {
+  return function payWithToss(_x4) {
     return _ref1.apply(this, arguments);
   };
 }();
@@ -1213,6 +1285,8 @@ window.UB = {
   openPostcode: openPostcode,
   loadProducts: loadProducts,
   useProducts: useProducts,
+  imgCDN: imgCDN,
+  resizeImageForUpload: resizeImageForUpload,
   isRemoteArea: isRemoteArea,
   payWithToss: payWithToss,
   Ic: Ic,

@@ -2263,47 +2263,52 @@ var ProductsTab = function ProductsTab() {
             setUploadBusy(true);
             setUploadErr(null);
             _context8.p = 5;
+            _context8.n = 6;
+            return resizeImageForUpload(file, 1600, 0.86);
+          case 6:
+            file = _context8.v;
+            // 웹 표시 크기로 축소 후 업로드
             ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
             slug = (editing && editing.id ? editing.id : "product").replace(/[^a-z0-9_-]/g, "");
             filename = "".concat(slug, "_").concat(Date.now(), ".").concat(ext || "jpg");
-            _context8.n = 6;
+            _context8.n = 7;
             return sb.storage.from("product-images").upload(filename, file, {
               upsert: false,
               cacheControl: "3600",
               contentType: file.type
             });
-          case 6:
+          case 7:
             _yield$sb$storage$fro = _context8.v;
             upErr = _yield$sb$storage$fro.error;
             if (!upErr) {
-              _context8.n = 7;
-              break;
-            }
-            throw upErr;
-          case 7:
-            _sb$storage$from$getP = sb.storage.from("product-images").getPublicUrl(filename), data = _sb$storage$from$getP.data;
-            publicUrl = data && data.publicUrl;
-            if (publicUrl) {
               _context8.n = 8;
               break;
             }
-            throw new Error("public URL 발급 실패");
+            throw upErr;
           case 8:
-            upd("image_url", publicUrl);
-            _context8.n = 10;
-            break;
+            _sb$storage$from$getP = sb.storage.from("product-images").getPublicUrl(filename), data = _sb$storage$from$getP.data;
+            publicUrl = data && data.publicUrl;
+            if (publicUrl) {
+              _context8.n = 9;
+              break;
+            }
+            throw new Error("public URL 발급 실패");
           case 9:
-            _context8.p = 9;
-            _t8 = _context8.v;
-            setUploadErr((_t8 === null || _t8 === void 0 ? void 0 : _t8.message) || String(_t8));
+            upd("image_url", publicUrl);
+            _context8.n = 11;
+            break;
           case 10:
             _context8.p = 10;
-            setUploadBusy(false);
-            return _context8.f(10);
+            _t8 = _context8.v;
+            setUploadErr((_t8 === null || _t8 === void 0 ? void 0 : _t8.message) || String(_t8));
           case 11:
+            _context8.p = 11;
+            setUploadBusy(false);
+            return _context8.f(11);
+          case 12:
             return _context8.a(2);
         }
-      }, _callee8, null, [[5, 9, 10, 11]]);
+      }, _callee8, null, [[5, 10, 11, 12]]);
     }));
     return function uploadImage(_x4) {
       return _ref10.apply(this, arguments);
@@ -3341,46 +3346,51 @@ var CasesTab = function CasesTab() {
             setUploadBusy(true);
             setUploadErr(null);
             _context11.p = 5;
+            _context11.n = 6;
+            return resizeImageForUpload(file, 1600, 0.86);
+          case 6:
+            file = _context11.v;
+            // 웹 표시 크기로 축소 후 업로드
             ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
             filename = "case_".concat(Date.now(), ".").concat(ext || "jpg");
-            _context11.n = 6;
+            _context11.n = 7;
             return sb.storage.from("product-images").upload(filename, file, {
               upsert: false,
               cacheControl: "3600",
               contentType: file.type
             });
-          case 6:
+          case 7:
             _yield$sb$storage$fro2 = _context11.v;
             upErr = _yield$sb$storage$fro2.error;
             if (!upErr) {
-              _context11.n = 7;
-              break;
-            }
-            throw upErr;
-          case 7:
-            _sb$storage$from$getP2 = sb.storage.from("product-images").getPublicUrl(filename), data = _sb$storage$from$getP2.data;
-            publicUrl = data && data.publicUrl;
-            if (publicUrl) {
               _context11.n = 8;
               break;
             }
-            throw new Error("public URL 발급 실패");
+            throw upErr;
           case 8:
-            upd("image_url", publicUrl);
-            _context11.n = 10;
-            break;
+            _sb$storage$from$getP2 = sb.storage.from("product-images").getPublicUrl(filename), data = _sb$storage$from$getP2.data;
+            publicUrl = data && data.publicUrl;
+            if (publicUrl) {
+              _context11.n = 9;
+              break;
+            }
+            throw new Error("public URL 발급 실패");
           case 9:
-            _context11.p = 9;
-            _t11 = _context11.v;
-            setUploadErr((_t11 === null || _t11 === void 0 ? void 0 : _t11.message) || String(_t11));
+            upd("image_url", publicUrl);
+            _context11.n = 11;
+            break;
           case 10:
             _context11.p = 10;
-            setUploadBusy(false);
-            return _context11.f(10);
+            _t11 = _context11.v;
+            setUploadErr((_t11 === null || _t11 === void 0 ? void 0 : _t11.message) || String(_t11));
           case 11:
+            _context11.p = 11;
+            setUploadBusy(false);
+            return _context11.f(11);
+          case 12:
             return _context11.a(2);
         }
-      }, _callee10, null, [[5, 9, 10, 11]]);
+      }, _callee10, null, [[5, 10, 11, 12]]);
     }));
     return function uploadImage(_x8) {
       return _ref14.apply(this, arguments);
